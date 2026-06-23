@@ -1,0 +1,979 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="robots" content="noindex, nofollow"/>
+  <title>Gestion des membres — FODDEB Admin</title>
+  <link rel="manifest" href="/manifest.json"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@500;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js" defer></script>
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    :root{
+      --sw:260px;--swc:68px;--hh:64px;
+      --g9:#0F2713;--g8:#1B5E20;--g7:#2E7D32;--g6:#388E3C;--g5:#4CAF50;--g4:#81C784;--g1:#C8E6C9;--g0:#E8F5E9;
+      --gold:#F9A825;--gold2:#FFD54F;--goldf:#FFFDE7;
+      --red:#C62828;--redf:#FFEBEE;
+      --blue:#1565C0;--bluef:#E3F2FD;
+      --org:#E65100;--orgf:#FFF3E0;
+      --bg:#F4F6F5;--surf:#FFFFFF;
+      --dark:#0D1B0F;--gr8:#1C2520;--gr6:#4A5568;--gr4:#9AA5B1;--gr2:#E2E8F0;--gr1:#F7FAFC;--brd:#E8EEE9;
+      --fh:'Syne',sans-serif;--fb:'DM Sans',system-ui,sans-serif;
+      --r:12px;--rs:8px;
+      --sh:0 1px 4px rgba(0,0,0,.06),0 4px 16px rgba(0,0,0,.06);
+      --shm:0 4px 24px rgba(0,0,0,.10);
+      --tr:.25s cubic-bezier(.4,0,.2,1);
+    }
+    html,body{height:100%;}
+    body{font-family:var(--fb);background:var(--bg);color:var(--gr8);display:flex;-webkit-font-smoothing:antialiased;}
+    a{color:inherit;text-decoration:none;}
+    ul{list-style:none;}
+    button{font-family:var(--fb);cursor:pointer;border:none;background:none;}
+
+    /* SIDEBAR */
+    .sidebar{width:var(--sw);min-height:100vh;background:var(--g9);display:flex;flex-direction:column;position:fixed;left:0;top:0;bottom:0;z-index:200;overflow:hidden;transition:width var(--tr);}
+    .sidebar.collapsed{width:var(--swc);}
+    .sb-logo{display:flex;align-items:center;gap:12px;padding:20px 18px;border-bottom:1px solid rgba(255,255,255,.08);min-height:var(--hh);flex-shrink:0;}
+    .sb-logo-icon{width:36px;height:36px;border-radius:10px;background:var(--g7);display:flex;align-items:center;justify-content:center;font-family:var(--fh);color:#fff;font-size:11px;font-weight:800;flex-shrink:0;}
+    .sb-logo-text{overflow:hidden;white-space:nowrap;}
+    .sb-logo-text strong{display:block;color:#fff;font-size:15px;font-weight:700;}
+    .sb-logo-text span{font-size:11px;color:rgba(255,255,255,.45);}
+    .sb-sec{padding:12px 10px 4px;overflow:hidden;}
+    .sb-sec-lbl{font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.3);padding:0 8px;margin-bottom:4px;white-space:nowrap;}
+    .sidebar.collapsed .sb-sec-lbl{opacity:0;}
+    .nav-item{display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:var(--rs);color:rgba(255,255,255,.6);font-size:14px;font-weight:500;cursor:pointer;transition:var(--tr);white-space:nowrap;overflow:hidden;}
+    .nav-item iconify-icon{flex-shrink:0;font-size:20px;}
+    .nav-label{overflow:hidden;}
+    .nav-badge{margin-left:auto;background:var(--g6);color:#fff;font-size:10px;font-weight:700;padding:1px 7px;border-radius:99px;flex-shrink:0;}
+    .nav-item:hover{background:rgba(255,255,255,.08);color:#fff;}
+    .nav-item.active{background:var(--g7);color:#fff;}
+    .nav-item.active iconify-icon{color:var(--g4);}
+    .sidebar.collapsed .nav-label,.sidebar.collapsed .nav-badge{display:none;}
+    .sidebar.collapsed .nav-item{justify-content:center;padding:12px;}
+    .sb-foot{margin-top:auto;border-top:1px solid rgba(255,255,255,.08);padding:12px 10px;}
+    .sb-user{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:var(--rs);cursor:pointer;transition:var(--tr);}
+    .sb-user:hover{background:rgba(255,255,255,.08);}
+    .sb-av{width:36px;height:36px;border-radius:50%;background:var(--g6);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:14px;flex-shrink:0;}
+    .sb-ui{overflow:hidden;flex:1;}
+    .sb-ui strong{display:block;font-size:13px;color:#fff;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+    .sb-ui span{font-size:11px;color:rgba(255,255,255,.4);}
+    .sidebar.collapsed .sb-ui,.sidebar.collapsed .sb-user iconify-icon:last-child{display:none;}
+    .sidebar.collapsed .sb-user{justify-content:center;}
+
+    /* MAIN */
+    .main-wrap{margin-left:var(--sw);flex:1;min-height:100vh;display:flex;flex-direction:column;transition:margin-left var(--tr);}
+    .main-wrap.collapsed{margin-left:var(--swc);}
+
+    /* HEADER */
+    .admin-header{background:var(--surf);border-bottom:1px solid var(--brd);height:var(--hh);display:flex;align-items:center;padding:0 24px;gap:16px;position:sticky;top:0;z-index:100;}
+    .hdr-toggle{width:36px;height:36px;border-radius:var(--rs);display:flex;align-items:center;justify-content:center;color:var(--gr6);font-size:20px;transition:var(--tr);}
+    .hdr-toggle:hover{background:var(--gr1);}
+    .hdr-bc{display:flex;align-items:center;gap:8px;font-size:14px;color:var(--gr6);}
+    .hdr-bc strong{color:var(--gr8);font-weight:600;}
+    .hdr-bc a{color:var(--g7);}
+    .hdr-right{margin-left:auto;display:flex;align-items:center;gap:10px;}
+    .hdr-btn{width:38px;height:38px;border-radius:var(--rs);display:flex;align-items:center;justify-content:center;color:var(--gr6);font-size:20px;position:relative;transition:var(--tr);}
+    .hdr-btn:hover{background:var(--gr1);}
+    .notif-dot{position:absolute;top:6px;right:6px;width:8px;height:8px;background:var(--red);border-radius:50%;border:2px solid var(--surf);}
+    .hdr-user{display:flex;align-items:center;gap:10px;padding:6px 12px 6px 6px;border-radius:var(--r);cursor:pointer;transition:var(--tr);border:1px solid var(--brd);}
+    .hdr-user:hover{background:var(--gr1);}
+    .hdr-av{width:32px;height:32px;border-radius:50%;background:var(--g7);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:12px;}
+    .hdr-ui strong{display:block;font-size:13px;font-weight:600;}
+    .hdr-ui span{font-size:11px;color:var(--gr4);}
+
+    /* PAGE */
+    .pc{padding:28px;flex:1;}
+    .pg-hdr{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:24px;flex-wrap:wrap;gap:16px;}
+    .pg-title{font-family:var(--fh);font-size:1.6rem;font-weight:700;color:var(--dark);}
+    .pg-sub{font-size:14px;color:var(--gr6);margin-top:4px;}
+    .pg-actions{display:flex;gap:10px;align-items:center;flex-wrap:wrap;}
+
+    /* BUTTONS */
+    .btn{display:inline-flex;align-items:center;gap:8px;font-family:var(--fb);font-size:14px;font-weight:600;padding:10px 18px;border-radius:var(--rs);border:1.5px solid transparent;cursor:pointer;transition:var(--tr);white-space:nowrap;}
+    .btn-p{background:var(--g8);color:#fff;}
+    .btn-p:hover{background:var(--g7);}
+    .btn-o{background:var(--surf);color:var(--gr8);border-color:var(--brd);}
+    .btn-o:hover{border-color:var(--g4);color:var(--g8);}
+    .btn-sm{font-size:12.5px;padding:6px 13px;}
+    .btn-danger-sm{background:var(--redf);color:var(--red);border:1px solid #FFCDD2;font-size:12px;padding:5px 11px;border-radius:6px;font-weight:600;cursor:pointer;transition:var(--tr);}
+    .btn-danger-sm:hover{background:#FFCDD2;}
+    .btn-success-sm{background:var(--g0);color:var(--g7);border:1px solid var(--g1);font-size:12px;padding:5px 11px;border-radius:6px;font-weight:600;cursor:pointer;transition:var(--tr);}
+    .btn-success-sm:hover{background:var(--g1);}
+    .btn-icon{width:32px;height:32px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:16px;border:1px solid var(--brd);background:var(--surf);color:var(--gr6);cursor:pointer;transition:var(--tr);}
+    .btn-icon:hover{border-color:var(--g4);color:var(--g8);background:var(--g0);}
+
+    /* STATS */
+    .stats-row{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:16px;margin-bottom:24px;}
+    .stat-card{background:var(--surf);border:1px solid var(--brd);border-radius:var(--r);padding:18px 20px;box-shadow:var(--sh);display:flex;align-items:center;gap:14px;}
+    .stat-icon{width:44px;height:44px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;}
+    .ic-g{background:var(--g0);color:var(--g7);}
+    .ic-o{background:var(--goldf);color:var(--gold);}
+    .ic-r{background:var(--redf);color:var(--red);}
+    .ic-b{background:var(--bluef);color:var(--blue);}
+    .stat-info strong{display:block;font-family:var(--fh);font-size:1.6rem;font-weight:700;color:var(--dark);line-height:1;}
+    .stat-info span{font-size:12px;color:var(--gr4);font-weight:500;margin-top:3px;display:block;}
+
+    /* SKELETON */
+    .skel{background:linear-gradient(90deg,var(--gr2) 25%,#e8ece9 50%,var(--gr2) 75%);background-size:200% 100%;animation:shimmer 1.5s infinite;border-radius:6px;}
+    @keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+
+    /* TABS */
+    .tabs-bar{display:flex;gap:2px;background:var(--gr1);border-radius:var(--rs);padding:4px;width:fit-content;margin-bottom:20px;}
+    .tab-btn{font-size:13px;font-weight:600;padding:8px 18px;border-radius:6px;color:var(--gr6);cursor:pointer;transition:var(--tr);display:flex;align-items:center;gap:6px;white-space:nowrap;}
+    .tab-btn.active{background:var(--surf);color:var(--g8);box-shadow:0 1px 4px rgba(0,0,0,.08);}
+    .tab-count{background:var(--gr2);color:var(--gr6);font-size:10px;font-weight:700;padding:1px 7px;border-radius:99px;}
+    .tab-btn.active .tab-count{background:var(--g1);color:var(--g8);}
+
+    /* TOOLBAR */
+    .toolbar{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:16px;}
+    .search-wrap{position:relative;flex:1;min-width:220px;max-width:360px;}
+    .search-wrap iconify-icon{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--gr4);font-size:18px;pointer-events:none;}
+    .search-input{width:100%;padding:9px 12px 9px 38px;border:1px solid var(--brd);border-radius:var(--rs);font-size:14px;font-family:var(--fb);outline:none;background:var(--surf);transition:border-color .2s;}
+    .search-input:focus{border-color:var(--g5);}
+    .fsel{padding:9px 12px;border:1px solid var(--brd);border-radius:var(--rs);font-size:13px;font-family:var(--fb);outline:none;background:var(--surf);color:var(--gr8);cursor:pointer;}
+    .toolbar-right{margin-left:auto;display:flex;gap:8px;}
+
+    /* TABLE */
+    .card{background:var(--surf);border-radius:var(--r);border:1px solid var(--brd);box-shadow:var(--sh);overflow:hidden;}
+    .tw{overflow-x:auto;}
+    table{width:100%;border-collapse:collapse;}
+    thead th{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--gr4);padding:11px 16px;text-align:left;border-bottom:1px solid var(--brd);white-space:nowrap;background:var(--gr1);cursor:pointer;}
+    thead th:hover{color:var(--g7);}
+    tbody tr{transition:background var(--tr);}
+    tbody tr:hover{background:var(--gr1);}
+    tbody td{font-size:13.5px;padding:13px 16px;border-bottom:1px solid var(--brd);color:var(--gr8);vertical-align:middle;}
+    tbody tr:last-child td{border-bottom:none;}
+    td input[type=checkbox],th input[type=checkbox]{accent-color:var(--g7);width:15px;height:15px;cursor:pointer;}
+
+    /* MEMBER CELL */
+    .mc-cell{display:flex;align-items:center;gap:11px;}
+    .av{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;flex-shrink:0;}
+    .mc-name{font-weight:600;font-size:14px;color:var(--dark);line-height:1.2;}
+    .mc-email{font-size:12px;color:var(--gr4);}
+
+    /* BADGES */
+    .badge{display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:700;padding:3px 10px;border-radius:99px;}
+    .bs{background:var(--g0);color:var(--g7);}
+    .bw{background:var(--goldf);color:#B45309;}
+    .bd-{background:var(--redf);color:var(--red);}
+    .bi{background:var(--bluef);color:var(--blue);}
+    .bn{background:var(--gr1);color:var(--gr6);}
+    .bdot{width:5px;height:5px;border-radius:50%;background:currentColor;}
+    .role-badge{display:inline-block;font-size:11px;font-weight:700;padding:3px 9px;border-radius:6px;}
+    .r-admin{background:#FFF3E0;color:#E65100;}
+    .r-manager{background:var(--bluef);color:var(--blue);}
+    .r-member{background:var(--g0);color:var(--g7);}
+    .r-donor{background:var(--goldf);color:#B45309;}
+
+    /* ACTIONS */
+    .act-cell{display:flex;gap:6px;align-items:center;}
+
+    /* PAGINATION */
+    .pagination{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;border-top:1px solid var(--brd);flex-wrap:wrap;gap:12px;}
+    .pag-info{font-size:13px;color:var(--gr6);}
+    .pag-btns{display:flex;gap:4px;}
+    .pag-btn{width:32px;height:32px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;border:1px solid var(--brd);background:var(--surf);color:var(--gr6);cursor:pointer;transition:var(--tr);}
+    .pag-btn:hover{border-color:var(--g4);color:var(--g8);}
+    .pag-btn.active{background:var(--g8);color:#fff;border-color:var(--g8);}
+    .pag-btn:disabled{opacity:.4;cursor:not-allowed;}
+
+    /* BULK BAR */
+    .bulk-bar{display:none;align-items:center;gap:12px;background:var(--g8);color:#fff;padding:10px 16px;border-radius:var(--rs);margin-bottom:12px;}
+    .bulk-bar.visible{display:flex;}
+    .bulk-bar span{font-size:13.5px;font-weight:600;}
+    .bulk-btn{background:rgba(255,255,255,.15);color:#fff;border:1px solid rgba(255,255,255,.2);border-radius:6px;font-size:12.5px;font-weight:600;padding:6px 14px;cursor:pointer;transition:var(--tr);display:flex;align-items:center;gap:5px;}
+    .bulk-btn:hover{background:rgba(255,255,255,.25);}
+    .bulk-btn.danger{background:rgba(198,40,40,.25);border-color:rgba(198,40,40,.4);}
+
+    /* EMPTY */
+    .empty-state{text-align:center;padding:60px 20px;color:var(--gr4);}
+    .empty-state iconify-icon{font-size:52px;display:block;margin-bottom:12px;opacity:.4;}
+    .empty-state h3{font-size:15px;font-weight:600;color:var(--gr6);margin-bottom:6px;}
+
+    /* LOADING */
+    .loading-row td{padding:32px;text-align:center;color:var(--gr4);}
+    @keyframes spin{to{transform:rotate(360deg)}}
+    .spin{animation:spin 1s linear infinite;display:inline-block;}
+
+    /* MODAL */
+    .mo{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:500;display:none;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(3px);}
+    .mo.open{display:flex;}
+    .modal{background:var(--surf);border-radius:16px;width:100%;max-width:580px;max-height:90vh;overflow-y:auto;box-shadow:0 24px 80px rgba(0,0,0,.2);animation:mIn .3s cubic-bezier(.34,1.2,.64,1);}
+    @keyframes mIn{from{opacity:0;transform:scale(.94)translateY(16px)}to{opacity:1;transform:none}}
+    .mh{display:flex;align-items:center;justify-content:space-between;padding:20px 24px;border-bottom:1px solid var(--brd);}
+    .mt{font-family:var(--fh);font-size:1.1rem;font-weight:700;color:var(--dark);}
+    .mc{width:32px;height:32px;border-radius:50%;background:var(--gr1);display:flex;align-items:center;justify-content:center;font-size:18px;color:var(--gr6);cursor:pointer;transition:var(--tr);}
+    .mc:hover{background:var(--gr2);}
+    .mb{padding:24px;}
+    .mf{padding:16px 24px;border-top:1px solid var(--brd);display:flex;gap:10px;justify-content:flex-end;}
+    .mfr{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+    .mg{margin-bottom:14px;}
+    .ml{display:block;font-size:12.5px;font-weight:600;color:var(--gr8);margin-bottom:6px;}
+    .mi,.msl,.mta{width:100%;padding:10px 13px;border:1.5px solid var(--gr2);border-radius:var(--rs);font-family:var(--fb);font-size:14px;color:var(--gr8);background:var(--gr1);outline:none;transition:all .2s;}
+    .mta{min-height:80px;resize:vertical;}
+    .mi:focus,.msl:focus,.mta:focus{border-color:var(--g5);background:#fff;box-shadow:0 0 0 3px rgba(76,175,80,.12);}
+
+    /* PROFILE CARD IN MODAL */
+    .prof-card{display:flex;flex-direction:column;align-items:center;gap:8px;padding:20px;background:var(--g0);border-radius:var(--r);margin-bottom:20px;}
+    .prof-av-lg{width:72px;height:72px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:24px;border:3px solid #fff;box-shadow:0 2px 12px rgba(0,0,0,.12);}
+    .prof-name{font-family:var(--fh);font-size:1.1rem;font-weight:700;color:var(--g9);}
+    .prof-org{font-size:13px;color:var(--gr6);}
+
+    /* SIDEBAR OVERLAY */
+    .sb-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:190;}
+    .sb-overlay.visible{display:block;}
+
+    /* TOAST */
+    #tc{position:fixed;top:20px;right:20px;z-index:9999;display:flex;flex-direction:column;gap:8px;}
+    .toast{padding:12px 16px;border-radius:10px;font-size:13.5px;display:flex;align-items:center;gap:8px;box-shadow:var(--shm);animation:tIn .3s ease;max-width:320px;color:#fff;}
+    .toast.ok{background:var(--g8);}
+    .toast.err{background:var(--red);}
+    .toast.warn{background:var(--gold);color:var(--dark);}
+    @keyframes tIn{from{opacity:0;transform:translateX(20px)}to{opacity:1;transform:none}}
+
+    @keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+    .ai{animation:fadeUp .35s ease both;}
+
+    @media(max-width:768px){
+      :root{--sw:260px;}
+      .sidebar{transform:translateX(-100%);}
+      .sidebar.mob-open{transform:none;}
+      .sb-overlay.visible{display:block;}
+      .main-wrap{margin-left:0!important;}
+      .pc{padding:16px;}
+      .stats-row{grid-template-columns:1fr 1fr;}
+      .hdr-ui{display:none;}
+      .mfr{grid-template-columns:1fr;}
+    }
+    @media(max-width:480px){.stats-row{grid-template-columns:1fr;}}
+  </style>
+</head>
+<body>
+
+<div class="sb-overlay" id="sbOverlay" onclick="closeSb()"></div>
+<div id="tc"></div>
+
+<!-- SIDEBAR -->
+<aside class="sidebar" id="sidebar">
+  <div class="sb-logo">
+    <img src="/assets/icons/logo-small.png" alt="FODDEB" style="width:36px;height:36px;border-radius:10px;object-fit:contain;background:#fff;padding:3px;flex-shrink:0">
+    <div class="sb-logo-text"><strong>FODDEB</strong><span>Administration</span></div>
+  </div>
+  <div class="sb-sec">
+    <div class="sb-sec-lbl">Principal</div>
+    <ul>
+      <li class="nav-item" onclick="go('/admin/dashboard.html')"><iconify-icon icon="mdi:view-dashboard-outline"></iconify-icon><span class="nav-label">Tableau de bord</span></li>
+      <li class="nav-item active"><iconify-icon icon="mdi:account-group-outline"></iconify-icon><span class="nav-label">Membres</span><span class="nav-badge" id="pendingBadge">—</span></li>
+      <li class="nav-item" onclick="go('/admin/dons.html')"><iconify-icon icon="mdi:heart-outline"></iconify-icon><span class="nav-label">Dons et Paiements</span></li>
+      <li class="nav-item" onclick="go('/admin/projets.html')"><iconify-icon icon="mdi:clipboard-list-outline"></iconify-icon><span class="nav-label">Projets</span></li>
+      <li class="nav-item" onclick="go('/admin/actualites.html')"><iconify-icon icon="mdi:newspaper-variant-outline"></iconify-icon><span class="nav-label">Actualites</span></li>
+    </ul>
+  </div>
+  <div class="sb-sec">
+    <div class="sb-sec-lbl">Communication</div>
+    <ul>
+      <li class="nav-item" onclick="go('/admin/newsletter.html')"><iconify-icon icon="mdi:email-newsletter"></iconify-icon><span class="nav-label">Newsletter</span></li>
+      <li class="nav-item" onclick="go('/admin/messages.html')"><iconify-icon icon="mdi:message-text-outline"></iconify-icon><span class="nav-label">Messages</span></li>
+      <li class="nav-item" onclick="go('/admin/cartographie.html')"><iconify-icon icon="mdi:map-outline"></iconify-icon><span class="nav-label">Cartographie</span></li>
+    </ul>
+  </div>
+  <div class="sb-sec">
+    <div class="sb-sec-lbl">Systeme</div>
+    <ul>
+      <li class="nav-item" onclick="go('/admin/bailleurs.html')"><iconify-icon icon="mdi:domain"></iconify-icon><span class="nav-label">Portail bailleurs</span></li>
+      <li class="nav-item" onclick="go('/admin/parametres.html')"><iconify-icon icon="mdi:cog-outline"></iconify-icon><span class="nav-label">Parametres</span></li>
+    </ul>
+  </div>
+  <div class="sb-foot">
+    <div class="sb-user">
+      <div class="sb-av" id="sbAv">AD</div>
+      <div class="sb-ui"><strong id="sbName">Admin</strong><span id="sbRole">Super Admin</span></div>
+      <iconify-icon icon="mdi:chevron-up" style="color:rgba(255,255,255,.4);font-size:16px"></iconify-icon>
+    </div>
+  </div>
+</aside>
+
+<!-- MAIN -->
+<div class="main-wrap" id="mainWrap">
+
+  <!-- HEADER -->
+  <header class="admin-header">
+    <button class="hdr-toggle" onclick="toggleSb()"><iconify-icon icon="mdi:menu"></iconify-icon></button>
+    <nav class="hdr-bc">
+      <a href="/admin/dashboard.html">FODDEB</a>
+      <iconify-icon icon="mdi:chevron-right"></iconify-icon>
+      <strong>Membres</strong>
+    </nav>
+    <div class="hdr-right">
+      <button class="hdr-btn"><iconify-icon icon="mdi:bell-outline"></iconify-icon><span class="notif-dot"></span></button>
+      <div class="hdr-user">
+        <div class="hdr-av" id="hdrAv">AD</div>
+        <div class="hdr-ui"><strong id="hdrName">Admin</strong><span id="hdrRole">Super Admin</span></div>
+        <iconify-icon icon="mdi:chevron-down" style="font-size:16px;color:var(--gr4)"></iconify-icon>
+      </div>
+    </div>
+  </header>
+
+  <!-- PAGE -->
+  <main class="pc">
+
+    <!-- Header -->
+    <div class="pg-hdr ai">
+      <div>
+        <h1 class="pg-title">Gestion des membres</h1>
+        <p class="pg-sub">Gerez les adhesions, roles et acces au reseau FODDEB</p>
+      </div>
+      <div class="pg-actions">
+        <button class="btn btn-o" onclick="exportCSV()"><iconify-icon icon="mdi:download-outline"></iconify-icon> Exporter CSV</button>
+        <button class="btn btn-p" onclick="openM('addM')"><iconify-icon icon="mdi:account-plus-outline"></iconify-icon> Ajouter</button>
+      </div>
+    </div>
+
+    <!-- Stats -->
+    <div class="stats-row ai">
+      <div class="stat-card"><div class="stat-icon ic-g"><iconify-icon icon="mdi:account-group-outline"></iconify-icon></div><div class="stat-info"><strong id="stTotal">—</strong><span>Total membres</span></div></div>
+      <div class="stat-card"><div class="stat-icon ic-g"><iconify-icon icon="mdi:account-check-outline"></iconify-icon></div><div class="stat-info"><strong id="stActive">—</strong><span>Actifs</span></div></div>
+      <div class="stat-card"><div class="stat-icon ic-o"><iconify-icon icon="mdi:account-clock-outline"></iconify-icon></div><div class="stat-info"><strong id="stPending">—</strong><span>En attente</span></div></div>
+      <div class="stat-card"><div class="stat-icon ic-r"><iconify-icon icon="mdi:account-cancel-outline"></iconify-icon></div><div class="stat-info"><strong id="stRejected">—</strong><span>Rejetes</span></div></div>
+      <div class="stat-card"><div class="stat-icon ic-b"><iconify-icon icon="mdi:shield-account-outline"></iconify-icon></div><div class="stat-info"><strong id="stAdmins">—</strong><span>Admins</span></div></div>
+    </div>
+
+    <!-- Tabs -->
+    <div class="tabs-bar">
+      <button class="tab-btn active" onclick="setTab('all',this)">Tous <span class="tab-count" id="tc-all">0</span></button>
+      <button class="tab-btn" onclick="setTab('active',this)">Actifs <span class="tab-count" id="tc-active">0</span></button>
+      <button class="tab-btn" onclick="setTab('pending',this)">En attente <span class="tab-count" id="tc-pending">0</span></button>
+      <button class="tab-btn" onclick="setTab('rejected',this)">Rejetes <span class="tab-count" id="tc-rejected">0</span></button>
+    </div>
+
+    <!-- Bulk bar -->
+    <div class="bulk-bar" id="bulkBar">
+      <iconify-icon icon="mdi:check-circle-outline"></iconify-icon>
+      <span id="bulkCount">0 selectionnes</span>
+      <button class="bulk-btn" onclick="bulkValidate()"><iconify-icon icon="mdi:check"></iconify-icon> Valider</button>
+      <button class="bulk-btn" onclick="bulkReject()"><iconify-icon icon="mdi:close"></iconify-icon> Rejeter</button>
+      <button class="bulk-btn" onclick="exportCSV()"><iconify-icon icon="mdi:download"></iconify-icon> Exporter</button>
+      <button class="bulk-btn" style="margin-left:auto" onclick="clearSel()"><iconify-icon icon="mdi:close"></iconify-icon></button>
+    </div>
+
+    <!-- Toolbar -->
+    <div class="toolbar ai">
+      <div class="search-wrap">
+        <iconify-icon icon="mdi:magnify"></iconify-icon>
+        <input type="search" class="search-input" id="searchInp" placeholder="Rechercher par nom, email, organisation..." oninput="applyFilters()"/>
+      </div>
+      <select class="fsel" id="roleF" onchange="applyFilters()">
+        <option value="">Tous les roles</option>
+        <option value="admin">Administrateur</option>
+        <option value="manager">Gestionnaire</option>
+        <option value="member">Membre</option>
+        <option value="donor">Donateur</option>
+      </select>
+      <select class="fsel" id="deptF" onchange="applyFilters()">
+        <option value="">Tous les departements</option>
+        <option>Alibori</option><option>Atacora</option><option>Atlantique</option>
+        <option>Borgou</option><option>Collines</option><option>Couffo</option>
+        <option>Donga</option><option>Littoral</option><option>Mono</option>
+        <option>Oueme</option><option>Plateau</option><option>Zou</option>
+      </select>
+      <div class="toolbar-right">
+        <button class="btn-icon" onclick="loadMembers()" title="Actualiser"><iconify-icon icon="mdi:refresh"></iconify-icon></button>
+      </div>
+    </div>
+
+    <!-- TABLE -->
+    <div class="card ai">
+      <div class="tw">
+        <table>
+          <thead>
+            <tr>
+              <th style="width:44px"><input type="checkbox" id="selAll" onchange="toggleSelAll(this)"/></th>
+              <th onclick="sortBy('Nom')">Membre <iconify-icon icon="mdi:unfold-more-horizontal" style="font-size:14px;vertical-align:middle"></iconify-icon></th>
+              <th>Organisation</th>
+              <th>Departement</th>
+              <th onclick="sortBy('Role')">Role <iconify-icon icon="mdi:unfold-more-horizontal" style="font-size:14px;vertical-align:middle"></iconify-icon></th>
+              <th onclick="sortBy('Statut')">Statut <iconify-icon icon="mdi:unfold-more-horizontal" style="font-size:14px;vertical-align:middle"></iconify-icon></th>
+              <th onclick="sortBy('DateAdhesion')">Date <iconify-icon icon="mdi:unfold-more-horizontal" style="font-size:14px;vertical-align:middle"></iconify-icon></th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="tbody"></tbody>
+        </table>
+      </div>
+      <div id="emptyState" class="empty-state" style="display:none">
+        <iconify-icon icon="mdi:account-search-outline"></iconify-icon>
+        <h3>Aucun membre trouve</h3>
+        <p>Ajustez vos filtres de recherche</p>
+      </div>
+      <div class="pagination" id="pagWrap">
+        <span class="pag-info" id="pagInfo"></span>
+        <div class="pag-btns" id="pagBtns"></div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<!-- MODAL — Voir membre -->
+<div class="mo" id="viewM">
+  <div class="modal">
+    <div class="mh"><h3 class="mt" id="viewTitle">Profil</h3><button class="mc" onclick="closeM('viewM')">&#x2715;</button></div>
+    <div class="mb" id="viewBody"></div>
+    <div class="mf">
+      <button class="btn btn-o btn-sm" onclick="closeM('viewM')">Fermer</button>
+      <button class="btn btn-p btn-sm" id="viewEditBtn"><iconify-icon icon="mdi:pencil-outline"></iconify-icon> Modifier le role</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL — Ajouter membre -->
+<div class="mo" id="addM">
+  <div class="modal">
+    <div class="mh"><h3 class="mt">Ajouter un membre</h3><button class="mc" onclick="closeM('addM')">&#x2715;</button></div>
+    <div class="mb">
+      <div class="mfr">
+        <div class="mg"><label class="ml">Prenom *</label><input type="text" id="aPrenom" class="mi" placeholder="Prenom"/></div>
+        <div class="mg"><label class="ml">Nom *</label><input type="text" id="aNom" class="mi" placeholder="Nom"/></div>
+      </div>
+      <div class="mg"><label class="ml">Email *</label><input type="email" id="aEmail" class="mi" placeholder="email@exemple.com"/></div>
+      <div class="mfr">
+        <div class="mg"><label class="ml">Telephone</label><input type="tel" id="aTel" class="mi" placeholder="+229 XX XX XX XX"/></div>
+        <div class="mg"><label class="ml">Role *</label>
+          <select id="aRole" class="msl">
+            <option value="member">Membre</option>
+            <option value="manager">Gestionnaire</option>
+            <option value="donor">Donateur</option>
+            <option value="admin">Administrateur</option>
+          </select>
+        </div>
+      </div>
+      <div class="mg"><label class="ml">Organisation</label><input type="text" id="aOrg" class="mi" placeholder="Nom de l'organisation"/></div>
+      <div class="mfr">
+        <div class="mg"><label class="ml">Departement</label>
+          <select id="aDept" class="msl">
+            <option value="">Selectionnez</option>
+            <option>Alibori</option><option>Atacora</option><option>Atlantique</option>
+            <option>Borgou</option><option>Collines</option><option>Couffo</option>
+            <option>Donga</option><option>Littoral</option><option>Mono</option>
+            <option>Oueme</option><option>Plateau</option><option>Zou</option>
+          </select>
+        </div>
+        <div class="mg"><label class="ml">Statut</label>
+          <select id="aStatut" class="msl">
+            <option value="active">Actif</option>
+            <option value="pending">En attente</option>
+          </select>
+        </div>
+      </div>
+      <div class="mg"><label class="ml">Notes</label><textarea id="aNotes" class="mta" placeholder="Notes internes (optionnel)"></textarea></div>
+    </div>
+    <div class="mf">
+      <button class="btn btn-o btn-sm" onclick="closeM('addM')">Annuler</button>
+      <button class="btn btn-p btn-sm" id="addBtn" onclick="addMember()"><iconify-icon icon="mdi:account-plus-outline"></iconify-icon> Ajouter</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL — Confirmation -->
+<div class="mo" id="confirmM">
+  <div class="modal" style="max-width:420px">
+    <div class="mh"><h3 class="mt" id="confirmTitle">Confirmer</h3><button class="mc" onclick="closeM('confirmM')">&#x2715;</button></div>
+    <div class="mb" id="confirmBody"></div>
+    <div class="mf">
+      <button class="btn btn-o btn-sm" onclick="closeM('confirmM')">Annuler</button>
+      <button class="btn btn-sm" id="confirmBtn"></button>
+    </div>
+  </div>
+</div>
+
+<script src="/assets/js/config.js"></script>
+<script src="/assets/js/utils.js"></script>
+<script src="/assets/js/services/api.js"></script>
+<script src="/assets/js/services/auth.js"></script>
+<script>
+'use strict';
+
+/* ═══ CONSTANTES ═══ */
+const COLORS = ['#1B5E20','#1565C0','#6A1B9A','#C62828','#F57F17','#00695C','#4527A0'];
+const gc  = i => COLORS[i % COLORS.length];
+const ini = (p,n) => (((p||'')[0]||'') + ((n||'')[0]||'')).toUpperCase() || '?';
+const fmtD = d => { try { return new Date(d).toLocaleDateString('fr-FR',{day:'numeric',month:'short',year:'numeric'}); } catch { return d||'—'; } };
+const go   = url => window.location.href = url;
+
+const STAT_BADGE = {
+  active:   '<span class="badge bs"><span class="bdot"></span>Actif</span>',
+  pending:  '<span class="badge bw"><span class="bdot"></span>En attente</span>',
+  rejected: '<span class="badge bd-"><span class="bdot"></span>Rejete</span>',
+};
+const ROLE_BADGE = {
+  admin:   '<span class="role-badge r-admin">Admin</span>',
+  manager: '<span class="role-badge r-manager">Manager</span>',
+  member:  '<span class="role-badge r-member">Membre</span>',
+  donor:   '<span class="role-badge r-donor">Donateur</span>',
+};
+const ROLE_LBL = { admin:'Administrateur', manager:'Gestionnaire', member:'Membre', donor:'Donateur' };
+
+/* ═══ ETAT ═══ */
+let ALL   = [];
+let FILT  = [];
+let curTab   = 'all';
+let curPage  = 1;
+const PER    = 10;
+let sortF    = 'DateAdhesion';
+let sortD    = 'desc';
+let selected = new Set();
+
+/* ═══ GUARD SESSION ═══ */
+function getUser() { try { return JSON.parse(sessionStorage.getItem('foddeb_user')); } catch { return null; } }
+function requireAdmin() {
+  const u = getUser();
+  if (!u) { window.location.href = '/auth/login.html'; return null; }
+  if (u.role !== 'admin' && u.role !== 'manager') { window.location.href = '/auth/login.html'; return null; }
+  return u;
+}
+
+/* ═══ INFOS UTILISATEUR ═══ */
+function loadUserInfo() {
+  const u = getUser() || {};
+  const prenom = u.Prenom || u.prenom || 'Admin';
+  const nom    = u.Nom    || u.nom    || '';
+  const role   = u.role   || 'admin';
+  const init   = ini(prenom, nom);
+  const rlbl   = { admin:'Super Admin', manager:'Gestionnaire', member:'Membre', donor:'Donateur' }[role] || role;
+  ['sbAv','hdrAv'].forEach(id => { const el = document.getElementById(id); if(el) el.textContent = init; });
+  ['sbName','hdrName'].forEach(id => { const el = document.getElementById(id); if(el) el.textContent = prenom + ' ' + nom; });
+  ['sbRole','hdrRole'].forEach(id => { const el = document.getElementById(id); if(el) el.textContent = rlbl; });
+}
+
+/* ═══ CHARGEMENT API GAS ═══ */
+async function loadMembers() {
+  showTableLoading();
+  try {
+    const res = await FODDEB_API.members.list(1, 500, '');
+    ALL = (res.data || []).map(m => ({
+      ID:            m.ID            || m.id            || '',
+      Prenom:        m.Prenom        || m.prenom        || '',
+      Nom:           m.Nom           || m.nom           || '',
+      Email:         m.Email         || m.email         || '',
+      Telephone:     m.Telephone     || m.tel           || '',
+      Organisation:  m.Organisation  || m.org           || '—',
+      Departement:   m.Departement   || m.dept          || '—',
+      Role:          m.Role          || m.role          || 'member',
+      Statut:        m.Statut        || m.statut        || 'pending',
+      Domaine:       m.Domaine       || m.domaine       || '—',
+      DateAdhesion:  m.DateAdhesion  || m.date          || '',
+      Notes:         m.Notes         || m.notes         || '',
+    }));
+    updateStats();
+    applyFilters();
+  } catch(e) {
+    document.getElementById('tbody').innerHTML = `<tr class="loading-row"><td colspan="8"><iconify-icon icon="mdi:alert-circle-outline" style="font-size:20px;color:var(--red);display:block;margin:0 auto 8px"></iconify-icon>Erreur : ${e.message}<br/><button class="btn btn-o btn-sm" style="margin-top:10px" onclick="loadMembers()">Reessayer</button></td></tr>`;
+    console.error('loadMembers:', e);
+  }
+}
+
+function showTableLoading() {
+  document.getElementById('tbody').innerHTML = `<tr class="loading-row"><td colspan="8"><iconify-icon icon="mdi:loading" class="spin" style="font-size:24px;display:block;margin:0 auto 8px"></iconify-icon>Chargement des membres...</td></tr>`;
+}
+
+/* ═══ STATS ═══ */
+function updateStats() {
+  const set = id => { const el = document.getElementById(id); return val => { if(el) el.textContent = val; }; };
+  set('stTotal')(ALL.length);
+  set('stActive')(ALL.filter(m=>m.Statut==='active').length);
+  set('stPending')(ALL.filter(m=>m.Statut==='pending').length);
+  set('stRejected')(ALL.filter(m=>m.Statut==='rejected').length);
+  set('stAdmins')(ALL.filter(m=>m.Role==='admin'||m.Role==='manager').length);
+  const p = ALL.filter(m=>m.Statut==='pending').length;
+  const pb = document.getElementById('pendingBadge'); if(pb) pb.textContent = p;
+  // Tab counts
+  document.getElementById('tc-all').textContent      = ALL.length;
+  document.getElementById('tc-active').textContent   = ALL.filter(m=>m.Statut==='active').length;
+  document.getElementById('tc-pending').textContent  = ALL.filter(m=>m.Statut==='pending').length;
+  document.getElementById('tc-rejected').textContent = ALL.filter(m=>m.Statut==='rejected').length;
+}
+
+/* ═══ FILTRES ═══ */
+function applyFilters() {
+  const q    = (document.getElementById('searchInp')?.value || '').toLowerCase();
+  const role = document.getElementById('roleF')?.value || '';
+  const dept = document.getElementById('deptF')?.value || '';
+  FILT = ALL.filter(m => {
+    const mTab  = curTab === 'all' || m.Statut === curTab;
+    const mQ    = !q || [m.Prenom,m.Nom,m.Email,m.Organisation,m.Departement].some(v=>(v||'').toLowerCase().includes(q));
+    const mRole = !role || m.Role === role;
+    const mDept = !dept || m.Departement === dept;
+    return mTab && mQ && mRole && mDept;
+  }).sort((a,b) => {
+    let va = a[sortF]||'', vb = b[sortF]||'';
+    if (sortF === 'DateAdhesion') { va = new Date(va||0); vb = new Date(vb||0); }
+    const cmp = va < vb ? -1 : va > vb ? 1 : 0;
+    return sortD === 'asc' ? cmp : -cmp;
+  });
+  curPage = 1;
+  renderTable();
+  renderPagination();
+}
+
+/* ═══ RENDU TABLE ═══ */
+function renderTable() {
+  const tbody = document.getElementById('tbody');
+  const empty = document.getElementById('emptyState');
+  const page  = FILT.slice((curPage-1)*PER, curPage*PER);
+
+  if (!page.length) {
+    tbody.innerHTML = '';
+    empty.style.display = ALL.length ? 'block' : 'none';
+    document.getElementById('pagWrap').style.display = 'none';
+    return;
+  }
+  empty.style.display = 'none';
+  document.getElementById('pagWrap').style.display = 'flex';
+
+  tbody.innerHTML = page.map((m, i) => {
+    const color = gc(ALL.indexOf(m));
+    const init  = ini(m.Prenom, m.Nom);
+    const sel   = selected.has(m.ID);
+    const pendActions = m.Statut === 'pending'
+      ? `<button class="btn-success-sm" onclick="validateMember('${m.ID}','${m.Prenom} ${m.Nom}')"><iconify-icon icon="mdi:check"></iconify-icon>Valider</button>
+         <button class="btn-danger-sm"  onclick="rejectMember('${m.ID}','${m.Prenom} ${m.Nom}')"><iconify-icon icon="mdi:close"></iconify-icon>Rejeter</button>`
+      : '';
+    return `
+    <tr style="animation:fadeUp .25s ease ${i*.04}s both">
+      <td><input type="checkbox" ${sel?'checked':''} onchange="toggleSel('${m.ID}',this)"/></td>
+      <td>
+        <div class="mc-cell">
+          <div class="av" style="background:${color}22;color:${color}">${init}</div>
+          <div><div class="mc-name">${m.Prenom} ${m.Nom}</div><div class="mc-email">${m.Email}</div></div>
+        </div>
+      </td>
+      <td style="color:var(--gr6)">${m.Organisation}</td>
+      <td><span class="badge bn">${m.Departement}</span></td>
+      <td>${ROLE_BADGE[m.Role]||m.Role}</td>
+      <td>${STAT_BADGE[m.Statut]||m.Statut}</td>
+      <td style="color:var(--gr4);font-size:12.5px">${fmtD(m.DateAdhesion)}</td>
+      <td>
+        <div class="act-cell">
+          ${pendActions}
+          <button class="btn-icon" onclick="viewMember('${m.ID}')" title="Voir"><iconify-icon icon="mdi:eye-outline"></iconify-icon></button>
+          <button class="btn-icon" onclick="changeRole('${m.ID}')" title="Modifier le role"><iconify-icon icon="mdi:shield-edit-outline"></iconify-icon></button>
+          <button class="btn-icon" onclick="deleteMember('${m.ID}','${m.Prenom} ${m.Nom}')" title="Supprimer" style="color:var(--red)"><iconify-icon icon="mdi:delete-outline"></iconify-icon></button>
+        </div>
+      </td>
+    </tr>`;
+  }).join('');
+}
+
+/* ═══ PAGINATION ═══ */
+function renderPagination() {
+  const total = FILT.length;
+  const pages = Math.ceil(total/PER);
+  const from  = total ? (curPage-1)*PER+1 : 0;
+  const to    = Math.min(curPage*PER, total);
+  document.getElementById('pagInfo').textContent = `${from}–${to} sur ${total} membre${total>1?'s':''}`;
+  const btns = [
+    `<button class="pag-btn" onclick="changePage(${curPage-1})" ${curPage===1?'disabled':''}>&#x2039;</button>`,
+    ...Array.from({length:Math.min(pages,7)},(_,i)=>`<button class="pag-btn ${i+1===curPage?'active':''}" onclick="changePage(${i+1})">${i+1}</button>`),
+    `<button class="pag-btn" onclick="changePage(${curPage+1})" ${curPage>=pages||pages===0?'disabled':''}>&#x203A;</button>`,
+  ].join('');
+  document.getElementById('pagBtns').innerHTML = btns;
+}
+
+function changePage(p) {
+  const pages = Math.ceil(FILT.length/PER);
+  if (p < 1 || p > pages) return;
+  curPage = p;
+  renderTable();
+  renderPagination();
+}
+
+/* ═══ TRI ═══ */
+function sortBy(field) {
+  if (sortF === field) sortD = sortD==='asc' ? 'desc' : 'asc';
+  else { sortF = field; sortD = 'asc'; }
+  applyFilters();
+}
+
+/* ═══ TABS ═══ */
+function setTab(tab, btn) {
+  curTab = tab; curPage = 1;
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  applyFilters();
+}
+
+/* ═══ SELECTION ═══ */
+function toggleSel(id, cb) {
+  if (cb.checked) selected.add(id); else selected.delete(id);
+  updateBulk();
+}
+function toggleSelAll(cb) {
+  FILT.slice((curPage-1)*PER, curPage*PER).forEach(m => { if(cb.checked) selected.add(m.ID); else selected.delete(m.ID); });
+  renderTable();
+  updateBulk();
+}
+function updateBulk() {
+  document.getElementById('bulkCount').textContent = `${selected.size} selectionne${selected.size>1?'s':''}`;
+  document.getElementById('bulkBar').classList.toggle('visible', selected.size > 0);
+}
+function clearSel() { selected.clear(); document.getElementById('selAll').checked=false; renderTable(); updateBulk(); }
+
+/* ═══ ACTIONS INDIVIDUELLES ═══ */
+async function validateMember(id, nom) {
+  if (!confirm(`Valider l'adhesion de ${nom} ?`)) return;
+  try {
+    const res = await FODDEB_API.members.validate(id);
+    if (!res.success) throw new Error(res.error);
+    toast(`Adhesion de ${nom} validee. Email envoye.`);
+    await loadMembers();
+  } catch(e) { toast('Erreur : ' + e.message, 'err'); }
+}
+
+async function rejectMember(id, nom) {
+  if (!confirm(`Rejeter la demande de ${nom} ?`)) return;
+  try {
+    const res = await FODDEB_API.members.reject(id, 'Demande rejetee par l\'administrateur');
+    if (!res.success) throw new Error(res.error);
+    toast(`Demande de ${nom} rejetee.`, 'warn');
+    await loadMembers();
+  } catch(e) { toast('Erreur : ' + e.message, 'err'); }
+}
+
+async function deleteMember(id, nom) {
+  if (!confirm(`Supprimer definitivement ${nom} ? Cette action est irreversible.`)) return;
+  try {
+    const res = await FODDEB_API.members.delete(id);
+    if (!res.success) throw new Error(res.error);
+    toast(`${nom} supprime(e).`, 'warn');
+    await loadMembers();
+  } catch(e) { toast('Erreur : ' + e.message, 'err'); }
+}
+
+function changeRole(id) {
+  const m = ALL.find(x => x.ID === id);
+  if (!m) return;
+  document.getElementById('confirmTitle').textContent = 'Modifier le role';
+  document.getElementById('confirmBody').innerHTML = `
+    <p style="margin-bottom:14px;font-size:14px;color:var(--gr6)">Role actuel de <strong>${m.Prenom} ${m.Nom}</strong> :</p>
+    <select id="newRole" style="width:100%;padding:10px;border:1.5px solid var(--gr2);border-radius:var(--rs);font-family:var(--fb);font-size:14px;background:var(--gr1);outline:none">
+      ${['admin','manager','member','donor'].map(r=>`<option value="${r}" ${r===m.Role?'selected':''}>${ROLE_LBL[r]}</option>`).join('')}
+    </select>`;
+  const btn = document.getElementById('confirmBtn');
+  btn.className = 'btn btn-p btn-sm';
+  btn.innerHTML = '<iconify-icon icon="mdi:check"></iconify-icon> Appliquer';
+  btn.onclick = async () => {
+    const newRole = document.getElementById('newRole').value;
+    try {
+      const res = await FODDEB_API.members.setRole(id, newRole);
+      if (!res.success) throw new Error(res.error);
+      toast(`Role de ${m.Prenom} ${m.Nom} mis a jour.`);
+      closeM('confirmM');
+      await loadMembers();
+    } catch(e) { toast('Erreur : ' + e.message, 'err'); }
+  };
+  openM('confirmM');
+}
+
+function viewMember(id) {
+  const m = ALL.find(x => x.ID === id);
+  if (!m) return;
+  const color = gc(ALL.indexOf(m));
+  const init  = ini(m.Prenom, m.Nom);
+  document.getElementById('viewTitle').textContent = `${m.Prenom} ${m.Nom}`;
+  document.getElementById('viewBody').innerHTML = `
+    <div class="prof-card">
+      <div class="prof-av-lg" style="background:${color}22;color:${color}">${init}</div>
+      <div class="prof-name">${m.Prenom} ${m.Nom}</div>
+      <div class="prof-org">${m.Organisation}</div>
+      <div style="display:flex;gap:8px;margin-top:6px">${STAT_BADGE[m.Statut]||''} ${ROLE_BADGE[m.Role]||''}</div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+      ${[['Email',m.Email,'mdi:email-outline'],['Telephone',m.Telephone,'mdi:phone-outline'],
+         ['Organisation',m.Organisation,'mdi:domain'],['Departement',m.Departement,'mdi:map-marker-outline'],
+         ['Domaine',m.Domaine,'mdi:tag-outline'],['Adhesion',fmtD(m.DateAdhesion),'mdi:calendar-outline']
+        ].map(([l,v,ic])=>`
+      <div style="display:flex;align-items:flex-start;gap:10px;padding:12px;background:var(--gr1);border-radius:8px">
+        <iconify-icon icon="${ic}" style="font-size:18px;color:var(--g7);flex-shrink:0;margin-top:1px"></iconify-icon>
+        <div><div style="font-size:11px;color:var(--gr4);font-weight:600;text-transform:uppercase;letter-spacing:.06em;margin-bottom:3px">${l}</div>
+        <div style="font-size:13.5px;font-weight:500;color:var(--gr8)">${v||'—'}</div></div>
+      </div>`).join('')}
+    </div>
+    ${m.Notes ? `<div style="margin-top:14px;background:var(--goldf);border:1px solid #FDE68A;border-radius:8px;padding:12px;font-size:13px;color:#92400E"><strong>Note :</strong> ${m.Notes}</div>` : ''}
+  `;
+  document.getElementById('viewEditBtn').onclick = () => { closeM('viewM'); changeRole(id); };
+  openM('viewM');
+}
+
+/* ═══ ACTIONS GROUPEES ═══ */
+async function bulkValidate() {
+  if (!selected.size) return;
+  const ids = [...selected];
+  try {
+    await Promise.all(ids.map(id => FODDEB_API.members.validate(id)));
+    toast(`${ids.length} membre${ids.length>1?'s':''} valide${ids.length>1?'s':''}.`);
+    clearSel();
+    await loadMembers();
+  } catch(e) { toast('Erreur groupee : ' + e.message, 'err'); }
+}
+
+async function bulkReject() {
+  if (!selected.size) return;
+  if (!confirm(`Rejeter ${selected.size} membre${selected.size>1?'s':''} ?`)) return;
+  const ids = [...selected];
+  try {
+    await Promise.all(ids.map(id => FODDEB_API.members.reject(id, 'Action groupee')));
+    toast(`${ids.length} membre${ids.length>1?'s':''} rejete${ids.length>1?'s':''}.`, 'warn');
+    clearSel();
+    await loadMembers();
+  } catch(e) { toast('Erreur groupee : ' + e.message, 'err'); }
+}
+
+/* ═══ AJOUTER MEMBRE ═══ */
+async function addMember() {
+  const prenom = document.getElementById('aPrenom').value.trim();
+  const nom    = document.getElementById('aNom').value.trim();
+  const email  = document.getElementById('aEmail').value.trim();
+  if (!prenom || !nom || !email) { toast('Remplissez les champs obligatoires.', 'err'); return; }
+  const btn = document.getElementById('addBtn');
+  btn.disabled = true;
+  btn.innerHTML = '<span style="width:14px;height:14px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;display:inline-block;vertical-align:middle"></span> Ajout...';
+  try {
+    const res = await FODDEB_API.members.create({
+      prenom, nom, email,
+      telephone:    document.getElementById('aTel').value.trim(),
+      organisation: document.getElementById('aOrg').value.trim() || 'Particulier',
+      departement:  document.getElementById('aDept').value || '—',
+      role:         document.getElementById('aRole').value,
+      statut:       document.getElementById('aStatut').value,
+      notes:        document.getElementById('aNotes').value.trim(),
+      createdAt:    new Date().toISOString(),
+    });
+    if (!res.success) throw new Error(res.error);
+    closeM('addM');
+    toast(`${prenom} ${nom} ajoute(e) avec succes.`);
+    ['aPrenom','aNom','aEmail','aTel','aOrg','aNotes'].forEach(id => document.getElementById(id).value = '');
+    await loadMembers();
+  } catch(e) {
+    toast('Erreur : ' + e.message, 'err');
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = '<iconify-icon icon="mdi:account-plus-outline"></iconify-icon> Ajouter';
+  }
+}
+
+/* ═══ EXPORT CSV ═══ */
+function exportCSV() {
+  const data = selected.size ? ALL.filter(m => selected.has(m.ID)) : FILT;
+  const headers = ['ID','Prenom','Nom','Email','Telephone','Organisation','Departement','Role','Statut','DateAdhesion'];
+  const rows = data.map(m => headers.map(h => `"${(m[h]||'').toString().replace(/"/g,'""')}"`).join(','));
+  const csv  = [headers.join(','), ...rows].join('\n');
+  const a    = document.createElement('a');
+  a.href     = URL.createObjectURL(new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8' }));
+  a.download = `membres_foddeb_${new Date().toISOString().split('T')[0]}.csv`;
+  a.click();
+  toast('Export CSV telecharge.');
+}
+
+/* ═══ MODAL ═══ */
+function openM(id)  { document.getElementById(id).classList.add('open');  document.body.style.overflow='hidden'; }
+function closeM(id) { document.getElementById(id).classList.remove('open'); document.body.style.overflow=''; }
+document.querySelectorAll('.mo').forEach(o => o.addEventListener('click', e => { if(e.target===o){o.classList.remove('open');document.body.style.overflow='';} }));
+document.addEventListener('keydown', e => { if(e.key==='Escape') document.querySelectorAll('.mo.open').forEach(o=>{o.classList.remove('open');document.body.style.overflow='';}); });
+
+/* ═══ TOAST ═══ */
+function toast(msg, type='ok') {
+  const c = document.getElementById('tc');
+  const t = document.createElement('div');
+  t.className = 'toast ' + type;
+  t.innerHTML = `<iconify-icon icon="${type==='err'?'mdi:alert-circle-outline':'mdi:check-circle-outline'}"></iconify-icon><span>${msg}</span>`;
+  c.appendChild(t);
+  setTimeout(() => { t.style.opacity='0'; t.style.transition='.3s'; setTimeout(()=>t.remove(),300); }, 3500);
+}
+
+/* ═══ SIDEBAR ═══ */
+let sbCol=false, sbMob=false;
+function toggleSb() {
+  if (window.innerWidth<=768) { sbMob=!sbMob; document.getElementById('sidebar').classList.toggle('mob-open',sbMob); document.getElementById('sbOverlay').classList.toggle('visible',sbMob); }
+  else { sbCol=!sbCol; document.getElementById('sidebar').classList.toggle('collapsed',sbCol); document.getElementById('mainWrap').classList.toggle('collapsed',sbCol); }
+}
+function closeSb() { sbMob=false; document.getElementById('sidebar').classList.remove('mob-open'); document.getElementById('sbOverlay').classList.remove('visible'); }
+
+/* ═══ INIT ═══ */
+document.addEventListener('DOMContentLoaded', async () => {
+  const user = requireAdmin();
+  if (!user) return;
+  loadUserInfo();
+  await loadMembers();
+});
+
+/* ═══ PHOTO PROFIL ADMIN ═══ */
+function renderAdminAvatar() {
+  const user  = (typeof getUser === 'function') ? getUser() : null;
+  const photo = user && (user.Photo || user.PhotoURL || '');
+  const prenom = user ? (user.Prenom || user.prenom || 'A') : 'A';
+  const nom    = user ? (user.Nom    || user.nom    || '') : '';
+  const init   = (((prenom||'')[0]||'') + ((nom||'')[0]||'')).toUpperCase() || '?';
+  const color  = '#1B5E20';
+
+  ['sbAv','hdrAv'].forEach(function(id) {
+    var el = document.getElementById(id);
+    if (!el) return;
+    if (photo) {
+      el.innerHTML = '';
+      el.style.background = 'transparent';
+      el.style.padding    = '0';
+      var img = document.createElement('img');
+      img.src    = photo;
+      img.style.cssText = 'width:100%;height:100%;border-radius:50%;object-fit:cover;display:block';
+      img.onerror = function() { el.textContent = init; el.style.background = color; img.remove(); };
+      el.appendChild(img);
+    } else {
+      el.innerHTML    = init;
+      el.style.background = color;
+    }
+  });
+}
+
+async function changeAdminPhoto() {
+  var input = document.createElement('input');
+  input.type   = 'file';
+  input.accept = 'image/jpeg,image/png,image/webp';
+  input.onchange = async function() {
+    var file = input.files[0];
+    if (!file) return;
+    if (file.size > 3 * 1024 * 1024) { toast('Image trop volumineuse (max 3 Mo).', 'err'); return; }
+    toast('Upload en cours…', 'info');
+    try {
+      var b64 = await new Promise(function(res, rej) {
+        var r = new FileReader();
+        r.onload  = function() { res(r.result.split(',')[1]); };
+        r.onerror = function() { rej(new Error('Lecture échouée')); };
+        r.readAsDataURL(file);
+      });
+      var user = (typeof getUser === 'function') ? getUser() : {};
+      var membreId = user.ID || user.id || '';
+      var res = await FODDEB_API.members.uploadProfilePhoto(b64, file.type, membreId, user.sessionToken || '');
+      if (res && res.success) {
+        var photoUrl = res.url || res.photoUrl || res.fileUrl || '';
+        // Mettre à jour la session locale
+        user.Photo = photoUrl;
+        sessionStorage.setItem('foddeb_user', JSON.stringify(user));
+        renderAdminAvatar();
+        toast('Photo mise à jour avec succès.');
+      } else {
+        toast('Erreur upload : ' + ((res && res.error) || 'inconnue'), 'err');
+      }
+    } catch(e) {
+      toast('Erreur : ' + e.message, 'err');
+    }
+  };
+  input.click();
+}
+
+if ('serviceWorker' in navigator) navigator.serviceWorker.register('/sw.js').catch(()=>{});
+</script>
+</body>
+</html>

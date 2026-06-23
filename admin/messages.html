@@ -1,0 +1,753 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="robots" content="noindex, nofollow"/>
+  <title>Messages — FODDEB Admin</title>
+  <link rel="manifest" href="/manifest.json"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@500;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js" defer></script>
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    :root{
+      --sw:260px;--swc:68px;--hh:64px;
+      --g9:#0F2713;--g8:#1B5E20;--g7:#2E7D32;--g6:#388E3C;--g5:#4CAF50;--g4:#81C784;--g1:#C8E6C9;--g0:#E8F5E9;
+      --gold:#F9A825;--goldf:#FFFDE7;
+      --red:#C62828;--redf:#FFEBEE;
+      --blue:#1565C0;--bluef:#E3F2FD;
+      --pur:#6A1B9A;--purf:#F3E5F5;
+      --bg:#F4F6F5;--surf:#FFFFFF;
+      --dark:#0D1B0F;--gr8:#1C2520;--gr6:#4A5568;--gr4:#9AA5B1;--gr2:#E2E8F0;--gr1:#F7FAFC;
+      --brd:#E8EEE9;
+      --fh:'Syne',sans-serif;--fb:'DM Sans',system-ui,sans-serif;
+      --r:12px;--rs:8px;
+      --sh:0 1px 4px rgba(0,0,0,.06),0 4px 16px rgba(0,0,0,.06);
+      --shm:0 4px 24px rgba(0,0,0,.10);
+      --tr:.25s cubic-bezier(.4,0,.2,1);
+    }
+    html,body{height:100%;}
+    body{font-family:var(--fb);background:var(--bg);color:var(--gr8);display:flex;-webkit-font-smoothing:antialiased;}
+    a{color:inherit;text-decoration:none;}
+    ul{list-style:none;}
+    button{font-family:var(--fb);cursor:pointer;border:none;background:none;}
+
+    /* SIDEBAR */
+    .sidebar{width:var(--sw);min-height:100vh;background:var(--g9);display:flex;flex-direction:column;position:fixed;left:0;top:0;bottom:0;z-index:200;overflow:hidden;transition:width var(--tr);}
+    .sidebar.collapsed{width:var(--swc);}
+    .sb-logo{display:flex;align-items:center;gap:12px;padding:20px 18px;border-bottom:1px solid rgba(255,255,255,.08);min-height:var(--hh);flex-shrink:0;}
+    .sb-logo-icon{width:36px;height:36px;border-radius:10px;background:var(--g7);display:flex;align-items:center;justify-content:center;font-family:var(--fh);color:#fff;font-size:11px;font-weight:800;flex-shrink:0;}
+    .sb-logo-text{overflow:hidden;white-space:nowrap;}
+    .sb-logo-text strong{display:block;color:#fff;font-size:15px;font-weight:700;}
+    .sb-logo-text span{font-size:11px;color:rgba(255,255,255,.45);}
+    .sb-sec{padding:12px 10px 4px;overflow:hidden;}
+    .sb-sec-lbl{font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.3);padding:0 8px;margin-bottom:4px;white-space:nowrap;}
+    .sidebar.collapsed .sb-sec-lbl{opacity:0;}
+    .nav-item{display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:var(--rs);color:rgba(255,255,255,.6);font-size:14px;font-weight:500;cursor:pointer;transition:var(--tr);white-space:nowrap;overflow:hidden;}
+    .nav-item iconify-icon{flex-shrink:0;font-size:20px;}
+    .nav-label{overflow:hidden;}
+    .nav-badge{margin-left:auto;background:var(--g6);color:#fff;font-size:10px;font-weight:700;padding:1px 7px;border-radius:99px;flex-shrink:0;}
+    .nav-item:hover{background:rgba(255,255,255,.08);color:#fff;}
+    .nav-item.active{background:var(--g7);color:#fff;}
+    .nav-item.active iconify-icon{color:var(--g4);}
+    .sidebar.collapsed .nav-label,.sidebar.collapsed .nav-badge{display:none;}
+    .sidebar.collapsed .nav-item{justify-content:center;padding:12px;}
+    .sb-foot{margin-top:auto;border-top:1px solid rgba(255,255,255,.08);padding:12px 10px;}
+    .sb-user{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:var(--rs);cursor:pointer;transition:var(--tr);}
+    .sb-user:hover{background:rgba(255,255,255,.08);}
+    .sb-av{width:36px;height:36px;border-radius:50%;background:var(--g6);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:14px;flex-shrink:0;overflow:hidden;}
+    .sb-ui{overflow:hidden;flex:1;}
+    .sb-ui strong{display:block;font-size:13px;color:#fff;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+    .sb-ui span{font-size:11px;color:rgba(255,255,255,.4);}
+    .sidebar.collapsed .sb-ui,.sidebar.collapsed .sb-user iconify-icon:last-child{display:none;}
+    .sidebar.collapsed .sb-user{justify-content:center;}
+
+    /* MAIN */
+    .main-wrap{margin-left:var(--sw);flex:1;min-height:100vh;display:flex;flex-direction:column;transition:margin-left var(--tr);}
+    .main-wrap.collapsed{margin-left:var(--swc);}
+
+    /* HEADER */
+    .admin-header{background:var(--surf);border-bottom:1px solid var(--brd);height:var(--hh);display:flex;align-items:center;padding:0 24px;gap:16px;position:sticky;top:0;z-index:100;}
+    .hdr-toggle{width:36px;height:36px;border-radius:var(--rs);display:flex;align-items:center;justify-content:center;color:var(--gr6);font-size:20px;transition:var(--tr);}
+    .hdr-toggle:hover{background:var(--gr1);color:var(--gr8);}
+    .hdr-bc{display:flex;align-items:center;gap:8px;font-size:14px;color:var(--gr6);}
+    .hdr-bc strong{color:var(--gr8);font-weight:600;}
+    .hdr-right{margin-left:auto;display:flex;align-items:center;gap:10px;}
+    .hdr-btn{width:38px;height:38px;border-radius:var(--rs);display:flex;align-items:center;justify-content:center;color:var(--gr6);font-size:20px;position:relative;transition:var(--tr);}
+    .hdr-btn:hover{background:var(--gr1);}
+    .notif-dot{position:absolute;top:6px;right:6px;width:8px;height:8px;background:var(--red);border-radius:50%;border:2px solid var(--surf);}
+    .hdr-user{display:flex;align-items:center;gap:10px;padding:6px 12px 6px 6px;border-radius:var(--r);cursor:pointer;transition:var(--tr);border:1px solid var(--brd);}
+    .hdr-user:hover{background:var(--gr1);}
+    .hdr-av{width:32px;height:32px;border-radius:50%;background:var(--g7);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:12px;overflow:hidden;}
+    .hdr-ui strong{display:block;font-size:13px;font-weight:600;}
+    .hdr-ui span{font-size:11px;color:var(--gr4);}
+
+    /* USER DROPDOWN */
+    .user-dd{position:absolute;top:calc(var(--hh) + 4px);right:20px;width:220px;background:var(--surf);border:1px solid var(--brd);border-radius:var(--r);box-shadow:var(--shm);z-index:300;overflow:hidden;display:none;}
+    .user-dd.open{display:block;}
+    .dd-user{padding:16px;border-bottom:1px solid var(--brd);}
+    .dd-user strong{display:block;font-size:14px;font-weight:700;}
+    .dd-user span{font-size:12px;color:var(--gr4);}
+    .dd-item{display:flex;align-items:center;gap:10px;padding:11px 16px;font-size:14px;color:var(--gr8);cursor:pointer;transition:background var(--tr);}
+    .dd-item:hover{background:var(--gr1);}
+    .dd-item iconify-icon{font-size:18px;color:var(--gr4);}
+    .dd-item.danger{color:var(--red);}
+    .dd-item.danger iconify-icon{color:var(--red);}
+    .dd-divider{height:1px;background:var(--brd);margin:4px 0;}
+
+    /* OVERLAY */
+    .sb-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:190;}
+    .sb-overlay.visible{display:block;}
+
+    /* PAGE */
+    .pc{padding:28px 28px 48px;flex:1;}
+    .pg-hdr{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:28px;flex-wrap:wrap;gap:16px;}
+    .pg-title{font-family:var(--fh);font-size:1.6rem;font-weight:700;color:var(--dark);}
+    .pg-sub{font-size:14px;color:var(--gr6);margin-top:4px;}
+    .pg-actions{display:flex;gap:10px;align-items:center;flex-wrap:wrap;}
+
+    /* BUTTONS */
+    .btn{display:inline-flex;align-items:center;gap:8px;font-family:var(--fb);font-size:14px;font-weight:600;padding:10px 18px;border-radius:var(--rs);border:1.5px solid transparent;cursor:pointer;transition:var(--tr);white-space:nowrap;}
+    .btn-p{background:var(--g8);color:#fff;border-color:var(--g8);}
+    .btn-p:hover{background:var(--g7);}
+    .btn-o{background:#fff;color:var(--gr8);border-color:var(--brd);}
+    .btn-o:hover{border-color:var(--g4);color:var(--g8);}
+    .btn-r{background:var(--redf);color:var(--red);border-color:var(--redf);}
+    .btn-r:hover{background:var(--red);color:#fff;}
+    .btn-sm{font-size:13px;padding:7px 14px;}
+
+    /* STATS */
+    .stats-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:16px;margin-bottom:28px;}
+    .stat-card{background:var(--surf);border-radius:var(--r);padding:20px 22px;border:1px solid var(--brd);box-shadow:var(--sh);display:flex;align-items:center;gap:16px;}
+    .stat-icon{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;}
+    .ic-b{background:var(--bluef);color:var(--blue);}
+    .ic-g{background:var(--g0);color:var(--g7);}
+    .ic-o{background:var(--goldf);color:var(--gold);}
+    .ic-r{background:var(--redf);color:var(--red);}
+    .stat-info{flex:1;}
+    .stat-val{font-family:var(--fh);font-size:1.6rem;font-weight:700;color:var(--dark);line-height:1;}
+    .stat-lbl{font-size:12px;color:var(--gr6);margin-top:3px;}
+
+    /* FILTERS */
+    .filters-bar{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:20px;}
+    .search-wrap{position:relative;flex:1;min-width:220px;max-width:360px;}
+    .search-wrap iconify-icon{position:absolute;left:11px;top:50%;transform:translateY(-50%);color:var(--gr4);font-size:18px;pointer-events:none;}
+    .search-inp{width:100%;padding:9px 12px 9px 38px;border:1.5px solid var(--brd);border-radius:var(--rs);font-size:14px;font-family:var(--fb);background:var(--surf);color:var(--gr8);transition:border-color var(--tr);}
+    .search-inp:focus{outline:none;border-color:var(--g5);}
+    .filter-sel{padding:9px 14px;border:1.5px solid var(--brd);border-radius:var(--rs);font-size:14px;font-family:var(--fb);background:var(--surf);color:var(--gr8);cursor:pointer;}
+    .filter-sel:focus{outline:none;border-color:var(--g5);}
+
+    /* TABLE */
+    .card{background:var(--surf);border-radius:var(--r);border:1px solid var(--brd);box-shadow:var(--sh);overflow:hidden;}
+    .tw{overflow-x:auto;}
+    table{width:100%;border-collapse:collapse;}
+    thead th{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--gr4);padding:12px 16px;text-align:left;border-bottom:1px solid var(--brd);white-space:nowrap;}
+    tbody tr{transition:background var(--tr);cursor:pointer;}
+    tbody tr:hover{background:var(--gr1);}
+    tbody tr.unread td:first-child{border-left:3px solid var(--blue);}
+    tbody td{font-size:13.5px;padding:13px 16px;border-bottom:1px solid var(--brd);color:var(--gr8);vertical-align:middle;}
+    tbody tr:last-child td{border-bottom:none;}
+    .empty-state{padding:64px 24px;text-align:center;color:var(--gr4);}
+    .empty-state iconify-icon{font-size:48px;margin-bottom:12px;display:block;}
+    .empty-state p{font-size:14px;}
+
+    /* BADGES STATUT */
+    .badge{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:700;padding:3px 10px;border-radius:99px;}
+    .bdot{width:6px;height:6px;border-radius:50%;background:currentColor;}
+    .b-new{background:var(--bluef);color:var(--blue);}
+    .b-lu{background:var(--g0);color:var(--g7);}
+    .b-traite{background:var(--gr1);color:var(--gr6);}
+    .b-archive{background:#F5F5F5;color:#9E9E9E;}
+
+    /* SUJET BADGE */
+    .sujet-tag{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:600;padding:3px 10px;border-radius:99px;background:var(--purf);color:var(--pur);}
+
+    /* MESSAGE PREVIEW */
+    .msg-preview{max-width:320px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--gr6);font-size:13px;}
+    .sender-cell{display:flex;align-items:center;gap:10px;}
+    .sender-av{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:12px;flex-shrink:0;}
+
+    /* MODAL */
+    .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:500;align-items:center;justify-content:center;padding:20px;}
+    .modal-overlay.open{display:flex;}
+    .modal{background:var(--surf);border-radius:var(--r);width:100%;max-width:640px;max-height:90vh;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 20px 60px rgba(0,0,0,.25);}
+    .modal-hdr{padding:20px 24px;border-bottom:1px solid var(--brd);display:flex;align-items:center;justify-content:space-between;flex-shrink:0;}
+    .modal-hdr h2{font-family:var(--fh);font-size:17px;font-weight:700;}
+    .modal-close{width:32px;height:32px;border-radius:var(--rs);display:flex;align-items:center;justify-content:center;color:var(--gr4);font-size:20px;transition:var(--tr);}
+    .modal-close:hover{background:var(--gr1);color:var(--gr8);}
+    .modal-body{padding:24px;overflow-y:auto;flex:1;}
+    .modal-foot{padding:16px 24px;border-top:1px solid var(--brd);display:flex;gap:10px;justify-content:flex-end;flex-shrink:0;flex-wrap:wrap;}
+
+    /* DETAIL MESSAGE */
+    .msg-meta-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px;}
+    .msg-meta-item label{display:block;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--gr4);margin-bottom:4px;}
+    .msg-meta-item span{font-size:14px;color:var(--gr8);}
+    .msg-body-box{background:var(--gr1);border:1px solid var(--brd);border-radius:var(--rs);padding:16px;font-size:14px;line-height:1.7;color:var(--gr8);white-space:pre-wrap;}
+
+    /* REPONSE */
+    .reply-box{margin-top:20px;}
+    .reply-box label{display:block;font-size:13px;font-weight:600;color:var(--gr8);margin-bottom:8px;}
+    .reply-box textarea{width:100%;padding:12px;border:1.5px solid var(--brd);border-radius:var(--rs);font-size:14px;font-family:var(--fb);min-height:120px;resize:vertical;transition:border-color var(--tr);}
+    .reply-box textarea:focus{outline:none;border-color:var(--g5);}
+
+    /* BULK */
+    .bulk-bar{display:none;align-items:center;gap:12px;padding:12px 16px;background:var(--g0);border-bottom:1px solid var(--g1);font-size:14px;font-weight:600;color:var(--g8);}
+    .bulk-bar.visible{display:flex;}
+
+    /* TOAST */
+    #toast-container{position:fixed;top:20px;right:20px;z-index:9999;display:flex;flex-direction:column;gap:8px;}
+    .toast{padding:12px 16px;border-radius:10px;font-size:13.5px;display:flex;align-items:center;gap:8px;box-shadow:var(--shm);animation:tIn .3s ease;max-width:320px;color:#fff;}
+    .toast.ok{background:var(--g8);}
+    .toast.err{background:var(--red);}
+    .toast.warn{background:var(--gold);color:var(--dark);}
+    @keyframes tIn{from{opacity:0;transform:translateX(20px)}to{opacity:1;transform:none}}
+    @keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+    .ai{animation:fadeUp .3s ease both;}
+
+    /* CHECKBOX */
+    input[type=checkbox]{width:16px;height:16px;accent-color:var(--g7);cursor:pointer;}
+
+    @media(max-width:768px){
+      :root{--sw:260px;}
+      .sidebar{transform:translateX(-100%);}
+      .sidebar.mob-open{transform:none;}
+      .main-wrap{margin-left:0!important;}
+      .pc{padding:16px;}
+      .stats-grid{grid-template-columns:1fr 1fr;}
+      .msg-meta-grid{grid-template-columns:1fr;}
+      .hdr-ui{display:none;}
+    }
+    @media(max-width:480px){
+      .stats-grid{grid-template-columns:1fr;}
+    }
+  </style>
+</head>
+<body>
+
+<div class="sb-overlay" id="sbOverlay" onclick="closeSb()"></div>
+<div id="toast-container"></div>
+
+<!-- SIDEBAR -->
+<aside class="sidebar" id="sidebar">
+  <div class="sb-logo">
+    <img src="/assets/icons/logo-small.png" alt="FODDEB" style="width:36px;height:36px;border-radius:10px;object-fit:contain;background:#fff;padding:3px;flex-shrink:0">
+    <div class="sb-logo-text"><strong>FODDEB</strong><span>Administration</span></div>
+  </div>
+  <div class="sb-sec">
+    <div class="sb-sec-lbl">Principal</div>
+    <ul>
+      <li class="nav-item" onclick="go('/admin/dashboard.html')"><iconify-icon icon="mdi:view-dashboard-outline"></iconify-icon><span class="nav-label">Tableau de bord</span></li>
+      <li class="nav-item" onclick="go('/admin/membres.html')"><iconify-icon icon="mdi:account-group-outline"></iconify-icon><span class="nav-label">Membres</span></li>
+      <li class="nav-item" onclick="go('/admin/dons.html')"><iconify-icon icon="mdi:heart-outline"></iconify-icon><span class="nav-label">Dons &amp; Paiements</span></li>
+      <li class="nav-item" onclick="go('/admin/projets.html')"><iconify-icon icon="mdi:clipboard-list-outline"></iconify-icon><span class="nav-label">Projets</span></li>
+      <li class="nav-item" onclick="go('/admin/actualites.html')"><iconify-icon icon="mdi:newspaper-variant-outline"></iconify-icon><span class="nav-label">Actualités</span></li>
+    </ul>
+  </div>
+  <div class="sb-sec">
+    <div class="sb-sec-lbl">Communication</div>
+    <ul>
+      <li class="nav-item" onclick="go('/admin/newsletter.html')"><iconify-icon icon="mdi:email-newsletter"></iconify-icon><span class="nav-label">Newsletter</span></li>
+      <li class="nav-item active"><iconify-icon icon="mdi:message-text-outline"></iconify-icon><span class="nav-label">Messages</span></li>
+      <li class="nav-item" onclick="go('/admin/cartographie.html')"><iconify-icon icon="mdi:map-outline"></iconify-icon><span class="nav-label">Cartographie</span></li>
+    </ul>
+  </div>
+  <div class="sb-sec">
+    <div class="sb-sec-lbl">Système</div>
+    <ul>
+      <li class="nav-item" onclick="go('/admin/bailleurs.html')"><iconify-icon icon="mdi:domain"></iconify-icon><span class="nav-label">Portail bailleurs</span></li>
+      <li class="nav-item" onclick="go('/admin/parametres.html')"><iconify-icon icon="mdi:cog-outline"></iconify-icon><span class="nav-label">Paramètres</span></li>
+    </ul>
+  </div>
+  <div class="sb-foot">
+    <div class="sb-user" onclick="toggleDd()">
+      <div class="sb-av" id="sbAv">AD</div>
+      <div class="sb-ui"><strong id="sbName">Chargement…</strong><span id="sbRole">—</span></div>
+      <iconify-icon icon="mdi:chevron-up" style="color:rgba(255,255,255,.4);font-size:16px"></iconify-icon>
+    </div>
+  </div>
+</aside>
+
+<!-- MAIN -->
+<div class="main-wrap" id="mainWrap">
+
+  <header class="admin-header">
+    <button class="hdr-toggle" onclick="toggleSb()"><iconify-icon icon="mdi:menu"></iconify-icon></button>
+    <nav class="hdr-bc">
+      <span>FODDEB</span>
+      <iconify-icon icon="mdi:chevron-right"></iconify-icon>
+      <strong>Messages</strong>
+    </nav>
+    <div class="hdr-right">
+      <button class="btn btn-o btn-sm" onclick="loadMessages()">
+        <iconify-icon icon="mdi:refresh"></iconify-icon>Actualiser
+      </button>
+      <button class="btn btn-o btn-sm" onclick="exportMessages()">
+        <iconify-icon icon="mdi:download-outline"></iconify-icon>Exporter CSV
+      </button>
+      <div class="hdr-user" onclick="toggleDd()">
+        <div class="hdr-av" id="hdrAv">AD</div>
+        <div class="hdr-ui">
+          <strong id="hdrName">Chargement…</strong>
+          <span id="hdrRole">—</span>
+        </div>
+        <iconify-icon icon="mdi:chevron-down" style="font-size:16px;color:var(--gr4)"></iconify-icon>
+      </div>
+    </div>
+  </header>
+
+  <!-- USER DROPDOWN -->
+  <div class="user-dd" id="userDd">
+    <div class="dd-user">
+      <strong id="ddName">—</strong>
+      <span id="ddEmail">—</span>
+    </div>
+    <div class="dd-item" onclick="go('/admin/parametres.html')"><iconify-icon icon="mdi:cog-outline"></iconify-icon> Paramètres</div>
+    <div class="dd-divider"></div>
+    <div class="dd-item danger" onclick="logout()"><iconify-icon icon="mdi:logout"></iconify-icon> Se déconnecter</div>
+  </div>
+
+  <!-- CONTENU -->
+  <div class="pc">
+
+    <div class="pg-hdr">
+      <div>
+        <h1 class="pg-title">Messages de contact</h1>
+        <p class="pg-sub">Formulaire de contact du site FODDEB</p>
+      </div>
+    </div>
+
+    <!-- STATS -->
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-icon ic-b"><iconify-icon icon="mdi:email-outline"></iconify-icon></div>
+        <div class="stat-info"><div class="stat-val" id="statTotal">—</div><div class="stat-lbl">Total messages</div></div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon ic-o"><iconify-icon icon="mdi:email-alert-outline"></iconify-icon></div>
+        <div class="stat-info"><div class="stat-val" id="statNouveau">—</div><div class="stat-lbl">Non lus</div></div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon ic-g"><iconify-icon icon="mdi:email-check-outline"></iconify-icon></div>
+        <div class="stat-info"><div class="stat-val" id="statTraite">—</div><div class="stat-lbl">Traités</div></div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon" style="background:var(--purf);color:var(--pur)"><iconify-icon icon="mdi:email-newsletter"></iconify-icon></div>
+        <div class="stat-info"><div class="stat-val" id="statNewsletter">—</div><div class="stat-lbl">Abonnés newsletter</div></div>
+      </div>
+    </div>
+
+    <!-- FILTRES -->
+    <div class="filters-bar">
+      <div class="search-wrap">
+        <iconify-icon icon="mdi:magnify"></iconify-icon>
+        <input type="search" class="search-inp" id="searchInp" placeholder="Rechercher nom, email, message…" oninput="applyFilters()">
+      </div>
+      <select class="filter-sel" id="statutFilter" onchange="applyFilters()">
+        <option value="">Tous les statuts</option>
+        <option value="nouveau">Non lus</option>
+        <option value="lu">Lus</option>
+        <option value="traite">Traités</option>
+        <option value="archive">Archivés</option>
+      </select>
+      <select class="filter-sel" id="sujetFilter" onchange="applyFilters()">
+        <option value="">Tous les sujets</option>
+        <option value="adhesion">Adhésion</option>
+        <option value="don">Don</option>
+        <option value="partenariat">Partenariat</option>
+        <option value="projet">Projet</option>
+        <option value="presse">Presse</option>
+        <option value="autre">Autre</option>
+      </select>
+      <span id="filterCount" style="font-size:13px;color:var(--gr4);white-space:nowrap;margin-left:auto;">— messages</span>
+    </div>
+
+    <!-- BULK BAR -->
+    <div class="bulk-bar" id="bulkBar">
+      <span id="bulkCount">0 sélectionné(s)</span>
+      <button class="btn btn-o btn-sm" onclick="bulkMarkLu()"><iconify-icon icon="mdi:email-open-outline"></iconify-icon>Marquer comme lu</button>
+      <button class="btn btn-o btn-sm" onclick="bulkMarkTraite()"><iconify-icon icon="mdi:check-circle-outline"></iconify-icon>Marquer traité</button>
+      <button class="btn btn-r btn-sm" onclick="bulkArchive()"><iconify-icon icon="mdi:archive-outline"></iconify-icon>Archiver</button>
+    </div>
+
+    <!-- TABLE -->
+    <div class="card">
+      <div class="tw">
+        <table id="msgsTable">
+          <thead>
+            <tr>
+              <th><input type="checkbox" id="selectAll" onchange="toggleSelectAll(this)"></th>
+              <th>Expéditeur</th>
+              <th>Sujet</th>
+              <th>Message</th>
+              <th>Statut</th>
+              <th>Date</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="msgsBody">
+            <tr><td colspan="7" class="empty-state">
+              <iconify-icon icon="mdi:loading" style="animation:spin 1s linear infinite;font-size:32px;margin-bottom:8px;display:block;color:var(--gr4)"></iconify-icon>
+              <p>Chargement des messages…</p>
+            </td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div><!-- /pc -->
+</div><!-- /main-wrap -->
+
+<!-- MODAL DETAIL MESSAGE -->
+<div class="modal-overlay" id="msgModal" onclick="if(event.target===this)closeModal()">
+  <div class="modal">
+    <div class="modal-hdr">
+      <h2 id="modalTitle">Message</h2>
+      <button class="modal-close" onclick="closeModal()"><iconify-icon icon="mdi:close"></iconify-icon></button>
+    </div>
+    <div class="modal-body" id="modalBody"></div>
+    <div class="modal-foot">
+      <button class="btn btn-o btn-sm" onclick="markTraite(currentMsgId)"><iconify-icon icon="mdi:check-circle-outline"></iconify-icon>Marquer traité</button>
+      <button class="btn btn-o btn-sm" onclick="archiveMsg(currentMsgId)"><iconify-icon icon="mdi:archive-outline"></iconify-icon>Archiver</button>
+      <button class="btn btn-p btn-sm" id="sendReplyBtn" onclick="sendReply()"><iconify-icon icon="mdi:send-outline"></iconify-icon>Envoyer la réponse</button>
+    </div>
+  </div>
+</div>
+
+<script src="/assets/js/config.js"></script>
+<script src="/assets/js/utils.js"></script>
+<script src="/assets/js/services/api.js"></script>
+<script src="/assets/js/services/auth.js"></script>
+<script>
+'use strict';
+
+/* ── Utilitaires ── */
+const go   = url => window.location.href = url;
+const fmtD = d => { try { return new Date(d).toLocaleDateString('fr-FR', {day:'numeric',month:'short',year:'numeric'}); } catch { return d||'—'; } };
+const fmtDT= d => { try { return new Date(d).toLocaleString('fr-FR', {day:'numeric',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'}); } catch { return d||'—'; } };
+const init2= (p,n) => (((p||'')[0]||'') + ((n||'')[0]||'')).toUpperCase() || '?';
+const CLRS = ['#1B5E20','#1565C0','#6A1B9A','#C62828','#F57F17','#00695C'];
+const gc   = i => CLRS[i % CLRS.length];
+
+function toast(msg, type='ok') {
+  const c = document.getElementById('toast-container');
+  const t = document.createElement('div');
+  t.className = 'toast ' + type;
+  t.innerHTML = `<iconify-icon icon="${type==='err'?'mdi:alert-circle-outline':'mdi:check-circle-outline'}"></iconify-icon><span>${msg}</span>`;
+  c.appendChild(t);
+  setTimeout(() => { t.style.opacity='0'; t.style.transition='.3s'; setTimeout(()=>t.remove(),300); }, 3500);
+}
+
+/* ── Guard session ── */
+function getUser() { try { return JSON.parse(sessionStorage.getItem('foddeb_user')); } catch { return null; } }
+function requireAdmin() {
+  const u = getUser();
+  if (!u || (u.role !== 'admin' && u.role !== 'manager')) { window.location.href = '/auth/login.html'; return null; }
+  return u;
+}
+
+/* ── Sidebar / Dropdown ── */
+let sbCol=false, sbMob=false, ddOpen=false;
+function toggleSb() {
+  if (window.innerWidth <= 768) {
+    sbMob = !sbMob;
+    document.getElementById('sidebar').classList.toggle('mob-open', sbMob);
+    document.getElementById('sbOverlay').classList.toggle('visible', sbMob);
+  } else {
+    sbCol = !sbCol;
+    document.getElementById('sidebar').classList.toggle('collapsed', sbCol);
+    document.getElementById('mainWrap').classList.toggle('collapsed', sbCol);
+  }
+}
+function closeSb() { sbMob=false; document.getElementById('sidebar').classList.remove('mob-open'); document.getElementById('sbOverlay').classList.remove('visible'); }
+function toggleDd() { ddOpen=!ddOpen; document.getElementById('userDd').classList.toggle('open', ddOpen); }
+function logout() { if(!confirm('Se déconnecter ?')) return; sessionStorage.clear(); window.location.href='/auth/login.html'; }
+
+document.addEventListener('click', e => {
+  if (!e.target.closest('#userDd') && !e.target.closest('.hdr-user') && !e.target.closest('.sb-user')) {
+    ddOpen = false; document.getElementById('userDd').classList.remove('open');
+  }
+});
+
+/* ── Avatar admin ── */
+function renderAdminAvatar() {
+  const user = getUser();
+  const photo = user && (user.Photo || user.PhotoURL || '');
+  const prenom = user ? (user.Prenom || user.prenom || 'A') : 'A';
+  const nom    = user ? (user.Nom    || user.nom    || '') : '';
+  const ini    = (((prenom||'')[0]||'') + ((nom||'')[0]||'')).toUpperCase() || '?';
+  ['sbAv','hdrAv'].forEach(id => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    if (photo) {
+      el.innerHTML = `<img src="${photo}" style="width:100%;height:100%;object-fit:cover;border-radius:50%">`;
+    } else {
+      el.textContent = ini;
+    }
+  });
+}
+
+function loadUserInfo() {
+  const user   = getUser() || {};
+  const prenom = user.Prenom || user.prenom || 'Admin';
+  const nom    = user.Nom    || user.nom    || '';
+  const email  = user.Email  || user.email  || '';
+  const role   = user.role   || 'admin';
+  const roleLabel = {admin:'Super Admin',manager:'Gestionnaire',member:'Membre'}[role] || role;
+  const ini = init2(prenom, nom);
+  ['sbAv','hdrAv'].forEach(id => { const el=document.getElementById(id); if(el&&!el.querySelector('img')) el.textContent=ini; });
+  ['sbName','hdrName'].forEach(id => { const el=document.getElementById(id); if(el) el.textContent=prenom+' '+nom; });
+  ['sbRole','hdrRole'].forEach(id => { const el=document.getElementById(id); if(el) el.textContent=roleLabel; });
+  const ddN=document.getElementById('ddName'); if(ddN) ddN.textContent=prenom+' '+nom;
+  const ddE=document.getElementById('ddEmail'); if(ddE) ddE.textContent=email;
+  renderAdminAvatar();
+}
+
+/* ═══════════════════════════════════════════════
+   DONNÉES
+═══════════════════════════════════════════════ */
+let ALL_MSGS  = [];
+let FILTERED  = [];
+let currentMsgId = null;
+let selected  = new Set();
+
+const STATUT_MAP = {
+  nouveau:  '<span class="badge b-new"><span class="bdot"></span>Non lu</span>',
+  lu:       '<span class="badge b-lu"><span class="bdot"></span>Lu</span>',
+  traite:   '<span class="badge b-traite"><span class="bdot"></span>Traité</span>',
+  archive:  '<span class="badge b-archive"><span class="bdot"></span>Archivé</span>',
+};
+
+const SUJET_LABELS = {
+  adhesion:'Adhésion', don:'Don', partenariat:'Partenariat',
+  projet:'Projet', presse:'Presse', autre:'Autre',
+};
+
+/* ── Chargement depuis GAS ── */
+async function loadMessages() {
+  document.getElementById('msgsBody').innerHTML = `
+    <tr><td colspan="7" class="empty-state">
+      <iconify-icon icon="mdi:loading" style="animation:spin 1s linear infinite;font-size:32px;margin-bottom:8px;display:block;color:var(--gr4)"></iconify-icon>
+      <p>Chargement…</p>
+    </td></tr>`;
+  try {
+    const res = await FODDEB_API.contact.list();
+    ALL_MSGS  = (res.data || []).map(m => ({
+      ID:           m.ID           || m.id           || '',
+      Prenom:       m.Prenom       || m.prenom       || '',
+      Nom:          m.Nom          || m.nom          || '',
+      Email:        m.Email        || m.email        || '',
+      Telephone:    m.Telephone    || m.telephone    || '',
+      Organisation: m.Organisation || m.organisation || '',
+      Sujet:        m.Sujet        || m.sujet        || 'autre',
+      Message:      m.Message      || m.message      || '',
+      Newsletter:   m.Newsletter   || m.newsletter   || 'non',
+      Statut:       m.Statut       || m.statut       || 'nouveau',
+      CreatedAt:    m.CreatedAt    || m.createdAt    || '',
+    }));
+    updateStats();
+    applyFilters();
+  } catch (err) {
+    document.getElementById('msgsBody').innerHTML = `
+      <tr><td colspan="7" class="empty-state">
+        <iconify-icon icon="mdi:alert-circle-outline" style="font-size:40px;margin-bottom:8px;display:block;color:var(--red)"></iconify-icon>
+        <p>Erreur de chargement : ${err.message}</p>
+      </td></tr>`;
+    toast('Erreur chargement messages : ' + err.message, 'err');
+  }
+}
+
+/* ── Stats ── */
+function updateStats() {
+  document.getElementById('statTotal').textContent     = ALL_MSGS.length;
+  document.getElementById('statNouveau').textContent   = ALL_MSGS.filter(m => m.Statut === 'nouveau').length;
+  document.getElementById('statTraite').textContent    = ALL_MSGS.filter(m => m.Statut === 'traite').length;
+  document.getElementById('statNewsletter').textContent= ALL_MSGS.filter(m => m.Newsletter === 'oui').length;
+}
+
+/* ── Filtres ── */
+function applyFilters() {
+  const q      = (document.getElementById('searchInp')?.value || '').toLowerCase().trim();
+  const statut = document.getElementById('statutFilter')?.value || '';
+  const sujet  = document.getElementById('sujetFilter')?.value  || '';
+
+  FILTERED = ALL_MSGS.filter(m => {
+    const mq = !q || [m.Prenom, m.Nom, m.Email, m.Message, m.Organisation]
+      .some(v => (v||'').toLowerCase().includes(q));
+    const ms = !statut || m.Statut === statut;
+    const mj = !sujet  || m.Sujet  === sujet;
+    return mq && ms && mj;
+  });
+
+  document.getElementById('filterCount').textContent = FILTERED.length + ' message' + (FILTERED.length > 1 ? 's' : '');
+  renderTable();
+}
+
+/* ── Rendu table ── */
+function renderTable() {
+  const tbody = document.getElementById('msgsBody');
+  if (!FILTERED.length) {
+    tbody.innerHTML = `<tr><td colspan="7" class="empty-state">
+      <iconify-icon icon="mdi:email-off-outline" style="font-size:40px;margin-bottom:8px;display:block;color:var(--gr4)"></iconify-icon>
+      <p>Aucun message trouvé.</p>
+    </td></tr>`;
+    return;
+  }
+
+  tbody.innerHTML = FILTERED.map((m, i) => {
+    const color = gc(i);
+    const ini   = init2(m.Prenom, m.Nom);
+    const chk   = selected.has(m.ID) ? 'checked' : '';
+    const isNew = m.Statut === 'nouveau';
+    return `<tr class="${isNew?'unread':''}" style="animation:fadeUp .2s ease ${i*.03}s both">
+      <td onclick="event.stopPropagation()"><input type="checkbox" ${chk} onchange="toggleSelect('${m.ID}',this)"></td>
+      <td onclick="openMsg('${m.ID}')">
+        <div class="sender-cell">
+          <div class="sender-av" style="background:${color}22;color:${color}">${ini}</div>
+          <div>
+            <div style="font-weight:600;font-size:13.5px">${m.Prenom} ${m.Nom}</div>
+            <div style="font-size:12px;color:var(--gr4)">${m.Email}</div>
+          </div>
+        </div>
+      </td>
+      <td onclick="openMsg('${m.ID}')"><span class="sujet-tag"><iconify-icon icon="mdi:tag-outline" width="12"></iconify-icon>${SUJET_LABELS[m.Sujet]||m.Sujet}</span></td>
+      <td onclick="openMsg('${m.ID}')"><div class="msg-preview">${m.Message}</div></td>
+      <td onclick="openMsg('${m.ID}')">${STATUT_MAP[m.Statut]||m.Statut}</td>
+      <td onclick="openMsg('${m.ID}')" style="font-size:12.5px;color:var(--gr4)">${fmtD(m.CreatedAt)}</td>
+      <td>
+        <div style="display:flex;gap:4px">
+          <button onclick="openMsg('${m.ID}')" title="Voir" style="width:30px;height:30px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:16px;color:var(--gr6);transition:var(--tr)" onmouseover="this.style.background='var(--gr1)'" onmouseout="this.style.background='none'">
+            <iconify-icon icon="mdi:eye-outline"></iconify-icon>
+          </button>
+          <button onclick="markTraite('${m.ID}')" title="Traité" style="width:30px;height:30px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:16px;color:var(--gr6);transition:var(--tr)" onmouseover="this.style.background='var(--gr1)'" onmouseout="this.style.background='none'">
+            <iconify-icon icon="mdi:check-circle-outline"></iconify-icon>
+          </button>
+          <button onclick="archiveMsg('${m.ID}')" title="Archiver" style="width:30px;height:30px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:16px;color:var(--gr6);transition:var(--tr)" onmouseover="this.style.background='var(--gr1)'" onmouseout="this.style.background='none'">
+            <iconify-icon icon="mdi:archive-outline"></iconify-icon>
+          </button>
+        </div>
+      </td>
+    </tr>`;
+  }).join('');
+}
+
+/* ── Ouvrir un message ── */
+function openMsg(id) {
+  const m = ALL_MSGS.find(x => x.ID === id);
+  if (!m) return;
+  currentMsgId = id;
+
+  // Marquer comme lu automatiquement si nouveau
+  if (m.Statut === 'nouveau') updateStatut(id, 'lu', false);
+
+  document.getElementById('modalTitle').textContent = `Message de ${m.Prenom} ${m.Nom}`;
+  document.getElementById('modalBody').innerHTML = `
+    <div class="msg-meta-grid">
+      <div class="msg-meta-item"><label>Expéditeur</label><span>${m.Prenom} ${m.Nom}</span></div>
+      <div class="msg-meta-item"><label>Email</label><span><a href="mailto:${m.Email}" style="color:var(--g7)">${m.Email}</a></span></div>
+      <div class="msg-meta-item"><label>Téléphone</label><span>${m.Telephone||'—'}</span></div>
+      <div class="msg-meta-item"><label>Organisation</label><span>${m.Organisation||'—'}</span></div>
+      <div class="msg-meta-item"><label>Sujet</label><span>${SUJET_LABELS[m.Sujet]||m.Sujet}</span></div>
+      <div class="msg-meta-item"><label>Date</label><span>${fmtDT(m.CreatedAt)}</span></div>
+      <div class="msg-meta-item"><label>Statut</label><span>${STATUT_MAP[m.Statut]||m.Statut}</span></div>
+      <div class="msg-meta-item"><label>Newsletter</label><span>${m.Newsletter==='oui'?'Abonné':'Non abonné'}</span></div>
+    </div>
+    <div class="msg-body-box">${m.Message}</div>
+    <div class="reply-box">
+      <label>Répondre à <strong>${m.Email}</strong></label>
+      <textarea id="replyText" placeholder="Votre réponse…"></textarea>
+    </div>`;
+  document.getElementById('msgModal').classList.add('open');
+}
+function closeModal() {
+  document.getElementById('msgModal').classList.remove('open');
+  currentMsgId = null;
+}
+
+/* ── Mettre à jour statut localement + GAS ── */
+async function updateStatut(id, statut, showToast = true) {
+  const m = ALL_MSGS.find(x => x.ID === id);
+  if (!m) return;
+  m.Statut = statut;
+  // Pas d'endpoint dédié dans GAS — on simule la mise à jour locale
+  // TODO : ajouter contact_update dans GAS pour persistance
+  updateStats();
+  applyFilters();
+  if (showToast) toast(statut === 'traite' ? 'Message marqué comme traité.' : 'Statut mis à jour.');
+}
+function markTraite(id)  { closeModal(); updateStatut(id, 'traite'); }
+function archiveMsg(id)  { closeModal(); updateStatut(id, 'archive'); }
+
+/* ── Répondre par email ── */
+async function sendReply() {
+  const text = document.getElementById('replyText')?.value.trim();
+  if (!text) { toast('Saisissez un message avant d\'envoyer.', 'warn'); return; }
+  const m = ALL_MSGS.find(x => x.ID === currentMsgId);
+  if (!m) return;
+  const btn = document.getElementById('sendReplyBtn');
+  btn.disabled = true; btn.textContent = 'Envoi…';
+  try {
+    // Envoi via newsletter_send en mode test (utilise MailApp de GAS)
+    // L'admin peut aussi ouvrir son client email directement
+    window.open(`mailto:${m.Email}?subject=Re: ${encodeURIComponent(SUJET_LABELS[m.Sujet]||m.Sujet)} — FODDEB&body=${encodeURIComponent(text)}`);
+    updateStatut(currentMsgId, 'traite', false);
+    closeModal();
+    toast(`Réponse ouverte dans votre client mail pour ${m.Email}.`);
+  } catch (err) {
+    toast('Erreur envoi : ' + err.message, 'err');
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = '<iconify-icon icon="mdi:send-outline"></iconify-icon>Envoyer la réponse';
+  }
+}
+
+/* ── Sélection multiple ── */
+function toggleSelect(id, chk) {
+  if (chk.checked) selected.add(id); else selected.delete(id);
+  updateBulkBar();
+}
+function toggleSelectAll(chk) {
+  FILTERED.forEach(m => { if (chk.checked) selected.add(m.ID); else selected.delete(m.ID); });
+  document.querySelectorAll('#msgsBody input[type=checkbox]').forEach(c => c.checked = chk.checked);
+  updateBulkBar();
+}
+function updateBulkBar() {
+  const bar = document.getElementById('bulkBar');
+  bar.classList.toggle('visible', selected.size > 0);
+  document.getElementById('bulkCount').textContent = selected.size + ' sélectionné(s)';
+}
+function bulkMarkLu()     { selected.forEach(id => updateStatut(id, 'lu', false)); selected.clear(); updateBulkBar(); toast(selected.size + ' messages marqués comme lus.'); }
+function bulkMarkTraite() { selected.forEach(id => updateStatut(id, 'traite', false)); selected.clear(); updateBulkBar(); toast('Messages marqués comme traités.'); }
+function bulkArchive()    { selected.forEach(id => updateStatut(id, 'archive', false)); selected.clear(); updateBulkBar(); toast('Messages archivés.'); }
+
+/* ── Export CSV ── */
+function exportMessages() {
+  if (!FILTERED.length) { toast('Aucune donnée à exporter.', 'warn'); return; }
+  const h = ['Prénom','Nom','Email','Téléphone','Organisation','Sujet','Message','Newsletter','Statut','Date'];
+  const rows = FILTERED.map(m => [
+    m.Prenom, m.Nom, m.Email, m.Telephone, m.Organisation,
+    SUJET_LABELS[m.Sujet]||m.Sujet, m.Message.replace(/\n/g,' '), m.Newsletter, m.Statut, m.CreatedAt,
+  ].map(v => `"${String(v||'').replace(/"/g,'""')}"`).join(','));
+  const csv = [h.join(','), ...rows].join('\n');
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob(['\uFEFF'+csv], {type:'text/csv'}));
+  a.download = `messages_foddeb_${new Date().toISOString().split('T')[0]}.csv`;
+  a.click();
+  toast('Export CSV téléchargé.');
+}
+
+/* ═══════════════════════════════════════════════
+   INIT
+═══════════════════════════════════════════════ */
+document.addEventListener('DOMContentLoaded', () => {
+  const user = requireAdmin();
+  if (!user) return;
+  loadUserInfo();
+  loadMessages();
+});
+
+if ('serviceWorker' in navigator) navigator.serviceWorker.register('/sw.js').catch(() => {});
+</script>
+</body>
+</html>

@@ -1,0 +1,849 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Nos organes — FODDEB</title>
+  <meta name="description" content="Découvrez les organes de gouvernance du FODDEB : Conseil d'Administration, Comité de Contrôle, Coordination Départementale et Secrétariat Exécutif."/>
+  <link rel="manifest" href="/manifest.json"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js" defer></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --g9: #1B3A1F; --g8: #1B5E20; --g7: #2E7D32; --g6: #388E3C;
+      --g5: #4CAF50; --g4: #81C784; --g1: #C8E6C9; --g0: #E8F5E9;
+      --gold: #F9A825; --gold2: #F57F17; --goldf: #FFFDE7;
+      --red: #C62828; --redf: #FFEBEE;
+      --blue: #1565C0; --bluef: #E3F2FD;
+      --cream: #FAFAF7; --white: #FFFFFF;
+      --dark: #0D1B0F; --gr8: #1C2520; --gr6: #4A5568;
+      --gr4: #A0ADB8; --gr2: #E2E8F0; --gr1: #F1F5F2; --brd: #E8EEE9;
+      --fh: 'Playfair Display', Georgia, serif;
+      --fb: 'DM Sans', system-ui, sans-serif;
+      --r: 14px; --rs: 8px;
+      --sh: 0 4px 24px rgba(0,0,0,.08);
+      --shm: 0 8px 40px rgba(0,0,0,.14);
+      --tr: .3s cubic-bezier(.4,0,.2,1);
+    }
+    html { scroll-behavior: smooth; }
+    body { font-family: var(--fb); background: var(--cream); color: var(--gr8); -webkit-font-smoothing: antialiased; }
+    a { color: inherit; text-decoration: none; }
+    ul { list-style: none; }
+    button { font-family: var(--fb); cursor: pointer; border: none; background: none; }
+    .container { width: 100%; max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+
+    /* TOPBAR */
+    .topbar { background: var(--g9); color: rgba(255,255,255,.72); font-size: 13px; padding: 8px 0; }
+    .topbar .container { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 6px; }
+    .topbar-info { display: flex; align-items: center; gap: 20px; flex-wrap: wrap; }
+    .topbar-info span { display: flex; align-items: center; gap: 6px; }
+    .topbar a { color: rgba(255,255,255,.72); transition: color .2s; }
+    .topbar a:hover { color: #fff; }
+    .topbar-social { display: flex; gap: 14px; }
+
+    /* NAVBAR */
+    .navbar { background: var(--white); border-bottom: 1px solid var(--brd); position: sticky; top: 0; z-index: 1000; box-shadow: 0 2px 12px rgba(0,0,0,.06); }
+    .navbar .container { display: flex; align-items: center; justify-content: space-between; height: 72px; }
+    .nav-brand { display: flex; align-items: center; gap: 14px; }
+    .nav-logo { width: 48px; height: 48px; border-radius: 50%; background: var(--g8); display: flex; align-items: center; justify-content: center; flex-shrink: 0; overflow: hidden; }
+    .nav-logo img { width: 100%; height: 100%; object-fit: cover; }
+    .nav-logo-txt { font-family: var(--fh); color: #fff; font-size: 14px; font-weight: 800; }
+    .nav-name strong { display: block; font-size: 18px; font-weight: 700; color: var(--g8); letter-spacing: .04em; }
+    .nav-name span { font-size: 11px; color: var(--gr6); }
+    .nav-links { display: flex; align-items: center; gap: 4px; }
+    .nav-link { font-size: 14px; font-weight: 500; color: var(--gr6); padding: 8px 14px; border-radius: var(--rs); transition: var(--tr); }
+    .nav-link:hover, .nav-link.active { color: var(--g8); background: var(--g0); }
+    .nav-link.active { font-weight: 600; }
+    .nav-cta { display: flex; gap: 10px; }
+    .btn { display: inline-flex; align-items: center; gap: 8px; font-family: var(--fb); font-size: 14px; font-weight: 600; padding: 10px 20px; border-radius: var(--rs); border: 1.5px solid transparent; cursor: pointer; transition: var(--tr); white-space: nowrap; }
+    .btn-p { background: var(--g8); color: #fff; }
+    .btn-p:hover { background: var(--g7); transform: translateY(-1px); }
+    .btn-gold { background: var(--gold); color: var(--dark); }
+    .btn-gold:hover { background: var(--gold2); transform: translateY(-1px); }
+    .btn-sm { font-size: 13px; padding: 8px 16px; }
+    .hamburger { display: none; background: none; border: none; cursor: pointer; padding: 6px; flex-direction: column; gap: 5px; }
+    .hamburger span { display: block; width: 24px; height: 2px; background: var(--gr8); border-radius: 2px; transition: var(--tr); }
+    .mobile-nav { display: none; position: fixed; inset: 0; background: var(--white); z-index: 2000; flex-direction: column; padding: 24px; overflow-y: auto; }
+    .mobile-nav.open { display: flex; }
+    .mobile-nav-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 32px; }
+    .mobile-close { background: none; border: none; cursor: pointer; font-size: 28px; color: var(--gr6); }
+    .mobile-links { display: flex; flex-direction: column; gap: 4px; }
+    .mobile-links a { font-size: 18px; font-weight: 500; color: var(--gr8); padding: 14px 16px; border-radius: var(--r); border-bottom: 1px solid var(--gr1); }
+    .mobile-links a:hover { color: var(--g8); background: var(--g0); }
+    .mobile-footer { margin-top: 32px; display: flex; flex-direction: column; gap: 12px; }
+
+    /* PAGE HERO */
+    .page-hero { background: linear-gradient(135deg, var(--g9) 0%, var(--g8) 55%, var(--g7) 100%); padding: 72px 0 56px; position: relative; overflow: hidden; }
+    .page-hero::before { content: ''; position: absolute; inset: 0; background: repeating-linear-gradient(45deg, rgba(249,168,37,.05) 0px, rgba(249,168,37,.05) 1px, transparent 1px, transparent 40px), repeating-linear-gradient(-45deg, rgba(76,175,80,.04) 0px, rgba(76,175,80,.04) 1px, transparent 1px, transparent 40px); }
+    .page-hero-inner { position: relative; z-index: 1; text-align: center; }
+    .page-hero-badge { display: inline-flex; align-items: center; gap: 8px; font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--gold); background: rgba(249,168,37,.12); border: 1px solid rgba(249,168,37,.25); border-radius: 99px; padding: 5px 16px; margin-bottom: 18px; }
+    .page-hero-title { font-family: var(--fh); font-size: clamp(2rem, 5vw, 3.2rem); font-weight: 800; color: #fff; line-height: 1.12; margin-bottom: 16px; }
+    .page-hero-title span { color: var(--gold); }
+    .page-hero-desc { font-size: 16px; color: rgba(255,255,255,.7); max-width: 540px; margin: 0 auto; line-height: 1.7; }
+
+    /* BREADCRUMB */
+    .breadcrumb { background: var(--white); border-bottom: 1px solid var(--brd); padding: 12px 0; }
+    .breadcrumb-inner { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--gr4); }
+    .breadcrumb-inner a { color: var(--g7); font-weight: 500; }
+    .breadcrumb-inner a:hover { text-decoration: underline; }
+
+    /* SECTION */
+    .section { padding: 72px 0; }
+    .section-header { text-align: center; margin-bottom: 56px; }
+    .section-label { display: inline-flex; align-items: center; gap: 6px; font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--g7); background: var(--g0); border: 1px solid var(--g1); border-radius: 99px; padding: 4px 14px; margin-bottom: 14px; }
+    .section-title { font-family: var(--fh); font-size: clamp(1.8rem, 3.5vw, 2.6rem); font-weight: 700; color: var(--g9); margin-bottom: 14px; line-height: 1.2; }
+    .section-lead { font-size: 16px; color: var(--gr6); max-width: 580px; margin: 0 auto; line-height: 1.7; }
+
+    /* PHOTO SECTION */
+    .photo-section { background: var(--gr1); padding: 56px 0; }
+    .photo-card { border-radius: 16px; overflow: hidden; box-shadow: var(--shm); max-width: 820px; margin: 0 auto; }
+    .photo-card img { width: 100%; display: block; object-fit: cover; }
+    .photo-caption { background: var(--white); padding: 18px 24px; display: flex; align-items: center; gap: 12px; }
+    .photo-caption iconify-icon { font-size: 20px; color: var(--g7); flex-shrink: 0; }
+    .photo-caption-text strong { display: block; font-size: 14px; font-weight: 700; color: var(--dark); }
+    .photo-caption-text span { font-size: 13px; color: var(--gr6); }
+
+    /* ORGANES GRID */
+    .organes-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 24px; }
+    .organe-card { background: var(--white); border: 1px solid var(--brd); border-radius: 16px; padding: 32px 28px; cursor: pointer; transition: var(--tr); position: relative; overflow: hidden; text-align: center; box-shadow: var(--sh); }
+    .organe-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px; background: var(--g7); transform: scaleX(0); transition: transform var(--tr); transform-origin: left; }
+    .organe-card:hover { box-shadow: var(--shm); transform: translateY(-4px); border-color: var(--g1); }
+    .organe-card:hover::before { transform: scaleX(1); }
+    .organe-icon-wrap { width: 72px; height: 72px; border-radius: 18px; display: flex; align-items: center; justify-content: center; font-size: 32px; margin: 0 auto 20px; }
+    .organe-card h3 { font-family: var(--fh); font-size: 1.15rem; font-weight: 700; color: var(--g9); margin-bottom: 10px; line-height: 1.3; }
+    .organe-card p { font-size: 13.5px; color: var(--gr6); line-height: 1.65; margin-bottom: 20px; }
+    .organe-count { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 700; color: var(--g7); background: var(--g0); border: 1px solid var(--g1); border-radius: 99px; padding: 4px 12px; margin-bottom: 16px; }
+    .organe-btn { display: inline-flex; align-items: center; gap: 6px; font-size: 13.5px; font-weight: 600; color: var(--g7); transition: var(--tr); }
+    .organe-btn:hover { color: var(--g8); gap: 10px; }
+
+    /* MODAL */
+    .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,.5); z-index: 500; display: none; align-items: center; justify-content: center; padding: 20px; backdrop-filter: blur(4px); }
+    .modal-overlay.open { display: flex; }
+    .modal { background: var(--white); border-radius: 20px; width: 100%; max-width: 860px; max-height: 90vh; overflow-y: auto; box-shadow: 0 24px 80px rgba(0,0,0,.22); animation: mIn .35s cubic-bezier(.34,1.2,.64,1); }
+    @keyframes mIn { from { opacity: 0; transform: scale(.93) translateY(16px); } to { opacity: 1; transform: none; } }
+    .modal-header { padding: 24px 28px 20px; border-bottom: 1px solid var(--brd); display: flex; align-items: center; justify-content: space-between; gap: 16px; position: sticky; top: 0; background: var(--white); z-index: 1; }
+    .modal-header-left { display: flex; align-items: center; gap: 14px; }
+    .modal-header-icon { width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 24px; flex-shrink: 0; }
+    .modal-title { font-family: var(--fh); font-size: 1.3rem; font-weight: 700; color: var(--dark); }
+    .modal-sub { font-size: 13px; color: var(--gr6); margin-top: 3px; }
+    .modal-close { width: 36px; height: 36px; border-radius: 50%; background: var(--gr1); display: flex; align-items: center; justify-content: center; font-size: 18px; color: var(--gr6); cursor: pointer; transition: var(--tr); flex-shrink: 0; }
+    .modal-close:hover { background: var(--gr2); color: var(--gr8); }
+    .modal-body { padding: 28px; }
+
+    /* MEMBERS GRID dans modal */
+    .members-modal-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 18px; }
+    .member-card { background: var(--gr1); border: 1px solid var(--brd); border-radius: 14px; padding: 22px 18px; text-align: center; transition: var(--tr); }
+    .member-card:hover { box-shadow: var(--sh); border-color: var(--g1); background: var(--g0); }
+    .member-photo { width: 80px; height: 80px; border-radius: 50%; margin: 0 auto 14px; overflow: hidden; border: 3px solid var(--white); box-shadow: 0 2px 12px rgba(0,0,0,.12); }
+    .member-photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .member-photo-placeholder { width: 100%; height: 100%; background: var(--g8); display: flex; align-items: center; justify-content: center; font-family: var(--fh); font-size: 1.4rem; font-weight: 700; color: #fff; }
+    .member-name { font-family: var(--fh); font-size: 1rem; font-weight: 700; color: var(--dark); margin-bottom: 5px; line-height: 1.3; }
+    .member-poste { font-size: 12.5px; font-weight: 600; color: var(--g7); background: var(--g0); border: 1px solid var(--g1); border-radius: 99px; padding: 3px 12px; display: inline-block; margin-bottom: 8px; }
+    .member-dept { display: flex; align-items: center; justify-content: center; gap: 5px; font-size: 12.5px; color: var(--gr6); }
+
+    /* COORDONNATEURS section */
+    .coord-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 12px; }
+    .coord-item { background: var(--gr1); border: 1px solid var(--brd); border-radius: var(--rs); padding: 14px 16px; display: flex; align-items: center; gap: 12px; transition: var(--tr); }
+    .coord-item:hover { border-color: var(--g1); background: var(--g0); }
+    .coord-num { width: 32px; height: 32px; border-radius: 50%; background: var(--g8); display: flex; align-items: center; justify-content: center; color: #fff; font-weight: 700; font-size: 13px; flex-shrink: 0; }
+    .coord-dept { font-size: 13.5px; font-weight: 600; color: var(--gr8); }
+
+    /* CTA */
+    .cta-section { background: var(--gold); padding: 56px 0; }
+    .cta-inner { display: flex; align-items: center; justify-content: space-between; gap: 40px; flex-wrap: wrap; }
+    .cta-text h2 { font-family: var(--fh); font-size: clamp(1.5rem, 3vw, 2rem); font-weight: 700; color: var(--dark); margin-bottom: 8px; }
+    .cta-text p { font-size: 15px; color: rgba(0,0,0,.65); }
+    .btn-dark { background: var(--dark); color: #fff; }
+    .btn-dark:hover { background: var(--g9); transform: translateY(-1px); }
+
+    /* FOOTER */
+    .footer { background: var(--g9); color: rgba(255,255,255,.7); padding: 56px 0 24px; }
+    .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 40px; margin-bottom: 40px; }
+    .footer-logo { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
+    .footer-logo-i { width: 40px; height: 40px; border-radius: 50%; background: rgba(255,255,255,.1); display: flex; align-items: center; justify-content: center; font-family: var(--fh); color: #fff; font-weight: 800; font-size: 12px; overflow: hidden; }
+    .footer-logo-i img { width: 100%; height: 100%; object-fit: cover; }
+    .footer-logo-t strong { display: block; color: #fff; font-size: 15px; font-weight: 700; }
+    .footer-desc { font-size: 13.5px; line-height: 1.7; margin-bottom: 18px; }
+    .footer-col h4 { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .1em; color: #fff; margin-bottom: 16px; }
+    .footer-col ul li { margin-bottom: 9px; }
+    .footer-col ul li a { font-size: 13.5px; color: rgba(255,255,255,.6); transition: color .2s; }
+    .footer-col ul li a:hover { color: #fff; }
+    .footer-bottom { border-top: 1px solid rgba(255,255,255,.1); padding-top: 20px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; font-size: 13px; }
+    .footer-bottom-links { display: flex; gap: 18px; }
+    .footer-bottom-links a { color: rgba(255,255,255,.5); }
+    .footer-bottom-links a:hover { color: #fff; }
+
+    /* FADE IN */
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: none; } }
+    .fade-in { opacity: 0; transform: translateY(20px); transition: opacity .6s ease, transform .6s ease; }
+    .fade-in.visible { opacity: 1; transform: none; }
+
+    @media(max-width: 1024px) { .footer-grid { grid-template-columns: 1fr 1fr; } }
+    @media(max-width: 768px) {
+      .nav-links, .nav-cta { display: none; }
+      .hamburger { display: flex; }
+      .cta-inner { flex-direction: column; align-items: flex-start; }
+      .footer-grid { grid-template-columns: 1fr; }
+      .members-modal-grid { grid-template-columns: 1fr 1fr; }
+    }
+    @media(max-width: 480px) {
+      .container { padding: 0 16px; }
+      .organes-grid { grid-template-columns: 1fr; }
+      .members-modal-grid { grid-template-columns: 1fr; }
+      .coord-grid { grid-template-columns: 1fr 1fr; }
+    }
+     /*-----------MON TEST------------*/
+    /* SECTION */
+.fade-in{
+  animation: fadeIn 1.2s ease;
+}
+/* CONTENU */
+.slide-left{
+  animation: slideLeft 1.5s ease;
+}
+
+/* IMAGE */
+.zoom-img{
+  width: 100%;
+  max-width: 500px;
+  border-radius: 20px;
+
+  animation: zoomIn 1.5s ease;
+}
+
+/* TEXTE */
+.floating-text{
+  display: inline-block;
+  margin-top: 15px;
+  font-size: 1.2rem;
+  font-weight: 600;
+
+  animation: floating 3s infinite ease-in-out;
+}
+
+
+/* ANIMATIONS */
+
+@keyframes fadeIn{
+  from{
+    opacity:0;
+  }
+
+  to{
+    opacity:1;
+  }
+}
+
+@keyframes slideLeft{
+  from{
+    transform: translateX(-80px);
+    opacity:0;
+  }
+
+  to{
+    transform: translateX(0);
+    opacity:1;
+  }
+}
+
+@keyframes zoomIn{
+  from{
+    transform: scale(0.7);
+    opacity:0;
+  }
+
+  to{
+    transform: scale(1);
+    opacity:1;
+  }
+}
+
+@keyframes floating{
+
+  0%{
+    transform: translateY(0);
+  }
+
+  50%{
+    transform: translateY(-10px);
+  }
+
+  100%{
+    transform: translateY(0);
+  }
+
+}
+    .carousel-section{
+  padding: 60px 20px;
+}
+
+.carousel{
+  display:flex;
+  gap:20px;
+
+  overflow-x:auto;
+  scroll-behavior:smooth;
+
+  padding-bottom:10px;
+}
+
+.carousel::-webkit-scrollbar{
+  height:8px;
+}
+
+.carousel::-webkit-scrollbar-thumb{
+  background:#999;
+  border-radius:20px;
+}
+
+.carousel-img{
+  width:350px;
+  height:250px;
+
+  object-fit:cover;
+
+  border-radius:20px;
+
+  flex-shrink:0;
+
+  transition:0.4s ease;
+}
+
+.carousel-img:hover{
+  transform:scale(1.05);
+}
+  </style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<div class="topbar">
+  <div class="container">
+    <div class="topbar-info">
+      <span><iconify-icon icon="mdi:phone" width="13"></iconify-icon><a href="tel:+22901976964826">+229 01 97 69 64 26</a></span>
+      <span><iconify-icon icon="mdi:phone" width="13"></iconify-icon><a href="tel:+22901940817108">01 94 08 17 10</a></span>
+      <span><iconify-icon icon="mdi:email-outline" width="13"></iconify-icon><a href="mailto:foddeb15@gmail.com">foddeb15@gmail.com</a></span>
+    </div>
+    <div class="topbar-social">
+      <a href="#" aria-label="Facebook"><iconify-icon icon="mdi:facebook" width="15"></iconify-icon></a>
+      <a href="#" aria-label="Twitter"><iconify-icon icon="mdi:twitter" width="15"></iconify-icon></a>
+      <a href="#" aria-label="LinkedIn"><iconify-icon icon="mdi:linkedin" width="15"></iconify-icon></a>
+    </div>
+  </div>
+</div>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+  <div class="container">
+    <a href="/" class="nav-brand">
+      <div class="nav-logo">
+        <img src="/assets/img/logo.png" alt="Logo FODDEB" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
+        <span class="nav-logo-txt" style="display:none">FOD</span>
+      </div>
+      <div class="nav-name"><strong>FODDEB</strong><span>Droits de l'Enfant au Bénin</span></div>
+    </a>
+    <div class="nav-links">
+      <a href="/" class="nav-link">Accueil</a>
+      <a href="/#a-propos" class="nav-link">A propos</a>
+      <a href="/pages/organes.html" class="nav-link active">Nos organes</a>
+      <a href="/pages/projets.html" class="nav-link">Projets</a>
+      <a href="/pages/actualites.html" class="nav-link">Actualites</a>
+      <a href="/pages/contact.html" class="nav-link">Contact</a>
+    </div>
+    <div class="nav-cta">
+      <a href="/#don" class="btn btn-gold btn-sm">Faire un don</a>
+      <a href="/auth/login.html" class="btn btn-p btn-sm">Espace membre</a>
+    </div>
+    <button class="hamburger" id="hamburger" aria-label="Ouvrir le menu"><span></span><span></span><span></span></button>
+  </div>
+</nav>
+
+<!-- MOBILE NAV -->
+<nav class="mobile-nav" id="mobileNav">
+  <div class="mobile-nav-header">
+    <a href="/" class="nav-brand"><div class="nav-logo"><span class="nav-logo-txt">FOD</span></div><div class="nav-name"><strong>FODDEB</strong></div></a>
+    <button class="mobile-close" id="mobileClose">&#x2715;</button>
+  </div>
+  <div class="mobile-links">
+    <a href="/">Accueil</a>
+    <a href="/#a-propos">A propos</a>
+    <a href="/pages/organes.html">Nos organes</a>
+    <a href="/pages/projets.html">Projets</a>
+    <a href="/pages/actualites.html">Actualites</a>
+    <a href="/pages/contact.html">Contact</a>
+  </div>
+  <div class="mobile-footer">
+    <a href="/#don" class="btn btn-gold">Faire un don</a>
+    <a href="/auth/login.html" class="btn btn-p">Espace membre</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="page-hero">
+  <div class="container">
+    <div class="page-hero-inner">
+      <div class="page-hero-badge"><iconify-icon icon="mdi:sitemap-outline"></iconify-icon>Gouvernance</div>
+      <h1 class="page-hero-title">Nos <span>organes</span> de gouvernance</h1>
+      <p class="page-hero-desc">Le FODDEB est structuré en quatre organes complémentaires assurant une gouvernance transparente et efficace au service des droits de l'enfant au Benin.</p>
+    </div>
+  </div>
+</section>
+
+<!-- BREADCRUMB -->
+<div class="breadcrumb">
+  <div class="container">
+    <div class="breadcrumb-inner">
+      <a href="/">Accueil</a>
+      <iconify-icon icon="mdi:chevron-right"></iconify-icon>
+      <span>Nos organes</span>
+    </div>
+  </div>
+</div>
+
+<!-- PHOTO AG -->
+<section class="photo-section">
+  <div class="container">
+    <div class="section-header fade-in">
+      <div class="section-label"><iconify-icon icon="mdi:camera-outline"></iconify-icon>Assemblée Générale</div>
+      <h2 class="section-title">Assemblée Générale Extraordinaire de mise en conformité</h2>
+      <p class="section-lead">Savalou, le 09 Avril 2026 — Election du nouveau bureau pour les trois années à venir.</p>
+    </div>
+    <!-----A GARDER DEBUT----->
+    <div class="photo-card fade-in">
+      <img src="/assets/img/5.jpeg"
+           alt="Assemblée Générale Extraordinaire FODDEB — Savalou, 09 Avril 2026"
+           loading="lazy"/>
+      <div class="photo-caption">
+        <iconify-icon icon="mdi:image-outline"></iconify-icon>
+        <div class="photo-caption-text">
+          <strong>Assemblée Générale Extraordinaire de mise en conformité</strong>
+          <span class="floating-text">FODDEB — Savalou, Benin, le 09 Avril 2026</span>
+        </div>
+      </div>
+    </div>
+  </div>
+<!==============A GARDER FIN ========>
+</section>
+<!-- ORGANES -->
+<section class="section">
+  <div class="container">
+    <div class="section-header fade-in">
+      <div class="section-label"><iconify-icon icon="mdi:account-group-outline"></iconify-icon>Structure organisationnelle</div>
+      <h2 class="section-title">Cliquez sur un organe pour voir ses membres</h2>
+      <p class="section-lead">Chaque organe joue un role spécifique dans la gouvernance du réseau FODDEB. Cliquez sur une carte pour découvrir ses responsables.</p>
+    </div>
+    <div class="organes-grid fade-in">
+
+      <!-- Conseil d'Administration -->
+      <div class="organe-card" onclick="openOrgane('ca')" role="button" tabindex="0" aria-label="Voir le Conseil d'Administration">
+        <div class="organe-icon-wrap" style="background:var(--g0)">
+          <iconify-icon icon="mdi:shield-crown-outline" style="color:var(--g7)"></iconify-icon>
+        </div>
+        <h3>Conseil d'Administration</h3>
+        <p>Organe suprême de décision. Il définit les orientations stratégiques, validé les budgets et supervisé la gestion du FODDEB.</p>
+        <div class="organe-count"><iconify-icon icon="mdi:account-group-outline"></iconify-icon>9 membres</div>
+        <div class="organe-btn">
+          Voir les membres
+          <iconify-icon icon="mdi:arrow-right"></iconify-icon>
+        </div>
+      </div>
+
+      <!-- Comité de Contrôle -->
+      <div class="organe-card" onclick="openOrgane('cc')" role="button" tabindex="0" aria-label="Voir le Comité de Contrôle">
+        <div class="organe-icon-wrap" style="background:var(--bluef)">
+          <iconify-icon icon="mdi:magnify-scan" style="color:var(--blue)"></iconify-icon>
+        </div>
+        <h3>Comité de Contrôle</h3>
+        <p>Organe de surveillance indépendant. Il vérifie la régularité des opérations financières et la conformité aux statuts du FODDEB.</p>
+        <div class="organe-count"><iconify-icon icon="mdi:account-group-outline"></iconify-icon>3 membres</div>
+        <div class="organe-btn">
+          Voir les membres
+          <iconify-icon icon="mdi:arrow-right"></iconify-icon>
+        </div>
+      </div>
+
+      <!-- Coordination Départementale -->
+      <div class="organe-card" onclick="openOrgane('coord')" role="button" tabindex="0" aria-label="Voir la Coordination Départementale">
+        <div class="organe-icon-wrap" style="background:var(--goldf)">
+          <iconify-icon icon="mdi:map-marker-multiple-outline" style="color:var(--gold2)"></iconify-icon>
+        </div>
+        <h3>Coordination Départementale</h3>
+        <p>Représente le FODDEB dans chacun des 12 départements du Bénin. Assure le relais entre le terrain et le siège national.</p>
+        <div class="organe-count"><iconify-icon icon="mdi:map-marker-outline"></iconify-icon>12 coordonnateurs</div>
+        <div class="organe-btn">
+          Voir les coordonnateurs
+          <iconify-icon icon="mdi:arrow-right"></iconify-icon>
+        </div>
+      </div>
+
+      <!-- Sécrétariat Exécutif -->
+      <div class="organe-card" onclick="openOrgane('se')" role="button" tabindex="0" aria-label="Voir le Sécrétariat Exécutif">
+        <div class="organe-icon-wrap" style="background:var(--redf)">
+          <iconify-icon icon="mdi:briefcase-outline" style="color:var(--red)"></iconify-icon>
+        </div>
+        <h3>Sécrétariat Exécutif</h3>
+        <p>Organe exécutif chargé de la mise en oeuvre des décisions du Conseil d'Administration et de la gestion quotidienne du réseau.</p>
+        <div class="organe-count"><iconify-icon icon="mdi:account-group-outline"></iconify-icon>5 membres</div>
+        <div class="organe-btn">
+          Voir les membres
+          <iconify-icon icon="mdi:arrow-right"></iconify-icon>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<div class="cta-section">
+  <div class="container">
+    <div class="cta-inner">
+      <div class="cta-text">
+        <h2>Rejoignez le réseau FODDEB</h2>
+        <p>Ensemble pour les droits de chaque enfant au Benin.</p>
+      </div>
+      <div style="display:flex;gap:12px;flex-wrap:wrap">
+        <a href="/auth/register.html" class="btn btn-dark"><iconify-icon icon="mdi:account-plus-outline"></iconify-icon>Adherer au réseau</a>
+        <a href="/#don" class="btn" style="background:transparent;border:2px solid var(--dark);color:var(--dark)"><iconify-icon icon="mdi:heart-outline"></iconify-icon>Faire un don</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-logo">
+          <div class="footer-logo-i">
+            <img src="/assets/img/logo.png" alt="Logo FODDEB" onerror="this.style.display='none';this.parentElement.textContent='FOD'"/>
+          </div>
+          <div class="footer-logo-t"><strong>FODDEB</strong><div style="font-size:11px;color:rgba(255,255,255,.4)">Droits de l'Enfant au Benin</div></div>
+        </div>
+        <p class="footer-desc">Forum des Organisations de Défense des Droits de l'Enfant au Bénin — coordonnant les actions de la société civile depuis 2015.</p>
+      </div>
+      <div class="footer-col"><h4>Navigation</h4><ul>
+        <li><a href="/">Accueil</a></li>
+        <li><a href="/pages/organes.html">Nos organes</a></li>
+        <li><a href="/pages/projets.html">Projets</a></li>
+        <li><a href="/pages/contact.html">Contact</a></li>
+      </ul></div>
+      <div class="footer-col"><h4>Espace membre</h4><ul>
+        <li><a href="/auth/login.html">Se connecter</a></li>
+        <li><a href="/auth/register.html">Adherer</a></li>
+        <li><a href="/dashboard/member.html">Mon espace</a></li>
+      </ul></div>
+      <div class="footer-col"><h4>Contact</h4><ul>
+        <li style="font-size:13.5px;color:rgba(255,255,255,.6);margin-bottom:9px">Agla Akplomey, Cotounou</li>
+        <li><a href="tel:+22901976964826">+229 01 97 69 64 26</a></li>
+        <li><a href="tel:+22901940817108">+229 01 94 08 17 10</a></li>
+        <li><a href="mailto:foddeb15@gmail.com">foddeb15@gmail.com</a></li>
+      </ul></div>
+    </div>
+    <div class="footer-bottom">
+      <p>2025 FODDEB — Tous droits reservés</p>
+      <div class="footer-bottom-links"><a href="/mentions-legales.html">Mentions légales</a><a href="/Confidentialité.html">Confidentialité</a></div>
+    </div>
+  </div>
+</footer>
+
+<!-- MODAL Conseil d'Administration -->
+<div class="modal-overlay" id="modal-ca" role="dialog" aria-modal="true" aria-labelledby="modal-ca-title">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-header-left">
+        <div class="modal-header-icon" style="background:var(--g0)"><iconify-icon icon="mdi:shield-crown-outline" style="color:var(--g7);font-size:24px"></iconify-icon></div>
+        <div>
+          <div class="modal-title" id="modal-ca-title">Conseil d'Administration</div>
+          <div class="modal-sub">Nouveau bureau 2026 — 2029</div>
+        </div>
+      </div>
+      <button class="modal-close" onclick="closeModal('modal-ca')" aria-label="Fermer">&#x2715;</button>
+    </div>
+    <div class="modal-body">
+      <div class="members-modal-grid">
+
+      <div class="member-card">
+      <div class="member-photo">
+      <img src="/assets/img/president_foddeb.webp" alt="Photo membre">
+      <!-- <div class="member-photo-placeholder">RZ</div> -->
+      </div>
+          <div class="member-name">RAMANOU Zachari</div>
+          <div class="member-poste">President</div>
+          <div class="member-dept"><iconify-icon icon="mdi:map-marker-outline"></iconify-icon>Mono</div>
+        </div>
+
+        <div class="member-card">
+          <div class="member-photo">
+            <div class="member-photo-placeholder">GF</div>
+          </div>
+          <div class="member-name">GBAGUIDI Pascaline ep. FAGNINOU</div>
+          <div class="member-poste">Vice Presidente</div>
+          <div class="member-dept"><iconify-icon icon="mdi:map-marker-outline"></iconify-icon>Collines</div>
+        </div>
+
+        <div class="member-card">
+          <div class="member-photo">
+            <div class="member-photo-placeholder">KM</div>
+          </div>
+          <div class="member-name">KASSIMOU Moutarou</div>
+          <div class="member-poste">Secretaire General</div>
+          <div class="member-dept"><iconify-icon icon="mdi:map-marker-outline"></iconify-icon>Borgou</div>
+        </div>
+
+        <div class="member-card">
+          <div class="member-photo">
+            <div class="member-photo-placeholder">TS</div>
+          </div>
+          <div class="member-name">TOSSA Severin</div>
+          <div class="member-poste">Secretaire General Adjoint</div>
+          <div class="member-dept"><iconify-icon icon="mdi:map-marker-outline"></iconify-icon>Couffo</div>
+        </div>
+
+        <div class="member-card">
+          <div class="member-photo">
+            <div class="member-photo-placeholder">SM</div>
+          </div>
+          <div class="member-name">SANOUSSI Mahamadou</div>
+          <div class="member-poste">Tresorier General</div>
+          <div class="member-dept"><iconify-icon icon="mdi:map-marker-outline"></iconify-icon>Zou</div>
+        </div>
+
+        <div class="member-card">
+          <div class="member-photo">
+            <div class="member-photo-placeholder">AN</div>
+          </div>
+          <div class="member-name">ABARISSI Nouhoumane</div>
+          <div class="member-poste">Tresorier General Adjoint</div>
+          <div class="member-dept"><iconify-icon icon="mdi:map-marker-outline"></iconify-icon>Alibori</div>
+        </div>
+
+        <div class="member-card">
+          <div class="member-photo">
+            <div class="member-photo-placeholder">HM</div>
+          </div>
+          <div class="member-name">HINVY Marcel Candide</div>
+          <div class="member-poste">Responsable Information et Communication</div>
+          <div class="member-dept"><iconify-icon icon="mdi:map-marker-outline"></iconify-icon>Littoral</div>
+        </div>
+
+        <div class="member-card">
+          <div class="member-photo">
+            <div class="member-photo-placeholder">OR</div>
+          </div>
+          <div class="member-name">OGOUTOLOU Rosalie</div>
+          <div class="member-poste">Responsable a l'Organisation</div>
+          <div class="member-dept"><iconify-icon icon="mdi:map-marker-outline"></iconify-icon>Plateau</div>
+        </div>
+
+        <div class="member-card">
+          <div class="member-photo">
+            <div class="member-photo-placeholder">CH</div>
+          </div>
+          <div class="member-name">CLOTOE Hubert</div>
+          <div class="member-poste">Charge de la Mobilisation des Ressources</div>
+          <div class="member-dept"><iconify-icon icon="mdi:map-marker-outline"></iconify-icon>Atlantique</div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL Comité de Contrôle -->
+<div class="modal-overlay" id="modal-cc" role="dialog" aria-modal="true" aria-labelledby="modal-cc-title">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-header-left">
+        <div class="modal-header-icon" style="background:var(--bluef)"><iconify-icon icon="mdi:magnify-scan" style="color:var(--blue);font-size:24px"></iconify-icon></div>
+        <div>
+          <div class="modal-title" id="modal-cc-title">Comité de Contrôle</div>
+          <div class="modal-sub">Organe de surveillance independant</div>
+        </div>
+      </div>
+      <button class="modal-close" onclick="closeModal('modal-cc')" aria-label="Fermer">&#x2715;</button>
+    </div>
+    <div class="modal-body">
+      <p style="font-size:14px;color:var(--gr6);margin-bottom:24px;line-height:1.7;background:var(--bluef);border:1px solid #BFDBFE;border-radius:var(--rs);padding:14px 16px;">
+        <iconify-icon icon="mdi:information-outline" style="vertical-align:middle;margin-right:6px;color:var(--blue)"></iconify-icon>
+        Le Comité de Contrôle verifie la regularite des operations financieres et la conformite aux statuts. Ses membres seront designes lors de la prochaine session.
+      </p>
+      <div class="members-modal-grid">
+        <div class="member-card">
+          <div class="member-photo"><div class="member-photo-placeholder" style="background:var(--blue)">P1</div></div>
+          <div class="member-name">Poste 1</div>
+          <div class="member-poste">President du Comite</div>
+          <div class="member-dept"><iconify-icon icon="mdi:map-marker-outline"></iconify-icon>A designer</div>
+        </div>
+        <div class="member-card">
+          <div class="member-photo"><div class="member-photo-placeholder" style="background:var(--blue)">P2</div></div>
+          <div class="member-name">Poste 2</div>
+          <div class="member-poste">Membre Controleur</div>
+          <div class="member-dept"><iconify-icon icon="mdi:map-marker-outline"></iconify-icon>A designer</div>
+        </div>
+        <div class="member-card">
+          <div class="member-photo"><div class="member-photo-placeholder" style="background:var(--blue)">P3</div></div>
+          <div class="member-name">Poste 3</div>
+          <div class="member-poste">Membre Controleur</div>
+          <div class="member-dept"><iconify-icon icon="mdi:map-marker-outline"></iconify-icon>A designer</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL Coordination Départementale -->
+<div class="modal-overlay" id="modal-coord" role="dialog" aria-modal="true" aria-labelledby="modal-coord-title">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-header-left">
+        <div class="modal-header-icon" style="background:var(--goldf)"><iconify-icon icon="mdi:map-marker-multiple-outline" style="color:var(--gold2);font-size:24px"></iconify-icon></div>
+        <div>
+          <div class="modal-title" id="modal-coord-title">Coordination Départementale</div>
+          <div class="modal-sub">12 coordonnateurs — un par departement</div>
+        </div>
+      </div>
+      <button class="modal-close" onclick="closeModal('modal-coord')" aria-label="Fermer">&#x2715;</button>
+    </div>
+    <div class="modal-body">
+      <p style="font-size:14px;color:var(--gr6);margin-bottom:24px;line-height:1.7">
+        Chaque coordonnateur departemental assure la representation et la coordination des activites du FODDEB dans son departement. Les noms des coordonnateurs seront mis a jour des leur designation officielle.
+      </p>
+      <div class="coord-grid">
+        <div class="coord-item"><div class="coord-num">1</div><div><div class="coord-dept">Alibori</div></div></div>
+        <div class="coord-item"><div class="coord-num">2</div><div><div class="coord-dept">Atacora</div></div></div>
+        <div class="coord-item"><div class="coord-num">3</div><div><div class="coord-dept">Atlantique</div></div></div>
+        <div class="coord-item"><div class="coord-num">4</div><div><div class="coord-dept">Borgou</div></div></div>
+        <div class="coord-item"><div class="coord-num">5</div><div><div class="coord-dept">Collines</div></div></div>
+        <div class="coord-item"><div class="coord-num">6</div><div><div class="coord-dept">Couffo</div></div></div>
+        <div class="coord-item"><div class="coord-num">7</div><div><div class="coord-dept">Donga</div></div></div>
+        <div class="coord-item"><div class="coord-num">8</div><div><div class="coord-dept">Littoral</div></div></div>
+        <div class="coord-item"><div class="coord-num">9</div><div><div class="coord-dept">Mono</div></div></div>
+        <div class="coord-item"><div class="coord-num">10</div><div><div class="coord-dept">Oueme</div></div></div>
+        <div class="coord-item"><div class="coord-num">11</div><div><div class="coord-dept">Plateau</div></div></div>
+        <div class="coord-item"><div class="coord-num">12</div><div><div class="coord-dept">Zou</div></div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL Sécrétariat Exécutif -->
+<div class="modal-overlay" id="modal-se" role="dialog" aria-modal="true" aria-labelledby="modal-se-title">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-header-left">
+        <div class="modal-header-icon" style="background:var(--redf)"><iconify-icon icon="mdi:briefcase-outline" style="color:var(--red);font-size:24px"></iconify-icon></div>
+        <div>
+          <div class="modal-title" id="modal-se-title">Sécrétariat Exécutif</div>
+          <div class="modal-sub">Organe d'execution operationnelle</div>
+        </div>
+      </div>
+      <button class="modal-close" onclick="closeModal('modal-se')" aria-label="Fermer">&#x2715;</button>
+    </div>
+    <div class="modal-body">
+      <p style="font-size:14px;color:var(--gr6);margin-bottom:24px;line-height:1.7;background:var(--goldf);border:1px solid #FDE68A;border-radius:var(--rs);padding:14px 16px;">
+        <iconify-icon icon="mdi:information-outline" style="vertical-align:middle;margin-right:6px;color:var(--gold2)"></iconify-icon>
+        Le Sécrétariat Exécutif est charge de la mise en oeuvre des décisions du Conseil d'Administration. Sa composition définitive sera communiquee prochainement.
+      </p>
+      <div class="members-modal-grid">
+        <div class="member-card">
+          <div class="member-photo"><div class="member-photo-placeholder" style="background:var(--red)">SG</div></div>
+          <div class="member-name">KASSIMOU Moutarou</div>
+          <div class="member-poste">Secretaire General</div>
+          <div class="member-dept"><iconify-icon icon="mdi:map-marker-outline"></iconify-icon>Borgou</div>
+        </div>
+        <div class="member-card">
+          <div class="member-photo"><div class="member-photo-placeholder" style="background:var(--red)">SGA</div></div>
+          <div class="member-name">TOSSA Severin</div>
+          <div class="member-poste">Secretaire General Adjoint</div>
+          <div class="member-dept"><iconify-icon icon="mdi:map-marker-outline"></iconify-icon>Couffo</div>
+        </div>
+        <div class="member-card">
+          <div class="member-photo"><div class="member-photo-placeholder" style="background:var(--red)">TG</div></div>
+          <div class="member-name">SANOUSSI Mahamadou</div>
+          <div class="member-poste">Tresorier General</div>
+          <div class="member-dept"><iconify-icon icon="mdi:map-marker-outline"></iconify-icon>Zou</div>
+        </div>
+        <div class="member-card">
+          <div class="member-photo"><div class="member-photo-placeholder" style="background:var(--red)">RIC</div></div>
+          <div class="member-name">HINVY Marcel Candide</div>
+          <div class="member-poste">Responsable Information et Communication</div>
+          <div class="member-dept"><iconify-icon icon="mdi:map-marker-outline"></iconify-icon>Littoral</div>
+        </div>
+        <div class="member-card">
+          <div class="member-photo"><div class="member-photo-placeholder" style="background:var(--red)">CMR</div></div>
+          <div class="member-name">CLOTOE Hubert</div>
+          <div class="member-poste">Charge Mobilisation Ressources</div>
+          <div class="member-dept"><iconify-icon icon="mdi:map-marker-outline"></iconify-icon>Atlantique</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+'use strict';
+
+/* ORGANES MODAL */
+function openOrgane(key) {
+  closeAllModals();
+  const modal = document.getElementById('modal-' + key);
+  if (modal) {
+    modal.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+}
+
+function closeModal(id) {
+  const modal = document.getElementById(id);
+  if (modal) { modal.classList.remove('open'); document.body.style.overflow = ''; }
+}
+
+function closeAllModals() {
+  document.querySelectorAll('.modal-overlay.open').forEach(m => m.classList.remove('open'));
+  document.body.style.overflow = '';
+}
+
+/* Fermer en cliquant hors du modal */
+document.querySelectorAll('.modal-overlay').forEach(overlay => {
+  overlay.addEventListener('click', e => { if (e.target === overlay) closeAllModals(); });
+});
+
+/* Fermer avec Escape */
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeAllModals(); });
+
+/* Accessibilite clavier sur les cartes organes */
+document.querySelectorAll('.organe-card').forEach(card => {
+  card.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); card.click(); } });
+});
+
+/* MOBILE NAV */
+document.getElementById('hamburger').addEventListener('click', () => {
+  document.getElementById('mobileNav').classList.add('open');
+  document.body.style.overflow = 'hidden';
+});
+document.getElementById('mobileClose').addEventListener('click', () => {
+  document.getElementById('mobileNav').classList.remove('open');
+  document.body.style.overflow = '';
+});
+document.querySelectorAll('.mobile-links a').forEach(a => {
+  a.addEventListener('click', () => {
+    document.getElementById('mobileNav').classList.remove('open');
+    document.body.style.overflow = '';
+  });
+});
+
+/* FADE IN */
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); } });
+}, { threshold: 0.1 });
+document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+if ('serviceWorker' in navigator) navigator.serviceWorker.register('/sw.js').catch(() => {});
+</script>
+</body>
+</html>

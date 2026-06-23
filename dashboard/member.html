@@ -1,0 +1,1763 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="robots" content="noindex, nofollow"/>
+  <title>Mon espace — FODDEB</title>
+  <link rel="manifest" href="/manifest.json"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@500;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js" defer></script>
+  <!-- qrcode.js : génère de vrais QR codes lisibles par scanner -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    :root{
+      --green-900:#0F2713;--green-800:#1B5E20;--green-700:#2E7D32;--green-600:#388E3C;--green-500:#4CAF50;--green-400:#81C784;--green-100:#C8E6C9;--green-50:#E8F5E9;
+      --gold:#F9A825;--gold-600:#FFD54F;--gold-light:#FFFDE7;
+      --red:#C62828;--red-light:#FFEBEE;
+      --blue:#1565C0;--blue-light:#E3F2FD;
+      --bg:#F4F6F5;--surf:#FFFFFF;
+      --dark:#0D1B0F;--gray-800:#1C2520;--gray-600:#4A5568;--gray-400:#9AA5B1;--gray-200:#E2E8F0;--gray-100:#F7FAFC;--brd:#E8EEE9;
+      --fh:'Syne',sans-serif;--fb:'DM Sans',system-ui,sans-serif;
+      --r:12px;--rs:8px;
+      --sh:0 1px 4px rgba(0,0,0,.06),0 4px 16px rgba(0,0,0,.06);
+      --shm:0 4px 24px rgba(0,0,0,.10);
+      --tr:.25s cubic-bezier(.4,0,.2,1);
+    }
+    html,body{min-height:100%;}
+    body{font-family:var(--fb);background:var(--bg);color:var(--gray-800);-webkit-font-smoothing:antialiased;}
+    a{color:inherit;text-decoration:none;}
+    button{font-family:var(--fb);cursor:pointer;border:none;background:none;}
+
+    /* TOPNAV */
+    .topnav{background:var(--green-900);position:sticky;top:0;z-index:100;}
+    .topnav-inner{max-width:1200px;margin:0 auto;display:flex;align-items:center;gap:16px;padding:0 24px;height:60px;}
+    .topnav-logo{display:flex;align-items:center;gap:10px;}
+    .topnav-logo-icon{width:34px;height:34px;border-radius:9px;background:var(--green-700);display:flex;align-items:center;justify-content:center;overflow:hidden;flex-shrink:0;}
+    .topnav-logo-icon img{width:100%;height:100%;object-fit:cover;}
+    .topnav-logo-txt{font-family:var(--fh);color:#fff;font-size:11px;font-weight:800;}
+    .topnav-logo-name{color:#fff;font-family:var(--fh);font-size:15px;font-weight:700;}
+    .topnav-links{display:flex;gap:4px;margin-left:28px;}
+    .tnl{font-size:13.5px;font-weight:500;color:rgba(255,255,255,.6);padding:7px 14px;border-radius:7px;transition:var(--tr);cursor:pointer;}
+    .tnl:hover{background:rgba(255,255,255,.08);color:#fff;}
+    .tnl.active{background:rgba(255,255,255,.12);color:#fff;font-weight:600;}
+    .topnav-right{margin-left:auto;display:flex;align-items:center;gap:10px;}
+    .nb-btn{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,.6);font-size:18px;position:relative;transition:var(--tr);}
+    .nb-btn:hover{color:#fff;background:rgba(255,255,255,.1);}
+    .nb-dot{position:absolute;top:5px;right:5px;width:7px;height:7px;background:var(--red);border-radius:50%;border:1.5px solid var(--green-900);}
+    .user-pill{display:flex;align-items:center;gap:8px;padding:5px 12px 5px 5px;border-radius:99px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);cursor:pointer;transition:var(--tr);}
+    .user-pill:hover{background:rgba(255,255,255,.14);}
+    .up-av{width:28px;height:28px;border-radius:50%;background:var(--green-600);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:11px;}
+    .up-name{font-size:13px;font-weight:600;color:#fff;}
+    .hbtn-mob{display:none;background:none;border:none;cursor:pointer;padding:4px;color:rgba(255,255,255,.7);font-size:22px;}
+
+    /* MOBILE DRAWER */
+    .mob-drawer{display:none;position:fixed;inset:0;background:var(--green-900);z-index:200;flex-direction:column;padding:24px;}
+    .mob-drawer.open{display:flex;}
+    .mob-drawer-hdr{display:flex;justify-content:space-between;align-items:center;margin-bottom:32px;}
+    .mob-close{background:none;border:none;color:rgba(255,255,255,.7);font-size:26px;cursor:pointer;}
+    .mob-links{display:flex;flex-direction:column;gap:4px;}
+    .mob-links a{font-size:17px;font-weight:500;color:rgba(255,255,255,.75);padding:14px 16px;border-radius:10px;border-bottom:1px solid rgba(255,255,255,.06);cursor:pointer;}
+    .mob-links a.active{color:#fff;background:rgba(255,255,255,.1);}
+
+    .pw{max-width:1200px;margin:0 auto;padding:28px 24px 60px;}
+
+    /* WELCOME */
+    .welcome{background:linear-gradient(135deg,var(--green-800) 0%,var(--green-700) 60%,var(--green-600) 100%);border-radius:16px;padding:32px 36px;display:flex;align-items:center;justify-content:space-between;gap:24px;margin-bottom:24px;position:relative;overflow:hidden;}
+    .welcome::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(45deg,rgba(255,255,255,.03) 0px,rgba(255,255,255,.03) 1px,transparent 1px,transparent 32px);pointer-events:none;}
+    .welcome-left{position:relative;z-index:1;}
+    .wg{font-size:13px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--green-400);margin-bottom:8px;}
+    .wn{font-family:var(--fh);font-size:clamp(1.4rem,3vw,2rem);font-weight:700;color:#fff;margin-bottom:8px;}
+    .wd{font-size:14px;color:rgba(255,255,255,.65);line-height:1.6;}
+    .welcome-right{display:flex;gap:24px;flex-shrink:0;position:relative;z-index:1;}
+    .wstat{text-align:center;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.16);border-radius:12px;padding:16px 20px;min-width:90px;backdrop-filter:blur(4px);}
+    .wstat strong{display:block;font-family:var(--fh);font-size:1.6rem;font-weight:700;color:#fff;}
+    .wstat span{font-size:11px;color:rgba(255,255,255,.65);font-weight:500;}
+
+    .dg{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:20px;}
+    .dg3{display:grid;grid-template-columns:2fr 1fr;gap:20px;margin-bottom:20px;}
+
+    .card{background:var(--surf);border-radius:var(--r);border:1px solid var(--brd);box-shadow:var(--sh);overflow:hidden;}
+    .ch{padding:18px 22px;border-bottom:1px solid var(--brd);display:flex;align-items:center;justify-content:space-between;}
+    .ct{font-family:var(--fh);font-size:15px;font-weight:700;color:var(--dark);display:flex;align-items:center;gap:8px;}
+    .ct iconify-icon{font-size:18px;color:var(--green-700);}
+    .cl{font-size:13px;font-weight:600;color:var(--green-700);cursor:pointer;transition:var(--tr);}
+    .cl:hover{color:var(--green-800);}
+    .cb{padding:22px;}
+
+    /* PROFILE CARD */
+    .profile-card{background:var(--surf);border-radius:var(--r);border:1px solid var(--brd);box-shadow:var(--sh);overflow:hidden;}
+    .prof-cover{height:80px;background:linear-gradient(135deg,var(--green-800),var(--green-600));}
+    .prof-body{padding:0 22px 22px;}
+    .prof-av-wrap{display:flex;align-items:flex-end;gap:16px;margin-top:-30px;margin-bottom:16px;}
+    .prof-av{width:64px;height:64px;border-radius:50%;background:var(--green-700);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:22px;border:3px solid #fff;box-shadow:0 2px 12px rgba(0,0,0,.12);flex-shrink:0;overflow:hidden;}
+    .prof-av img{width:100%;height:100%;object-fit:cover;display:block;}
+    .prof-badge{font-size:11px;font-weight:700;padding:4px 12px;border-radius:99px;background:var(--green-50);color:var(--green-800);border:1px solid var(--green-100);}
+    .prof-name{font-family:var(--fh);font-size:1.15rem;font-weight:700;color:var(--dark);margin-bottom:4px;}
+    .prof-org{font-size:13px;color:var(--gray-600);margin-bottom:16px;display:flex;align-items:center;gap:6px;}
+    .prof-details{display:flex;flex-direction:column;gap:10px;}
+    .prof-detail{display:flex;align-items:center;gap:10px;font-size:13.5px;color:var(--gray-600);}
+    .prof-detail iconify-icon{font-size:17px;color:var(--green-600);flex-shrink:0;}
+    .prof-actions{margin-top:18px;display:flex;flex-direction:column;gap:8px;}
+    .btn-prof{width:100%;padding:11px;border-radius:var(--rs);font-size:14px;font-weight:600;display:flex;align-items:center;justify-content:center;gap:8px;cursor:pointer;transition:var(--tr);}
+    .btn-prof-p{background:var(--green-800);color:#fff;border:none;box-shadow:0 2px 8px rgba(27,94,32,.15);}
+    .btn-prof-p:hover{background:var(--green-700);box-shadow:0 4px 12px rgba(27,94,32,.25);transform:translateY(-1px);}
+    .btn-prof-p:active{transform:translateY(0);}
+    .btn-prof-o{background:transparent;color:var(--gray-800);border:1.5px solid var(--brd);}
+    .btn-prof-o:hover{border-color:var(--green-400);color:var(--green-800);background:var(--green-50);}
+    .btn-prof-o:active{background:var(--green-100);}
+
+    /* PROJETS */
+    .proj-list{display:flex;flex-direction:column;gap:12px;}
+    .proj-item{border:1px solid var(--brd);border-radius:var(--rs);overflow:hidden;transition:var(--tr);cursor:pointer;}
+    .proj-item:hover{border-color:var(--green-100);box-shadow:var(--sh);}
+    /* Image de couverture du projet */
+    .proj-cover{width:100%;height:100px;object-fit:cover;display:block;background:var(--gray-200);}
+    .proj-cover-placeholder{width:100%;height:100px;display:flex;align-items:center;justify-content:center;font-size:32px;}
+    .proj-body{padding:12px 14px;}
+    .proj-title{font-size:14px;font-weight:600;color:var(--dark);margin-bottom:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+    .proj-meta{font-size:12px;color:var(--gray-400);margin-bottom:8px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+    .progress{height:5px;background:var(--gray-200);border-radius:99px;overflow:hidden;}
+    .pf{height:100%;border-radius:99px;transition:width 1s ease;}
+    .proj-foot{display:flex;align-items:center;justify-content:space-between;margin-top:6px;}
+    .proj-attach{display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:600;color:var(--blue);background:var(--blue-light);padding:2px 8px;border-radius:4px;}
+
+    /* ACTIVITY */
+    .act-list{display:flex;flex-direction:column;}
+    .act-item{display:flex;gap:12px;padding:12px 0;border-bottom:1px solid var(--brd);align-items:flex-start;}
+    .act-item:last-child{border-bottom:none;}
+    .aicon{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;}
+    .atext p{font-size:13.5px;color:var(--gray-800);line-height:1.45;}
+    .atext p strong{font-weight:600;}
+    .atime{font-size:11px;color:var(--gray-400);margin-top:2px;}
+
+    /* RESOURCES */
+    .res-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+    .res-item{border:1px solid var(--brd);border-radius:var(--rs);padding:14px;display:flex;align-items:center;gap:12px;cursor:pointer;transition:var(--tr);}
+    .res-item:hover{border-color:var(--green-100);background:var(--green-50);}
+    .ricon{width:38px;height:38px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;}
+    .rtitle{font-size:13.5px;font-weight:600;color:var(--dark);margin-bottom:2px;}
+    .rsize{font-size:11px;color:var(--gray-400);}
+
+    /* EVENTS */
+    .evt-list{display:flex;flex-direction:column;gap:12px;}
+    .evt-item{display:flex;gap:14px;align-items:flex-start;}
+    .evt-date{width:44px;text-align:center;flex-shrink:0;}
+    .evt-day{font-family:var(--fh);font-size:1.4rem;font-weight:700;color:var(--green-800);line-height:1;}
+    .evt-month{font-size:10px;font-weight:700;text-transform:uppercase;color:var(--gray-400);letter-spacing:.08em;}
+    .evt-cnt{flex:1;padding-top:2px;}
+    .evt-title{font-size:14px;font-weight:600;color:var(--dark);margin-bottom:4px;}
+    .evt-meta{font-size:12px;color:var(--gray-400);display:flex;align-items:center;gap:6px;flex-wrap:wrap;}
+    .evt-tag{font-size:10px;font-weight:700;padding:2px 8px;border-radius:4px;background:var(--green-50);color:var(--green-700);}
+
+    /* BADGES */
+    .badge{display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:700;padding:3px 10px;border-radius:99px;}
+    .bs{background:var(--green-50);color:var(--green-700);}
+    .bw{background:var(--gold-light);color:#92400E;}
+    .bi{background:var(--blue-light);color:var(--blue);}
+    .br{background:var(--red-light);color:var(--red);}
+    .bdot{width:5px;height:5px;border-radius:50%;background:currentColor;}
+
+    @keyframes spin{to{transform:rotate(360deg)}}
+    .spin{animation:spin 1s linear infinite;display:inline-block;}
+
+    /* MODAL */
+    .mo{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:500;display:none;align-items:center;justify-content:center;padding:16px;backdrop-filter:blur(3px);}
+    .mo.open{display:flex;}
+    .modal{background:var(--surf);border-radius:16px;width:100%;max-width:520px;max-height:90vh;overflow-y:auto;box-shadow:0 24px 80px rgba(0,0,0,.2);animation:mIn .3s cubic-bezier(.34,1.2,.64,1);}
+    .modal-lg{max-width:760px;}
+    @keyframes mIn{from{opacity:0;transform:scale(.94) translateY(12px)}to{opacity:1;transform:none}}
+    .mh{display:flex;align-items:center;justify-content:space-between;padding:18px 22px;border-bottom:1px solid var(--brd);}
+    .mt{font-family:var(--fh);font-size:1.05rem;font-weight:700;color:var(--dark);}
+    .mc{width:30px;height:30px;border-radius:50%;background:var(--gray-100);display:flex;align-items:center;justify-content:center;font-size:16px;color:var(--gray-600);cursor:pointer;flex-shrink:0;}
+    .mb{padding:22px;}
+    .mf{padding:14px 22px;border-top:1px solid var(--brd);display:flex;gap:10px;justify-content:flex-end;}
+    .fg{margin-bottom:14px;}
+    .fl{display:block;font-size:12.5px;font-weight:600;color:var(--gray-800);margin-bottom:6px;}
+    .fi,.fsel,.fta{width:100%;padding:10px 13px;border:1.5px solid var(--gray-200);border-radius:var(--rs);font-family:var(--fb);font-size:14px;color:var(--gray-800);background:var(--gray-100);outline:none;transition:all .2s;}
+    .fta{min-height:80px;resize:vertical;}
+    .fi:focus,.fsel:focus,.fta:focus{border-color:var(--green-500);background:#fff;box-shadow:0 0 0 3px rgba(76,175,80,.12);}
+
+    /* UPLOAD ZONE */
+    /* ── Photo de profil — upload ── */
+    .prof-av-wrap { position:relative; display:inline-block; }
+    .prof-av-edit {
+      position:absolute; bottom:0; right:-4px;
+      width:26px; height:26px; border-radius:50%;
+      background:var(--green-600); color:#fff; border:2px solid var(--surf);
+      display:flex; align-items:center; justify-content:center;
+      cursor:pointer; font-size:13px; transition:.2s;
+    }
+    .prof-av-edit:hover { background:var(--green-700); transform:scale(1.1); }
+    .prof-av { width:72px; height:72px; border-radius:50%; background:var(--green-600);
+      display:flex; align-items:center; justify-content:center;
+      font-size:22px; font-weight:700; color:#fff; overflow:hidden; flex-shrink:0; }
+    .prof-av img { width:100%; height:100%; object-fit:cover; }
+
+    /* ── Badge membre ── */
+    .badge-wrap {
+      background:linear-gradient(135deg,#1B3A1F 0%,#2D5A35 50%,#1B3A1F 100%);
+      border-radius:16px; padding:28px 24px; color:#fff;
+      position:relative; overflow:hidden; box-shadow:0 8px 32px rgba(0,0,0,.3);
+      width:340px; margin:0 auto;
+    }
+    .badge-wrap::before {
+      content:''; position:absolute; inset:0;
+      background:url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    }
+    .badge-header { display:flex; align-items:center; gap:6px; margin-bottom:20px; opacity:.7; font-size:11px; font-weight:700; letter-spacing:1px; text-transform:uppercase; }
+    .badge-logo { width:22px; height:22px; }
+    .badge-av {
+      width:80px; height:80px; border-radius:50%;
+      border:3px solid rgba(249,168,37,.8);
+      overflow:hidden; margin:0 auto 12px;
+      background:rgba(255,255,255,.1);
+      display:flex; align-items:center; justify-content:center;
+      font-size:28px; font-weight:700;
+    }
+    .badge-av img { width:100%; height:100%; object-fit:cover; }
+    .badge-name { font-size:18px; font-weight:700; text-align:center; margin-bottom:4px; }
+    .badge-role { font-size:11px; font-weight:600; text-align:center; padding:3px 12px; border-radius:99px; background:rgba(249,168,37,.2); color:#F9A825; border:1px solid rgba(249,168,37,.3); display:inline-block; margin:0 auto 16px; }
+    .badge-center { text-align:center; }
+    .badge-info { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin:16px 0; }
+    .badge-info-item { background:rgba(255,255,255,.06); border-radius:8px; padding:8px 10px; }
+    .badge-info-item .bi-label { font-size:9px; font-weight:600; opacity:.5; text-transform:uppercase; letter-spacing:.5px; margin-bottom:2px; }
+    .badge-info-item .bi-val { font-size:12px; font-weight:600; }
+    .badge-footer { display:flex; align-items:flex-end; justify-content:space-between; margin-top:16px; padding-top:12px; border-top:1px solid rgba(255,255,255,.1); gap:8px; }
+    .badge-id { font-size:11px; font-weight:700; font-family:monospace; color:rgba(249,168,37,.8); letter-spacing:.05em; }
+    .badge-qr { width:52px; height:52px; background:#fff; border-radius:6px; padding:3px; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+    .badge-valid { font-size:9px; opacity:.6; display:flex; align-items:center; gap:4px; }
+    .badge-valid-dot { width:6px; height:6px; border-radius:50%; background:#4CAF50; display:inline-block; }
+    /* Zone signature + cachet Président */
+    .badge-sign {
+      flex:1; display:flex; flex-direction:column; align-items:center; gap:2px;
+      border-left:1px solid rgba(255,255,255,.12); padding-left:8px;
+    }
+    .badge-sign-img {
+      width:70px; height:36px; object-fit:contain; filter:brightness(0) invert(1);
+      opacity:.85;
+    }
+    /* Placeholder SVG signature si l'image réelle n'est pas encore disponible */
+    .badge-sign-placeholder {
+      width:70px; height:36px; display:flex; align-items:center; justify-content:center;
+    }
+    .badge-sign-label {
+      font-size:8px; opacity:.5; text-transform:uppercase; letter-spacing:.5px;
+      text-align:center; line-height:1.2;
+    }
+    .badge-actions { display:flex; gap:8px; justify-content:center; margin-top:16px; }
+
+        .upload-zone{border:2px dashed var(--brd);border-radius:var(--rs);padding:16px;text-align:center;cursor:pointer;transition:all .2s;background:var(--gray-100);position:relative;overflow:hidden;}
+    .upload-zone:hover,.upload-zone.drag{border-color:var(--green-500);background:var(--green-50);}
+    .upload-zone.has-file{border-color:var(--green-500);background:var(--green-50);border-style:solid;}
+    .upload-zone input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;}
+    .uz-icon{font-size:24px;color:var(--gray-400);margin-bottom:6px;display:block;}
+    .uz-label{font-size:13px;font-weight:600;color:var(--gray-600);}
+    .uz-hint{font-size:11px;color:var(--gray-400);margin-top:2px;}
+    .uz-preview{display:flex;align-items:center;gap:8px;margin-top:8px;padding:8px 10px;background:#fff;border-radius:6px;border:1px solid var(--green-100);}
+    .uz-preview img{width:40px;height:40px;object-fit:cover;border-radius:4px;flex-shrink:0;}
+    .uz-preview-icon{font-size:18px;color:var(--green-700);flex-shrink:0;}
+    .uz-preview-name{font-size:12px;font-weight:600;color:var(--gray-800);flex:1;text-align:left;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+    .uz-preview-size{font-size:11px;color:var(--gray-400);white-space:nowrap;}
+    .uz-remove{font-size:16px;color:var(--red);cursor:pointer;flex-shrink:0;background:none;border:none;padding:2px;z-index:2;position:relative;}
+
+    /* UPLOAD PROGRESS */
+    .upload-prog{height:4px;background:var(--gray-200);border-radius:99px;overflow:hidden;margin-top:8px;display:none;}
+    .upload-prog-bar{height:100%;background:var(--green-500);border-radius:99px;transition:width .3s;width:0%;}
+
+    /* BTNS */
+    .btn{display:inline-flex;align-items:center;gap:8px;font-family:var(--fb);font-size:14px;font-weight:600;padding:9px 16px;border-radius:var(--rs);border:1.5px solid transparent;cursor:pointer;transition:var(--tr);}
+    .btn-p{background:var(--green-800);color:#fff;}
+    .btn-p:hover:not(:disabled){background:var(--green-700);}
+    .btn-p:disabled{opacity:.5;cursor:not-allowed;}
+    .btn-o{background:transparent;color:var(--gray-800);border-color:var(--brd);}
+    .btn-o:hover{border-color:var(--green-400);color:var(--green-800);}
+    .btn-sm{font-size:12.5px;padding:7px 14px;}
+
+    /* VISIONNEUSE */
+    .viewer-wrap{border-radius:var(--rs);overflow:hidden;background:#111827;border:1px solid var(--brd);}
+    .viewer-bar{display:flex;align-items:center;justify-content:space-between;padding:8px 14px;background:#0d1117;border-bottom:1px solid rgba(255,255,255,.08);}
+    .viewer-bar-left{display:flex;align-items:center;gap:8px;font-size:12px;color:rgba(255,255,255,.6);}
+    .viewer-badge{font-size:10px;font-weight:700;padding:2px 8px;border-radius:4px;background:rgba(249,168,37,.15);color:#F9A825;border:1px solid rgba(249,168,37,.25);}
+    .viewer-iframe-wrap{position:relative;height:400px;}
+    .viewer-iframe{width:100%;height:100%;border:none;display:block;}
+    .viewer-overlay{position:absolute;inset:0;z-index:10;cursor:default;}
+    .viewer-footer{padding:8px 14px;background:#0d1117;border-top:1px solid rgba(255,255,255,.08);font-size:11px;color:rgba(255,255,255,.3);display:flex;align-items:center;gap:6px;}
+    .viewer-footer iconify-icon{font-size:13px;color:rgba(249,168,37,.5);}
+
+    /* DETAIL PROJET — image de couverture */
+    .pd-cover{width:100%;height:160px;object-fit:cover;border-radius:var(--rs);margin-bottom:16px;display:block;}
+    .pd-cover-placeholder{width:100%;height:160px;border-radius:var(--rs);margin-bottom:16px;display:flex;align-items:center;justify-content:center;font-size:48px;background:var(--gray-100);}
+
+    /* TOAST */
+    #tc{position:fixed;top:16px;right:16px;z-index:9999;display:flex;flex-direction:column;gap:8px;}
+    .toast{padding:11px 16px;border-radius:10px;font-size:13.5px;display:flex;align-items:center;gap:8px;box-shadow:var(--shm);animation:tIn .3s ease;max-width:300px;color:#fff;}
+    .toast.ok{background:var(--green-800);}
+    .toast.err{background:var(--red);}
+    @keyframes tIn{from{opacity:0;transform:translateX(16px)}to{opacity:1;transform:none}}
+    @keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+    .ai{animation:fadeUp .35s ease both;}
+    .ai:nth-child(2){animation-delay:.05s;}
+    .ai:nth-child(3){animation-delay:.10s;}
+
+    @media(max-width:1024px){.dg3{grid-template-columns:1fr;}}
+    
+    /* Fix mobile — cibles tactiles min 44px */
+    .btn-prof{min-height:44px;}
+    .tnl{min-height:44px;display:flex;align-items:center;}
+    .nb-btn{width:44px;height:44px;}
+    .user-pill{min-height:44px;}
+    .mob-links a{min-height:48px;display:flex;align-items:center;}
+    .mc{width:44px;height:44px;}
+    @media(max-width:768px){
+      .dg{grid-template-columns:1fr;}
+      .topnav-links{display:none;}
+      .hbtn-mob{display:block;}
+      .welcome-right{display:none;}
+      .welcome{padding:24px 20px;}
+      .res-grid{grid-template-columns:1fr;}
+      .pw{padding:16px 16px 48px;}
+      .viewer-iframe-wrap{height:260px;}
+    }
+  </style>
+</head>
+<body>
+<div id="tc"></div>
+
+<nav class="topnav">
+  <div class="topnav-inner">
+    <div class="topnav-logo">
+      <div class="topnav-logo-icon">
+        <img src="/assets/icons/apple-touch-icon.png" alt="Logo FODDEB"
+             onerror="this.style.display='none';this.parentElement.innerHTML='<span class=topnav-logo-txt>FOD</span>'"/>
+      </div>
+      <span class="topnav-logo-name">FODDEB</span>
+    </div>
+    <div class="topnav-links">
+      <span class="tnl active" id="nl-accueil"    onclick="scrollToSection('accueil')">Accueil</span>
+      <span class="tnl"        id="nl-projets"    onclick="scrollToSection('projets')">Mes projets</span>
+      <span class="tnl"        id="nl-ressources" onclick="scrollToSection('ressources')">Ressources</span>
+      <span class="tnl"        id="nl-evenements" onclick="scrollToSection('evenements')">Événements</span>
+      <a href="/" class="tnl">Site public</a>
+    </div>
+    <div class="topnav-right">
+      <button class="nb-btn" aria-label="Notifications">
+        <iconify-icon icon="mdi:bell-outline"></iconify-icon>
+        <span class="nb-dot"></span>
+      </button>
+      <div class="user-pill" onclick="openM('profileM')">
+        <div class="up-av" id="navAv">—</div>
+        <span class="up-name" id="navName">Chargement…</span>
+        <iconify-icon icon="mdi:chevron-down" style="color:rgba(255,255,255,.5);font-size:16px"></iconify-icon>
+      </div>
+      <button class="hbtn-mob" onclick="openDrawer()">
+        <iconify-icon icon="mdi:menu"></iconify-icon>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<div class="mob-drawer" id="mobDrawer">
+  <div class="mob-drawer-hdr">
+    <span class="topnav-logo-name" style="color:#fff">FODDEB</span>
+    <button class="mob-close" onclick="closeDrawer()">&#x2715;</button>
+  </div>
+  <div class="mob-links">
+    <a class="active" onclick="scrollToSection('accueil');closeDrawer()">Accueil</a>
+    <a onclick="scrollToSection('projets');closeDrawer()">Mes projets</a>
+    <a onclick="scrollToSection('ressources');closeDrawer()">Ressources</a>
+    <a onclick="scrollToSection('evenements');closeDrawer()">Événements</a>
+    <a href="/">Site public</a>
+    <a onclick="logout()" style="color:rgba(255,100,100,.8)">Se déconnecter</a>
+  </div>
+</div>
+
+<div class="pw" id="accueil">
+
+  <div class="welcome ai">
+    <div class="welcome-left">
+      <div class="wg">Bienvenue dans votre espace</div>
+      <div class="wn" id="welcomeName">
+        <iconify-icon icon="mdi:loading" class="spin" style="font-size:24px"></iconify-icon>
+      </div>
+      <div class="wd" id="welcomeDesc">Chargement…</div>
+    </div>
+    <div class="welcome-right">
+      <div class="wstat"><strong id="wsProjets">—</strong><span>Projets</span></div>
+      <div class="wstat"><strong id="wsDate">—</strong><span>Membre depuis</span></div>
+      <div class="wstat"><strong id="wsDept">—</strong><span>Département</span></div>
+    </div>
+  </div>
+
+  <div class="dg3 ai" id="projets">
+    <div class="card">
+      <div class="ch">
+        <span class="ct"><iconify-icon icon="mdi:clipboard-list-outline"></iconify-icon>Mes projets</span>
+        <span class="cl" onclick="openM('projetM')">+ Proposer</span>
+      </div>
+      <div class="cb">
+        <div class="proj-list" id="projList">
+          <div style="padding:32px 20px;text-align:center;color:var(--gray-400)">
+            <iconify-icon icon="mdi:folder-open-outline" style="font-size:40px;display:block;margin:0 auto 12px;opacity:.5"></iconify-icon>
+            <p style="font-size:14px;font-weight:500;color:var(--gray-600);margin-bottom:12px">Aucun projet proposé pour le moment</p>
+            <p style="font-size:13px;color:var(--gray-400);margin-bottom:16px;line-height:1.5">Proposez votre projet pour contribuer aux activités du FODDEB</p>
+            <button class="cl" onclick="openM('projetM')" style="color:var(--green-700);font-weight:600;cursor:pointer">+ Proposer un projet</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div style="display:flex;flex-direction:column;gap:20px">
+      <div class="profile-card">
+        <div class="prof-cover"></div>
+        <div class="prof-body">
+          <div class="prof-av-wrap">
+            <div class="prof-av" id="profAv">—</div>
+            <!-- Bouton crayon pour changer la photo -->
+            <label class="prof-av-edit" title="Changer la photo de profil" tabindex="0">
+              <iconify-icon icon="mdi:camera-outline" style="font-size:13px"></iconify-icon>
+              <input type="file" id="photoProfilInput" accept="image/jpeg,image/png,image/webp"
+                     style="display:none" onchange="handleProfilePhotoChange(this)"/>
+            </label>
+            <span class="prof-badge" id="profBadge">—</span>
+          </div>
+          <div class="prof-name" id="profName">Chargement…</div>
+          <div class="prof-org"><iconify-icon icon="mdi:domain" style="color:var(--green-600)"></iconify-icon><span id="profOrg">—</span></div>
+          <div class="prof-details">
+            <div class="prof-detail"><iconify-icon icon="mdi:email-outline"></iconify-icon><span id="profEmail">—</span></div>
+            <div class="prof-detail"><iconify-icon icon="mdi:phone-outline"></iconify-icon><span id="profTel">—</span></div>
+            <div class="prof-detail"><iconify-icon icon="mdi:map-marker-outline"></iconify-icon><span id="profDept">—</span></div>
+            <div class="prof-detail"><iconify-icon icon="mdi:calendar-outline"></iconify-icon><span id="profDate">—</span></div>
+          </div>
+          <div class="prof-actions">
+            <button class="btn-prof btn-prof-p" onclick="openM('editProfileM')">
+              <iconify-icon icon="mdi:pencil-outline"></iconify-icon>Modifier mon profil
+            </button>
+            <button class="btn-prof btn-prof-o" onclick="openM('changePwdM')">
+              <iconify-icon icon="mdi:lock-outline"></iconify-icon>Changer le mot de passe
+            </button>
+            <button class="btn-prof" onclick="openM('badgeM')"
+              style="background:linear-gradient(135deg,var(--gold-400),#f0a500);color:#1B3A1F;font-weight:700;border:none;width:100%;border-radius:8px;padding:9px 14px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;font-size:13px;margin-top:4px">
+              <iconify-icon icon="mdi:card-account-details-outline" style="font-size:16px"></iconify-icon>Mon badge membre
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="dg ai">
+    <div class="card">
+      <div class="ch"><span class="ct"><iconify-icon icon="mdi:history"></iconify-icon>Activité récente</span></div>
+      <div class="cb" style="padding:8px 20px 16px">
+        <div class="act-list" id="actList">
+          <div style="padding:20px;text-align:center;color:var(--gray-400)">
+            <iconify-icon icon="mdi:loading" class="spin" style="font-size:22px;display:block;margin:0 auto 8px"></iconify-icon>Chargement…
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card" id="evenements">
+      <div class="ch"><span class="ct"><iconify-icon icon="mdi:calendar-star-outline"></iconify-icon>Événements à venir</span></div>
+      <div class="cb">
+        <div class="evt-list" id="evtList">
+          <div style="padding:20px;text-align:center;color:var(--gray-400)">
+            <iconify-icon icon="mdi:loading" class="spin" style="font-size:22px;display:block;margin:0 auto 8px"></iconify-icon>Chargement…
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card ai" id="ressources">
+    <div class="ch"><span class="ct"><iconify-icon icon="mdi:folder-outline"></iconify-icon>Ressources et Documents</span></div>
+    <div class="cb">
+      <div class="res-grid" id="resList">
+        <div style="grid-column:1/-1;padding:32px 20px;text-align:center;color:var(--gray-400)">
+          <iconify-icon icon="mdi:folder-document-outline" style="font-size:40px;display:block;margin:0 auto 12px;opacity:.5"></iconify-icon>
+          <p style="font-size:14px;font-weight:500;color:var(--gray-600);margin-bottom:8px">Aucun document disponible</p>
+          <p style="font-size:13px;color:var(--gray-400)">Les ressources seront disponibles ici</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL MODIFIER PROFIL -->
+<div class="mo" id="editProfileM">
+  <div class="modal">
+    <div class="mh"><h3 class="mt">Modifier mon profil</h3><button class="mc" onclick="closeM('editProfileM')">&#x2715;</button></div>
+    <div class="mb">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+        <div class="fg"><label class="fl">Prénom</label><input type="text" id="epPrénom" class="fi"/></div>
+        <div class="fg"><label class="fl">Nom</label><input type="text" id="epNom" class="fi"/></div>
+      </div>
+      <div class="fg"><label class="fl">Email</label><input type="email" id="epEmail" class="fi"/></div>
+      <div class="fg"><label class="fl">Telephone</label><input type="tel" id="epTel" class="fi"/></div>
+      <div class="fg"><label class="fl">Organisation</label><input type="text" id="epOrg" class="fi"/></div>
+      <div class="fg"><label class="fl">Bio / Presentation</label><textarea id="epBio" class="fta" placeholder="Decrivez votre role et expertise…"></textarea></div>
+    </div>
+    <div class="mf">
+      <button class="btn btn-o btn-sm" onclick="closeM('editProfileM')">Annuler</button>
+      <button class="btn btn-p btn-sm" onclick="saveProfile()"><iconify-icon icon="mdi:check"></iconify-icon>Enregistrer</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL CHANGER MOT DE PASSE -->
+<div class="mo" id="changePwdM">
+  <div class="modal">
+    <div class="mh"><h3 class="mt">Changer le mot de passe</h3><button class="mc" onclick="closeM('changePwdM')">&#x2715;</button></div>
+    <div class="mb">
+      <form id="changePwdForm" onsubmit="handleChangePwd(event)" autocomplete="on" novalidate>
+      <div class="fg"><label class="fl">Mot de passe actuel</label><input type="password" id="cpOld" class="fi" placeholder="••••••••" autocomplete="current-password"/></div>
+      <div class="fg"><label class="fl">Nouveau mot de passe</label><input type="password" id="cpNew" class="fi" placeholder="Min. 8 caractères" autocomplete="new-password"/></div>
+      <div class="fg"><label class="fl">Confirmer le nouveau</label><input type="password" id="cpConf" class="fi" placeholder="Répétez le nouveau" autocomplete="new-password"/></div>
+      </form>
+    </div>
+    <div class="mf">
+      <button class="btn btn-o btn-sm" onclick="closeM('changePwdM')">Annuler</button>
+      <button class="btn btn-p btn-sm" onclick="changePwd()"><iconify-icon icon="mdi:lock-reset"></iconify-icon>Modifier</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL BADGE MEMBRE -->
+<div class="mo" id="badgeM">
+  <div class="modal" style="max-width:420px">
+    <div class="mh">
+      <h3 class="mt"><iconify-icon icon="mdi:card-account-details-outline"></iconify-icon> Badge membre</h3>
+      <button class="mc" onclick="closeM('badgeM')">&#x2715;</button>
+    </div>
+    <div class="mb" style="padding:20px">
+
+      <!-- Le badge rendu -->
+      <div class="badge-wrap" id="badgeCard">
+        <div class="badge-header">
+          <!-- Logo officiel FODDEB -->
+          <img class="badge-logo" src="/assets/icons/logo-small.png" alt="Logo FODDEB"
+               onerror="this.style.display='none'"/>
+          FODDEB — Carte de membre
+        </div>
+        <div class="badge-center">
+          <div class="badge-av" id="badgeAv">?</div>
+          <div class="badge-name" id="badgeName">—</div>
+          <div style="text-align:center">
+            <span class="badge-role" id="badgeRole">—</span>
+          </div>
+        </div>
+        <div class="badge-info">
+          <div class="badge-info-item">
+            <div class="bi-label">Organisation</div>
+            <div class="bi-val" id="badgeOrg">—</div>
+          </div>
+          <div class="badge-info-item">
+            <div class="bi-label">Département</div>
+            <div class="bi-val" id="badgeDept">—</div>
+          </div>
+          <div class="badge-info-item">
+            <div class="bi-label">Membre depuis</div>
+            <div class="bi-val" id="badgeDate">—</div>
+          </div>
+          <div class="badge-info-item">
+            <div class="bi-label">Statut</div>
+            <div class="bi-val" style="color:#4CAF50">✓ Actif</div>
+          </div>
+        </div>
+        <div class="badge-footer">
+          <div>
+            <div class="badge-valid">
+              <span class="badge-valid-dot"></span>Badge vérifié · FODDEB
+            </div>
+            <div class="badge-id" id="badgeId">—</div>
+          </div>
+          <!-- Signature + cachet du Président
+               Remplacer badge-sign-placeholder par une balise <img> pointant vers
+               /assets/img/signature-president.png (PNG fond transparent) dès que l'asset est prêt.
+          -->
+          <div class="badge-sign">
+            <div class="badge-sign-placeholder" id="signatureZone">
+              <!-- Signature placeholder SVG — remplacer par la vraie image -->
+              <svg viewBox="0 0 70 36" xmlns="http://www.w3.org/2000/svg" width="70" height="36">
+                <path d="M6 28 C10 14 18 8 28 18 C35 25 38 12 46 10 C52 8 58 16 64 22"
+                      stroke="rgba(249,168,37,0.75)" stroke-width="2" fill="none"
+                      stroke-linecap="round" stroke-linejoin="round"/>
+                <ellipse cx="35" cy="22" rx="28" ry="12"
+                         stroke="rgba(249,168,37,0.25)" stroke-width="1.5" fill="none"
+                         stroke-dasharray="3 2"/>
+                <text x="35" y="26" text-anchor="middle" font-size="5"
+                      fill="rgba(249,168,37,0.5)" font-family="serif" letter-spacing="0.5">FODDEB</text>
+              </svg>
+            </div>
+            <div class="badge-sign-label">Signature · Président</div>
+          </div>
+          <!-- QR code réel généré par qrcode.js -->
+          <div class="badge-qr" id="badgeQR">
+            <div id="qrCanvas"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Progression upload photo -->
+      <div id="photoUploadStatus" style="display:none;text-align:center;padding:8px 0;font-size:13px;color:var(--green-600)">
+        <iconify-icon icon="mdi:loading" class="spin"></iconify-icon> Enregistrement de la photo…
+      </div>
+
+      <p style="font-size:11px;color:var(--gray-400);text-align:center;margin-top:12px;line-height:1.5">
+        <iconify-icon icon="mdi:shield-lock-outline" style="color:var(--gold-400)"></iconify-icon>
+        Ce badge contient un QR code unique lié à votre identifiant FODDEB.<br/>
+        Il sera vérifiable en ligne dans la prochaine version de la plateforme.
+      </p>
+    </div>
+    <div class="mf" style="justify-content:center;gap:10px">
+      <button class="btn btn-o btn-sm" onclick="closeM('badgeM')">Fermer</button>
+      <button class="btn btn-p btn-sm" onclick="downloadBadge()">
+        <iconify-icon icon="mdi:download-outline"></iconify-icon>Télécharger
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL PROPOSER UN PROJET -->
+<div class="mo" id="projetM">
+  <div class="modal">
+    <div class="mh"><h3 class="mt" id="pjModalTitre">Proposer un projet</h3><button class="mc" onclick="closeProjetModal()">&#x2715;</button></div>
+    <div class="mb">
+
+      <div class="fg">
+        <label class="fl">Titre du projet <span style="color:var(--red)">*</span></label>
+        <input type="text" id="pjTitre" class="fi" placeholder="Nom du projet"/>
+      </div>
+      <div class="fg">
+        <label class="fl">Description <span style="color:var(--red)">*</span></label>
+        <textarea id="pjDesc" class="fta" placeholder="Objectifs, zone d'intervention, beneficiaires…"></textarea>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+        <div class="fg">
+          <label class="fl">Département</label>
+          <select id="pjDept" class="fsel">
+            <option>Atlantique</option><option>Borgou</option><option>Alibori</option>
+            <option>Atacora</option><option>Donga</option><option>Littoral</option>
+            <option>Mono</option><option>Oueme</option><option>Plateau</option>
+            <option>Collines</option><option>Couffo</option><option>Zou</option>
+          </select>
+        </div>
+        <div class="fg">
+          <label class="fl">Beneficiaires estimes</label>
+          <input type="number" id="pjBenef" class="fi" placeholder="Ex: 500" min="0"/>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+        <div class="fg">
+          <label class="fl">Budget estime (FCFA)</label>
+          <input type="number" id="pjBudget" class="fi" placeholder="Ex: 2500000" min="0"/>
+        </div>
+        <div class="fg">
+          <label class="fl">Date de debut souhaitee</label>
+          <input type="date" id="pjDate" class="fi"/>
+        </div>
+      </div>
+
+      <!-- Image de couverture — upload direct -->
+      <div class="fg">
+        <label class="fl">
+          Image de couverture
+          <span style="font-weight:400;color:var(--gray-400)"> (facultatif — JPG, PNG · max 5 Mo)</span>
+        </label>
+        <div class="upload-zone" id="uz-img" onclick="document.getElementById('fi-img').click()">
+          <input type="file" id="fi-img" accept="image/jpeg,image/png,image/webp"
+                 onchange="handleFileSelect(this,'img')" style="display:none"/>
+          <iconify-icon icon="mdi:image-plus-outline" class="uz-icon" id="uzi-img"></iconify-icon>
+          <div class="uz-label" id="uzl-img">Cliquez pour choisir une image</div>
+          <div class="uz-hint">Sera affichee comme image de couverture du projet</div>
+          <div class="uz-preview" id="uzp-img" style="display:none">
+            <img id="uzp-img-thumb" src="" alt=""/>
+            <span class="uz-preview-name" id="uzpn-img"></span>
+            <span class="uz-preview-size" id="uzps-img"></span>
+            <button class="uz-remove" onclick="removeFile(event,'img')" title="Supprimer">
+              <iconify-icon icon="mdi:close-circle-outline"></iconify-icon>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Document joint — upload direct -->
+      <div class="fg">
+        <label class="fl">
+          Document joint
+          <span style="font-weight:400;color:var(--gray-400)"> (facultatif — PDF, Word, Excel · max 5 Mo)</span>
+        </label>
+        <div class="upload-zone" id="uz-doc" onclick="document.getElementById('fi-doc').click()">
+          <input type="file" id="fi-doc"
+                 accept="application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+                 onchange="handleFileSelect(this,'doc')" style="display:none"/>
+          <iconify-icon icon="mdi:file-upload-outline" class="uz-icon" id="uzi-doc"></iconify-icon>
+          <div class="uz-label" id="uzl-doc">Cliquez pour choisir un document</div>
+          <div class="uz-hint">PDF, Word ou Excel · Max 5 Mo · Consultation uniquement pour les membres</div>
+          <div class="uz-preview" id="uzp-doc" style="display:none">
+            <iconify-icon icon="mdi:file-outline" class="uz-preview-icon"></iconify-icon>
+            <span class="uz-preview-name" id="uzpn-doc"></span>
+            <span class="uz-preview-size" id="uzps-doc"></span>
+            <button class="uz-remove" onclick="removeFile(event,'doc')" title="Supprimer">
+              <iconify-icon icon="mdi:close-circle-outline"></iconify-icon>
+            </button>
+          </div>
+        </div>
+        <!-- Barre de progression upload -->
+        <div class="upload-prog" id="uploadProg">
+          <div class="upload-prog-bar" id="uploadProgBar"></div>
+        </div>
+        <div id="uploadProgLabel" style="font-size:11.5px;color:var(--gray-600);margin-top:4px;display:none"></div>
+      </div>
+
+      <p style="font-size:12px;color:var(--gray-400);margin-top:4px">
+        Votre proposition sera examinee par l'equipe FODDEB dans les 5 jours ouvrables.
+      </p>
+    </div>
+    <div class="mf">
+      <button class="btn btn-o btn-sm" onclick="closeProjetModal()">Annuler</button>
+      <button class="btn btn-p btn-sm" id="pjBtn" onclick="submitProjet()">
+        <iconify-icon icon="mdi:send-outline"></iconify-icon>Soumettre
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL DETAIL PROJET -->
+<div class="mo" id="projetDetailM">
+  <div class="modal modal-lg">
+    <div class="mh">
+      <h3 class="mt" id="pdTitre">Detail du projet</h3>
+      <button class="mc" onclick="closeM('projetDetailM')">&#x2715;</button>
+    </div>
+    <div class="mb">
+      <!-- Image de couverture -->
+      <div id="pdImgWrap"></div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px">
+        <div>
+          <div style="font-size:11px;font-weight:700;text-transform:uppercase;color:var(--gray-400);margin-bottom:4px">Statut</div>
+          <div id="pdStatut">—</div>
+        </div>
+        <div>
+          <div style="font-size:11px;font-weight:700;text-transform:uppercase;color:var(--gray-400);margin-bottom:4px">Département</div>
+          <div id="pdDept" style="font-size:14px;color:var(--gray-800)">—</div>
+        </div>
+        <div>
+          <div style="font-size:11px;font-weight:700;text-transform:uppercase;color:var(--gray-400);margin-bottom:4px">Budget</div>
+          <div id="pdBudget" style="font-size:14px;color:var(--gray-800)">—</div>
+        </div>
+        <div>
+          <div style="font-size:11px;font-weight:700;text-transform:uppercase;color:var(--gray-400);margin-bottom:4px">Beneficiaires</div>
+          <div id="pdBenef" style="font-size:14px;color:var(--gray-800)">—</div>
+        </div>
+        <div>
+          <div style="font-size:11px;font-weight:700;text-transform:uppercase;color:var(--gray-400);margin-bottom:4px">Date de debut</div>
+          <div id="pdDate" style="font-size:14px;color:var(--gray-800)">—</div>
+        </div>
+        <div>
+          <div style="font-size:11px;font-weight:700;text-transform:uppercase;color:var(--gray-400);margin-bottom:4px">Date de fin</div>
+          <div id="pdDateFin" style="font-size:14px;color:var(--gray-800)">—</div>
+        </div>
+      </div>
+
+      <div style="margin-bottom:16px">
+        <div style="font-size:11px;font-weight:700;text-transform:uppercase;color:var(--gray-400);margin-bottom:6px">Description</div>
+        <div id="pdDesc" style="font-size:14px;color:var(--gray-800);line-height:1.65">—</div>
+      </div>
+
+      <div style="margin-bottom:16px">
+        <div style="font-size:11px;font-weight:700;text-transform:uppercase;color:var(--gray-400);margin-bottom:6px">Progression</div>
+        <div style="display:flex;align-items:center;gap:12px">
+          <div class="progress" style="flex:1;height:8px">
+            <div class="pf" id="pdProg" style="width:0%;background:var(--green-600)"></div>
+          </div>
+          <span id="pdProgTxt" style="font-size:13px;font-weight:700;color:var(--green-700);min-width:36px">0%</span>
+        </div>
+      </div>
+
+     <!-- Document joint — injecté dynamiquement par JS -->
+      <div id="pdFichierWrap" style="display:none"></div>
+    </div>
+    <div class="mf">
+      <button class="btn btn-o btn-sm" onclick="closeM('projetDetailM')">Fermer</button>
+    </div>
+  </div>
+</div>
+<!-- MODAL MENU COMPTE -->
+<div class="mo" id="profileM">
+  <div class="modal" style="max-width:300px">
+    <div class="mh"><h3 class="mt">Mon compte</h3><button class="mc" onclick="closeM('profileM')">&#x2715;</button></div>
+    <div class="mb" style="padding:12px">
+      <div style="display:flex;flex-direction:column;gap:2px">
+        <button onclick="closeM('profileM');openM('editProfileM')"
+                style="display:flex;align-items:center;gap:10px;padding:11px 14px;border-radius:8px;font-size:14px;color:var(--gray-800);cursor:pointer;width:100%;text-align:left;background:none;border:none;font-family:var(--fb)">
+          <iconify-icon icon="mdi:account-outline" style="font-size:18px;color:var(--gray-400)"></iconify-icon>Mon profil
+        </button>
+        <button onclick="closeM('profileM');openM('changePwdM')"
+                style="display:flex;align-items:center;gap:10px;padding:11px 14px;border-radius:8px;font-size:14px;color:var(--gray-800);cursor:pointer;width:100%;text-align:left;background:none;border:none;font-family:var(--fb)">
+          <iconify-icon icon="mdi:lock-outline" style="font-size:18px;color:var(--gray-400)"></iconify-icon>Mot de passe
+        </button>
+        <hr style="border:none;border-top:1px solid var(--brd);margin:4px 0"/>
+        <button onclick="logout()"
+                style="display:flex;align-items:center;gap:10px;padding:11px 14px;border-radius:8px;font-size:14px;color:var(--red);cursor:pointer;width:100%;text-align:left;background:none;border:none;font-family:var(--fb)">
+          <iconify-icon icon="mdi:logout" style="font-size:18px"></iconify-icon>Se déconnecter
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="/assets/js/utils.js"></script>
+<script src="/assets/js/services/auth.js"></script>
+<script src="/assets/js/services/api.js"></script>
+<script>
+'use strict';
+
+/* ═══ CONSTANTES ═══ */
+const ROLE_LBL = { admin:'Administrateur', manager:'Gestionnaire', member:'Membre', donor:'Donateur' };
+const COLORS   = ['#1B5E20','#1565C0','#6A1B9A','#C62828','#F57F17','#00695C'];
+const gc = i => COLORS[i % COLORS.length];
+
+const STAT_MAP = {
+  en_cours:  '<span class="badge bs"><span class="bdot"></span>En cours</span>',
+  planifie:  '<span class="badge bw"><span class="bdot"></span>Planifié</span>',
+  soumis:    '<span class="badge bi"><span class="bdot"></span>Soumis</span>',
+  termine:   '<span class="badge bi"><span class="bdot"></span>Terminé</span>',
+  rejété:    '<span class="badge br"><span class="bdot"></span>Rejeté</span>',
+  'à revoir':'<span class="badge" style="background:#FFF3E0;color:#E65100;border:1px solid #FFE0B2"><span class="bdot" style="background:#E65100"></span>À revoir</span>',
+};
+
+const DOM_ICONS = {
+  'Protection': { icon:'mdi:shield-account-outline', bg:'var(--green-50)',   color:'var(--green-700)'   },
+  'Education':  { icon:'mdi:school-outline',          bg:'var(--blue-light)',color:'var(--blue)'  },
+  'Sante':      { icon:'mdi:heart-plus-outline',      bg:'var(--red-light)',color:'var(--red)'   },
+  'Numerique':  { icon:'mdi:laptop-outline',           bg:'#F3E5F5',    color:'#6A1B9A'     },
+  'default':    { icon:'mdi:clipboard-list-outline',  bg:'var(--gold-light)',color:'var(--gold-600)' },
+};
+
+/* ─── Formateurs de données ─── */
+
+// Formate une date ISO ou string en date lisible
+function fmtD(d) {
+  if (!d) return '—';
+  try {
+    const dt = new Date(d);
+    if (isNaN(dt)) return d;
+    return dt.toLocaleDateString('fr-FR', { day:'numeric', month:'short', year:'numeric' });
+  } catch { return d; }
+}
+
+// Extrait l'année d'une date
+function fmtYear(d) {
+  if (!d) return '—';
+  try {
+    const dt = new Date(d);
+    return isNaN(dt) ? '—' : dt.getFullYear().toString();
+  } catch { return '—'; }
+}
+
+// Formate un montant en FCFA
+function fmtXOF(n) {
+  const num = parseInt(n);
+  if (isNaN(num)) return '—';
+  return num.toLocaleString('fr-FR') + ' FCFA';
+}
+
+// Formate un nombre de bénéficiaires — corrige le NaN
+function fmtBenef(n) {
+  const num = parseInt(n);
+  if (isNaN(num) || num === 0) return '—';
+  return num.toLocaleString('fr-FR') + ' bénéficiaires';
+}
+
+// Formate une taille de fichier
+function fmtSize(bytes) {
+  if (bytes < 1024) return bytes + ' o';
+  if (bytes < 1024*1024) return Math.round(bytes/1024) + ' Ko';
+  return (bytes/(1024*1024)).toFixed(1) + ' Mo';
+}
+
+/* ═══ SESSION ═══ */
+let USER = null;
+
+function getSession() {
+  try { return JSON.parse(sessionStorage.getItem('foddeb_user')); } catch { return null; }
+}
+
+function requireMember() {
+  const u = getSession();
+  if (!u) { window.location.href = '/auth/login.html'; return null; }
+  return u;
+}
+
+/* ═══ RENDER PROFIL ═══ */
+function renderUserInfo(user) {
+  // Sheet stocke 'Prenom' (sans accent) — GAS auth retourne 'prenom' (minuscule)
+  const prénom  = user.Prenom || user.Prénom  || user.prenom  || '';
+  const nom     = user.Nom    || user.nom     || '';
+  const email   = user.Email  || user.email   || '';
+  const tel     = user.Telephone || user.tel  || '—';
+  const org     = user.Organisation || user.org || '—';
+  // Sheet stocke 'Departement' (sans accent) — GAS auth retourne 'dept'
+  const dept    = user.Departement || user.Département || user.dept || '—';
+  const role    = user.Role    || user.role    || 'member';
+  const date    = user.DateAdhesion || user.date || '';
+  const init    = ((prénom[0]||'') + (nom[0]||'')).toUpperCase() || '?';
+  const roleLbl = ROLE_LBL[role] || role;
+
+  // Afficher la photo de profil si disponible depuis Drive
+  const photoURL = user.PhotoURL || user.photoURL || '';
+  const profAv = document.getElementById('profAv');
+  if (profAv) {
+    if (photoURL) {
+      // driveImgUrl() → thumbnail lh3 (CORS OK) — crossorigin non requis pour l'affichage seul
+      profAv.innerHTML = `<img src="${driveImgUrl(photoURL)}" alt="Photo" onerror="this.parentElement.textContent='${init}'"/>`;
+    } else {
+      profAv.textContent = init;
+    }
+  }
+  const navAv = document.getElementById('navAv');
+  if (navAv) navAv.textContent = init;
+
+  const navNm = document.getElementById('navName');
+  if (navNm) navNm.textContent = prénom + ' ' + nom;
+
+  const wn = document.getElementById('welcomeName');
+  const wd = document.getElementById('welcomeDesc');
+  if (wn) wn.textContent = prénom + ' ' + nom;
+  if (wd) wd.textContent = roleLbl + (org !== '—' ? ' — ' + org : '') + (dept !== '—' ? ' · Dept. ' + dept : '');
+
+  const wsDate = document.getElementById('wsDate');
+  const wsDept = document.getElementById('wsDept');
+  if (wsDate) wsDate.textContent = fmtYear(date);
+  if (wsDept) wsDept.textContent = dept !== '—' ? dept.split(',')[0].trim() : '—';
+
+  const profBadge = document.getElementById('profBadge');
+  const profName  = document.getElementById('profName');
+  const profOrg   = document.getElementById('profOrg');
+  const profEmail = document.getElementById('profEmail');
+  const profTel   = document.getElementById('profTel');
+  const profDept  = document.getElementById('profDept');
+  const profDate  = document.getElementById('profDate');
+  if (profBadge) profBadge.textContent = roleLbl;
+  if (profName)  profName.textContent  = prénom + ' ' + nom;
+  if (profOrg)   profOrg.textContent   = org;
+  if (profEmail) profEmail.textContent = email;
+  if (profTel)   profTel.textContent   = tel;
+  if (profDept)  profDept.textContent  = dept + ', Benin';
+  if (profDate)  profDate.textContent  = 'Membre depuis ' + fmtD(date);
+
+  const epP = document.getElementById('epPrénom'); if (epP) epP.value = prénom;
+  const epN = document.getElementById('epNom');    if (epN) epN.value = nom;
+  const epE = document.getElementById('epEmail');  if (epE) epE.value = email;
+  const epT = document.getElementById('epTel');    if (epT) epT.value = tel !== '—' ? tel : '';
+  const epO = document.getElementById('epOrg');    if (epO) epO.value = org !== '—' ? org : '';
+}
+
+/* ═══ GESTION FICHIERS UPLOAD ═══ */
+const FILES = { img: null, doc: null };
+
+function handleFileSelect(input, key) {
+  const file = input.files[0];
+  if (!file) return;
+
+  if (file.size > 5 * 1024 * 1024) {
+    toast('Fichier trop volumineux (max 5 Mo).', 'err');
+    input.value = '';
+    return;
+  }
+
+  const reader = new FileReader();
+  reader.onload = e => {
+    const dataUrl = e.target.result;
+    FILES[key] = {
+      base64:   dataUrl.split(',')[1],
+      mimeType: file.type,
+      fileName: file.name,
+      size:     file.size,
+      dataUrl,
+    };
+    showFilePreview(key, file, dataUrl);
+  };
+  reader.readAsDataURL(file);
+}
+
+function showFilePreview(key, file, dataUrl) {
+  const zone  = document.getElementById('uz-' + key);
+  const prev  = document.getElementById('uzp-' + key);
+  const pname = document.getElementById('uzpn-' + key);
+  const psize = document.getElementById('uzps-' + key);
+
+  if (zone) zone.classList.add('has-file');
+  if (pname) pname.textContent = file.name;
+  if (psize) psize.textContent = fmtSize(file.size);
+
+  // Miniature pour les images
+  if (key === 'img') {
+    const thumb = document.getElementById('uzp-img-thumb');
+    if (thumb) { thumb.src = dataUrl; thumb.style.display = 'block'; }
+  }
+  if (prev) prev.style.display = 'flex';
+}
+
+function removeFile(event, key) {
+  event.stopPropagation();
+  FILES[key] = null;
+  const input = document.getElementById('fi-' + key);
+  if (input) input.value = '';
+  const zone = document.getElementById('uz-' + key);
+  const prev = document.getElementById('uzp-' + key);
+  if (zone) zone.classList.remove('has-file');
+  if (prev) prev.style.display = 'none';
+  if (key === 'img') {
+    const thumb = document.getElementById('uzp-img-thumb');
+    if (thumb) { thumb.src = ''; }
+  }
+}
+
+/* Convertit URL Drive partagé en URL preview iframe */
+function driveEmbedUrl(url) {
+  if (!url) return '';
+  try {
+    const m1 = url.match(/\/d\/([a-zA-Z0-9_-]+)/);
+    if (m1) return `https://drive.google.com/file/d/${m1[1]}/preview`;
+    const m2 = url.match(/id=([a-zA-Z0-9_-]+)/);
+    if (m2) return `https://drive.google.com/file/d/${m2[1]}/preview`;
+    return url;
+  } catch { return url; }
+}
+// Convertit toute URL Drive en URL affichable — passe par lh3.googleusercontent.com
+// qui renvoie les headers CORS nécessaires (Access-Control-Allow-Origin: *).
+// Compatible affichage + html2canvas avec crossorigin="anonymous".
+function driveImgUrl(url) {
+  if (!url) return '';
+  // Déjà au bon format
+  if (url.includes('thumbnail?id=') || url.includes('lh3.googleusercontent')) return url;
+  // Format /file/d/ID/view ou /file/d/ID
+  const m = url.match(/\/file\/d\/([^/?]+)/);
+  if (m) return 'https://drive.google.com/thumbnail?id=' + m[1] + '&sz=w800';
+  // Format ?id=ID (open?id=, uc?id=...)
+  const m2 = url.match(/[?&]id=([^&]+)/);
+  if (m2) return 'https://drive.google.com/thumbnail?id=' + m2[1] + '&sz=w800';
+  return url;
+}
+  
+/* ═══ PROJETS ═══ */
+async function loadProjets() {
+  const list = document.getElementById('projList');
+  const wsP  = document.getElementById('wsProjets');
+  try {
+    const res  = await FODDEB_API.projets.list({});
+    const rows = res.data || [];
+
+    if (wsP) wsP.textContent = rows.length;
+
+    if (!rows.length) {
+      list.innerHTML = `
+        <div style="padding:24px;text-align:center">
+          <iconify-icon icon="mdi:clipboard-off-outline" style="font-size:36px;color:var(--gray-200);display:block;margin:0 auto 10px"></iconify-icon>
+          <p style="color:var(--gray-400);font-size:13.5px">Aucun projet pour le moment.</p>
+          <p style="color:var(--gray-400);font-size:12px;margin-top:4px">Cliquez sur <strong>+ Proposer</strong> pour soumettre votre premier projet.</p>
+        </div>`;
+      return;
+    }
+
+    list.innerHTML = rows.slice(0, 6).map((p, i) => {
+      const titre    = p.Titre       || p.titre       || 'Projet ' + (i+1);
+      const prog     = parseInt(p.Progression || p.progression || 0);
+      const dept     = p.Département || p.département || '—';
+      const statut   = p.Statut      || p.statut      || 'soumis';
+      const dom      = p.Domaine     || p.domaine     || '';
+      const fichier  = p.FichierURL  || p.fichierurl  || '';
+      const imgURL   = p.ImageURL    || p.imageurl    || '';
+      const cfg      = Object.entries(DOM_ICONS).find(([k]) => dom.includes(k))?.[1] || DOM_ICONS.default;
+      const badge    = STAT_MAP[statut] || `<span class="badge bw">${statut}</span>`;
+      const attach   = fichier
+        ? `<span class="proj-attach"><iconify-icon icon="mdi:paperclip" style="font-size:11px"></iconify-icon>Document</span>`
+        : '';
+
+      // Image de couverture ou placeholder coloré
+      const coverHTML = imgURL
+        ? `<img class="proj-cover" src="${driveImgUrl(imgURL)}" alt="${titre}" onerror="this.style.display='none'"/>`
+        : `<div class="proj-cover-placeholder" style="background:${cfg.bg}"><iconify-icon icon="${cfg.icon}" style="color:${cfg.color}"></iconify-icon></div>`;
+
+      return `
+        <div class="proj-item" onclick="openProjetDetail(${JSON.stringify(p).replace(/"/g,'&quot;')})">
+          ${coverHTML}
+          <div class="proj-body">
+            <div class="proj-title">${titre}</div>
+            <div class="proj-meta">${badge}<span>${dept}</span></div>
+            <div class="progress"><div class="pf" style="width:${prog}%;background:${gc(i)}"></div></div>
+            <div class="proj-foot">
+              <span style="font-size:11px;color:var(--gray-400)">${prog}% complété</span>
+              ${attach}
+            </div>
+          </div>
+        </div>`;
+    }).join('');
+
+  } catch(e) {
+    list.innerHTML = `<p style="color:var(--red);font-size:13px;padding:8px 0">Erreur de chargement.</p>`;
+    console.error('loadProjets:', e);
+  }
+}
+
+/* ═══ DETAIL PROJET ═══ */
+/* ─── État global du mode édition ─────────────────────────────────────
+ * null  = création d'un nouveau projet
+ * objet = modification d'un projet existant (statut 'à revoir')
+ */
+let _editProjet = null;
+
+/* ═══ FERMETURE MODAL PROJET ═══
+ * Réinitialise le mode édition et restaure le libellé création.
+ */
+function closeProjetModal() {
+  _editProjet = null;
+  const titleEl = document.getElementById('pjModalTitre');
+  const btnEl   = document.getElementById('pjBtn');
+  if (titleEl) titleEl.textContent = 'Proposer un projet';
+  if (btnEl)   btnEl.innerHTML = '<iconify-icon icon="mdi:send-outline"></iconify-icon>Soumettre';
+  closeM('projetM');
+}
+
+/* ═══ OUVRIR EN MODE ÉDITION ═══
+ * Pré-remplit le formulaire avec les données du projet.
+ * Appelé depuis openProjetDetail() si statut === 'à revoir'.
+ */
+function openEditProjet(projet) {
+  _editProjet = projet;
+
+  const titleEl = document.getElementById('pjModalTitre');
+  const btnEl   = document.getElementById('pjBtn');
+  if (titleEl) titleEl.textContent = 'Modifier le projet';
+  if (btnEl)   btnEl.innerHTML = '<iconify-icon icon="mdi:content-save-outline"></iconify-icon>Enregistrer';
+
+  const set = (id, val) => { const el = document.getElementById(id); if (el) el.value = val || ''; };
+  set('pjTitre',  projet.Titre         || projet.titre         || '');
+  set('pjDesc',   projet.Description   || projet.description   || '');
+  set('pjDept',   projet.Département   || projet.département   || '');
+  set('pjBenef',  projet.Beneficiaires || projet.beneficiaires || '');
+  set('pjBudget', projet.Budget        || projet.budget        || '');
+  set('pjDate',   projet.DateDebut     || projet.dateDebut     || '');
+
+  // Réinitialiser les zones de fichier (le membre rechargera s'il veut changer)
+  removeFile({ stopPropagation: () => {} }, 'img');
+  removeFile({ stopPropagation: () => {} }, 'doc');
+
+  closeM('projetDetailM');
+  openM('projetM');
+}
+
+/* ═══ DETAIL PROJET ═══ */
+function openProjetDetail(projet) {
+  const p       = typeof projet === 'string' ? JSON.parse(projet) : projet;
+  const titre   = p.Titre         || p.titre         || '—';
+  const statut  = p.Statut        || p.statut         || 'soumis';
+  const dept    = p.Département   || p.département    || '—';
+  const budget  = p.Budget        || p.budget         || '';
+  const benef   = p.Beneficiaires || p.beneficiaires  || '';
+  const date    = p.DateDebut     || p.dateDebut      || '';
+  const dateFin = p.DateFin       || p.dateFin        || '';
+  const desc    = p.Description   || p.description    || '—';
+  const prog    = parseInt(p.Progression || p.progression || 0);
+  const fichier = p.FichierURL    || p.fichierurl     || '';
+  const imgURL  = p.ImageURL      || p.imageurl       || '';
+
+  document.getElementById('pdTitre').textContent   = titre;
+  document.getElementById('pdStatut').innerHTML    = STAT_MAP[statut] || statut;
+  document.getElementById('pdDept').textContent    = dept;
+  document.getElementById('pdBudget').textContent  = budget ? fmtXOF(budget) : '—';
+  document.getElementById('pdBenef').textContent   = fmtBenef(benef);
+  document.getElementById('pdDate').textContent    = fmtD(date);
+  document.getElementById('pdDateFin').textContent = fmtD(dateFin);
+  document.getElementById('pdDesc').textContent    = desc;
+  document.getElementById('pdProg').style.width    = prog + '%';
+  document.getElementById('pdProgTxt').textContent = prog + '%';
+
+  // Image de couverture dans le détail
+  const imgWrap = document.getElementById('pdImgWrap');
+  if (imgURL) {
+    // driveImgUrl() converti l'URL Drive pour l'affichage direct
+    imgWrap.innerHTML = `<img src="${driveImgUrl(imgURL)}" class="pd-cover" alt="${titre}" onerror="this.style.display='none'"/>`;
+  } else {
+    const dom = p.Domaine || p.domaine || '';
+    const cfg = Object.entries(DOM_ICONS).find(([k]) => dom.includes(k))?.[1] || DOM_ICONS.default;
+    imgWrap.innerHTML = `<div class="pd-cover-placeholder" style="background:${cfg.bg}"><iconify-icon icon="${cfg.icon}" style="color:${cfg.color}"></iconify-icon></div>`;
+  }
+
+  // Document joint — téléchargement direct
+  const wrap = document.getElementById('pdFichierWrap');
+  if (fichier) {
+    const fileId = fichier.match(/\/d\/([a-zA-Z0-9_-]+)/)?.[1]
+                 || fichier.match(/id=([a-zA-Z0-9_-]+)/)?.[1];
+    const dlUrl = fileId
+      ? `https://drive.google.com/uc?export=download&id=${fileId}`
+      : fichier;
+    wrap.innerHTML = `
+      <div style="font-size:11px;font-weight:700;text-transform:uppercase;color:var(--gray-400);margin-bottom:8px">Document joint</div>
+      <a href="${dlUrl}" target="_blank" rel="noopener"
+         style="display:inline-flex;align-items:center;gap:8px;padding:10px 18px;background:var(--green-50);border:1.5px solid var(--green-100);border-radius:var(--rs);font-size:14px;font-weight:600;color:var(--green-800);">
+        <iconify-icon icon="mdi:download-outline" style="font-size:18px"></iconify-icon>
+        Télécharger — ${p.FichierNom || p.fichierNom || 'Document'}
+      </a>`;
+    wrap.style.display = 'block';
+  } else {
+    wrap.innerHTML = '';
+    wrap.style.display = 'none';
+  }
+
+  // ─── Bouton "Modifier" — visible uniquement si statut = 'à revoir' ───
+  const footer = document.querySelector('#projetDetailM .mf');
+  document.getElementById('pdModifierBtn')?.remove(); // supprimer si déjà présent
+  if (statut === 'à revoir') {
+    const modBtn = document.createElement('button');
+    modBtn.id        = 'pdModifierBtn';
+    modBtn.className = 'btn btn-p btn-sm';
+    modBtn.innerHTML = '<iconify-icon icon="mdi:pencil-outline"></iconify-icon>Modifier';
+    modBtn.onclick   = () => openEditProjet(p);
+    footer.insertBefore(modBtn, footer.firstChild); // avant le bouton Fermer
+  }
+
+  openM('projetDetailM');
+}
+
+/* ═══ ACTIVITE ═══ */
+async function loadActivité() {
+  const list = document.getElementById('actList');
+  try {
+    const [projRes, alertRes] = await Promise.all([
+      FODDEB_API.projets.list({}),
+      FODDEB_API.dashboard.alerts(),
+    ]);
+    const items = [];
+
+    (projRes.data || []).slice(0, 2).forEach(p => {
+      items.push({
+        icon:'mdi:clipboard-check-outline', bg:'var(--green-50)', color:'var(--green-700)',
+        text: `Projet <strong>${p.Titre||p.titre||'—'}</strong> — ${p.Statut||p.statut||'soumis'} (${p.Progression||0}%)`,
+        time: fmtD(p.CreatedAt || new Date().toISOString()),
+      });
+    });
+
+    (alertRes.alerts || []).slice(0, 2).forEach(a => {
+      items.push({
+        icon:'mdi:information-outline', bg:'var(--blue-light)', color:'var(--blue)',
+        text: a.message || a.titre || '—',
+        time: 'Récemment',
+      });
+    });
+
+    items.push({
+      icon:'mdi:account-check-outline', bg:'var(--green-50)', color:'var(--green-700)',
+      text: `Votre adhésion au réseau FODDEB à été <strong>validée</strong>`,
+      time: fmtD(USER?.DateAdhesion || USER?.date || ''),
+    });
+
+    list.innerHTML = items.map(a => `
+      <div class="act-item">
+        <div class="aicon" style="background:${a.bg}">
+          <iconify-icon icon="${a.icon}" style="color:${a.color}"></iconify-icon>
+        </div>
+        <div class="atext"><p>${a.text}</p><div class="atime">${a.time}</div></div>
+      </div>`).join('');
+  } catch(e) {
+    list.innerHTML = `<p style="color:var(--red);font-size:13px">Erreur de chargement.</p>`;
+  }
+}
+
+/* ═══ EVENEMENTS ═══ */
+async function loadÉvénements() {
+  const list = document.getElementById('evtList');
+  try {
+    const res = await FODDEB_API.evenements?.list?.() || { data: [] };
+    const EVT = res.data || [
+      { day:'10', month:'Jun', title:'Journée mondiale de l\'Enfant — FODDEB', lieu:'Cotonou',  type:'Événement public' },
+      { day:'20', month:'Jun', title:'Réunion mensuelle du réseau FODDEB',      lieu:'En ligne', type:'Réunion'          },
+      { day:'15', month:'Jul', title:'Atelier régional protection de l\'enfant',lieu:'Parakou',  type:'Atelier'          },
+    ];
+    
+    list.innerHTML = EVT.map(e => `
+      <div class="evt-item">
+        <div class="evt-date"><div class="evt-day">${e.day}</div><div class="evt-month">${e.month}</div></div>
+        <div class="evt-cnt">
+          <div class="evt-title">${e.title}</div>
+          <div class="evt-meta"><iconify-icon icon="mdi:map-marker-outline"></iconify-icon>${e.lieu}<span class="evt-tag">${e.type}</span></div>
+        </div>
+      </div>`).join('');
+  } catch(e) {
+    console.error('loadÉvénements:', e);
+    // Garder les données par défaut en cas d'erreur
+  }
+}
+
+/* ═══ RESSOURCES ═══ */
+async function loadRessources() {
+  const list = document.getElementById('resList');
+  try {
+    const res = await FODDEB_API.ressources?.list?.() || { data: [] };
+    const DOCS = res.data || [
+      { icon:'mdi:file-pdf-box',           bg:'#FFF3E0',     color:'#E65100',    title:'Guide de protection de l\'enfant', size:'PDF · 2.4 Mo', url:'' },
+      { icon:'mdi:chart-bar',              bg:'var(--blue-light)', color:'var(--blue)',title:'Rapport annuel FODDEB 2024',       size:'PDF · 5.1 Mo', url:'' },
+      { icon:'mdi:file-document-outline',  bg:'var(--green-50)',    color:'var(--green-700)',  title:'Statuts et règlement intérieur',   size:'DOCX · 890 Ko', url:'' },
+      { icon:'mdi:image-multiple-outline', bg:'var(--gold-light)', color:'var(--gold-600)',title:'Kit de communication FODDEB',     size:'ZIP · 12 Mo', url:'' },
+      { icon:'mdi:form-select',            bg:'#F3E5F5',      color:'#6A1B9A',   title:'Formulaire de rapport de projet',  size:'XLSX · 150 Ko', url:'' },
+      { icon:'mdi:handshake-outline',      bg:'var(--green-50)',    color:'var(--green-700)',  title:'Charte des membres du réseau',     size:'PDF · 320 Ko', url:'' },
+      { icon:'mdi:map-outline',            bg:'var(--blue-light)', color:'var(--blue)',title:'Plan stratégique 2025-2027',       size:'PDF · 3.2 Mo', url:'' },
+      { icon:'mdi:email-newsletter',       bg:'var(--gold-light)', color:'var(--gold-600)',title:'Archives newsletters 2024',       size:'ZIP · 8.4 Mo', url:'' },
+    ];
+    
+    list.innerHTML = DOCS.map(d => `
+      <div class="res-item" onclick="telecharger('${d.url || '#'}', '${d.title}')">
+        <div class="ricon" style="background:${d.bg}"><iconify-icon icon="${d.icon}" style="color:${d.color}"></iconify-icon></div>
+        <div><div class="rtitle">${d.title}</div><div class="rsize">${d.size}</div></div>
+      </div>`).join('');
+  } catch(e) {
+    console.error('loadRessources:', e);
+    // Garder les données par défaut en cas d'erreur
+  }
+}
+
+function telecharger(url, titre) {
+  if (!url || url === '#') {
+    toast('Téléchargement de « ' + titre + ' »…');
+    return;
+  }
+  window.open(url, '_blank');
+}
+
+/* ═══ SOUMETTRE / METTRE À JOUR UN PROJET ═══
+ * Gère CREATE (nouveau projet) et UPDATE (modification 'à revoir').
+ * FIX BUG UPLOAD : utilise uploadProjectFile (renommé dans api.js)
+ * pour éviter le conflit avec uploadFile (inscriptions membres).
+ */
+async function submitProjet() {
+  const titre = document.getElementById('pjTitre').value.trim();
+  const desc  = document.getElementById('pjDesc').value.trim();
+  if (!titre || !desc) { toast('Titre et description requis.', 'err'); return; }
+
+  const btn = document.getElementById('pjBtn');
+  btn.disabled = true;
+  btn.innerHTML = '<span style="width:14px;height:14px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;display:inline-block;vertical-align:middle"></span> Envoi…';
+
+  const progWrap  = document.getElementById('uploadProg');
+  const progBar   = document.getElementById('uploadProgBar');
+  const progLabel = document.getElementById('uploadProgLabel');
+
+  const setProgress = (pct, msg) => {
+    if (progWrap)  progWrap.style.display  = 'block';
+    if (progLabel) { progLabel.style.display = 'block'; progLabel.textContent = msg; }
+    if (progBar)   progBar.style.width = pct + '%';
+  };
+  const resetProgress = () => {
+    if (progWrap)  progWrap.style.display  = 'none';
+    if (progLabel) progLabel.style.display = 'none';
+    if (progBar)   progBar.style.width = '0%';
+  };
+
+  try {
+    // ID du dossier Drive : réutiliser l'ID existant en mode édition
+    const projetId = _editProjet
+      ? (_editProjet.ID || _editProjet.id || 'proj_' + Date.now())
+      : 'proj_' + Date.now();
+
+    // Conserver les anciens fichiers si le membre n'en sélectionne pas de nouveaux
+    let imageURL   = _editProjet ? (_editProjet.ImageURL   || _editProjet.imageurl   || '') : '';
+    let fichierURL = _editProjet ? (_editProjet.FichierURL || _editProjet.fichierurl || '') : '';
+    let fichierNom = _editProjet ? (_editProjet.FichierNom || _editProjet.fichierNom || '') : '';
+
+    // Upload image de couverture si l'utilisateur en a sélectionné une nouvelle
+    if (FILES.img) {
+      setProgress(20, 'Upload de l\'image en cours…');
+      // FIX : uploadProjectFile (anciennement uploadFile — signature incorrecte)
+      const resImg = await FODDEB_API.members.uploadProjectFile(
+        FILES.img.base64, FILES.img.fileName, FILES.img.mimeType, 'projet', projetId
+      );
+      if (resImg.success) imageURL = resImg.url;
+    }
+
+    // Upload document si l'utilisateur en a sélectionné un nouveau
+    if (FILES.doc) {
+      setProgress(50, 'Upload du document en cours…');
+      const resDoc = await FODDEB_API.members.uploadProjectFile(
+        FILES.doc.base64, FILES.doc.fileName, FILES.doc.mimeType, 'projet', projetId
+      );
+      if (resDoc.success) {
+        fichierURL = resDoc.url;
+        fichierNom = FILES.doc.fileName;
+      }
+    }
+
+    setProgress(75, _editProjet ? 'Mise à jour du projet…' : 'Soumission du projet…');
+
+    const benef  = parseInt(document.getElementById('pjBenef').value)   || 0;
+    const budget = parseFloat(document.getElementById('pjBudget').value) || 0;
+
+    const payload = {
+      Titre:         titre,
+      Description:   desc,
+      Departement:   document.getElementById('pjDept').value,
+      Budget:        budget,
+      Beneficiaires: benef,
+      DateDebut:     document.getElementById('pjDate').value,
+      ImageURL:      imageURL,
+      FichierURL:    fichierURL,
+      FichierNom:    fichierNom,
+      Responsable:   (USER.Prénom || USER.prénom || '') + ' ' + (USER.Nom || USER.nom || ''),
+    };
+
+    let res;
+    if (_editProjet) {
+      // MODE MISE À JOUR — GAS vérifie propriété + statut 'à revoir' + force Statut='soumis'
+      const editId = _editProjet.ID || _editProjet.id;
+      res = await FODDEB_API.projets.update(editId, payload);
+    } else {
+      // MODE CRÉATION
+      res = await FODDEB_API.projets.create({
+        ...payload,
+        Statut:      'soumis',
+        Progression: 0,
+      });
+    }
+
+    if (!res.success) throw new Error(res.error);
+
+    setProgress(100, _editProjet ? 'Projet mis à jour !' : 'Projet soumis avec succès !');
+
+    const msg = _editProjet
+      ? 'Projet mis à jour. L\'équipe FODDEB a été notifiée.'
+      : 'Proposition soumise. L\'équipe FODDEB vous contactera sous 5 jours.';
+
+    setTimeout(() => {
+      closeProjetModal();
+      ['pjTitre', 'pjDesc', 'pjBudget', 'pjBenef', 'pjDate'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.value = '';
+      });
+      removeFile({ stopPropagation: () => {} }, 'img');
+      removeFile({ stopPropagation: () => {} }, 'doc');
+      resetProgress();
+      toast(msg);
+      loadProjets();
+    }, 800);
+
+  } catch(e) {
+    resetProgress();
+    toast('Erreur : ' + e.message, 'err');
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = _editProjet
+      ? '<iconify-icon icon="mdi:content-save-outline"></iconify-icon>Enregistrer'
+      : '<iconify-icon icon="mdi:send-outline"></iconify-icon>Soumettre';
+  }
+}
+
+/* ═══ ACTIONS PROFIL ═══ */
+async function saveProfile() {
+  const prénom = document.getElementById('epPrénom').value.trim();
+  const nom    = document.getElementById('epNom').value.trim();
+  if (!prénom || !nom) { toast('Prénom et nom requis.', 'err'); return; }
+  try {
+    const res = await FODDEB_API.members.update(USER.ID || USER.id, {
+      Prénom:       prénom,
+      Nom:          nom,
+      Email:        document.getElementById('epEmail').value.trim(),
+      Telephone:    document.getElementById('epTel').value.trim(),
+      Organisation: document.getElementById('epOrg').value.trim(),
+    });
+    if (!res.success) throw new Error(res.error);
+    const updated = { ...USER, Prénom: prénom, prénom, Nom: nom, nom };
+    sessionStorage.setItem('foddeb_user', JSON.stringify(updated));
+    USER = updated;
+    renderUserInfo(USER);
+    closeM('editProfileM');
+    toast('Profil mis à jour avec succès.');
+  } catch(e) { toast('Erreur : ' + e.message, 'err'); }
+}
+
+async function changePwd() {
+  const oldPwd  = document.getElementById('cpOld').value;
+  const newPwd  = document.getElementById('cpNew').value;
+  const confPwd = document.getElementById('cpConf').value;
+  if (!oldPwd || !newPwd)  { toast('Remplissez tous les champs.', 'err'); return; }
+  if (newPwd !== confPwd)  { toast('Les mots de passe ne correspondent pas.', 'err'); return; }
+  if (newPwd.length < 8)   { toast('Nouveau mot de passe trop court (min. 8 car.).', 'err'); return; }
+  try {
+    const h = async p => {
+      const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(p));
+      return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,'0')).join('');
+    };
+    const [oldHash, newHash] = await Promise.all([h(oldPwd), h(newPwd)]);
+    const res = await FODDEB_API.auth.changePassword(USER.ID || USER.id, oldHash, newHash);
+    if (!res.success) throw new Error(res.error);
+    closeM('changePwdM');
+    ['cpOld','cpNew','cpConf'].forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; });
+    toast('Mot de passe modifié avec succès.');
+  } catch(e) { toast('Erreur : ' + e.message, 'err'); }
+}
+
+/* ═══ NAVIGATION ═══ */
+function scrollToSection(id) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.scrollIntoView({ behavior:'smooth', block:'start' });
+  document.querySelectorAll('.tnl[id^="nl-"]').forEach(l => l.classList.remove('active'));
+  const nl = document.getElementById('nl-' + id);
+  if (nl) nl.classList.add('active');
+}
+
+/* ═══ MODALS ═══ */
+function openM(id)  { const el = document.getElementById(id); if (el) { el.classList.add('open');    document.body.style.overflow = 'hidden'; } }
+function closeM(id) { const el = document.getElementById(id); if (el) { el.classList.remove('open'); document.body.style.overflow = '';       } }
+document.querySelectorAll('.mo').forEach(o => o.addEventListener('click', e => {
+  if (e.target === o) { o.classList.remove('open'); document.body.style.overflow = ''; }
+}));
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') document.querySelectorAll('.mo.open').forEach(o => { o.classList.remove('open'); document.body.style.overflow = ''; });
+});
+
+function openDrawer()  { document.getElementById('mobDrawer').classList.add('open');    document.body.style.overflow = 'hidden'; }
+function closeDrawer() { document.getElementById('mobDrawer').classList.remove('open'); document.body.style.overflow = '';       }
+
+function logout() {
+  if (confirm('Voulez-vous vous déconnecter ?')) { sessionStorage.clear(); window.location.href = '/auth/login.html'; }
+}
+
+/* ═══ TOAST ═══ */
+function toast(msg, type = 'ok') {
+  const c = document.getElementById('tc');
+  const t = document.createElement('div');
+  t.className = 'toast ' + type;
+  t.innerHTML = `<iconify-icon icon="${type==='err'?'mdi:alert-circle-outline':'mdi:check-circle-outline'}"></iconify-icon><span>${msg}</span>`;
+  c.appendChild(t);
+  setTimeout(() => { t.style.opacity='0'; t.style.transform='translateX(16px)'; t.style.transition='.3s'; setTimeout(()=>t.remove(),300); }, 3500);
+}
+
+/* ═══ INIT ═══ */
+document.addEventListener('DOMContentLoaded', async () => {
+  USER = requireMember();
+  if (!USER) return;
+
+  renderUserInfo(USER);
+
+  try {
+    const fresh = await FODDEB_API.members.get(USER.ID || USER.id);
+    const freshData = fresh.membre || fresh.member; // compatibilité double clé
+    if (fresh.success && freshData) {
+      // Fusionner en préservant PhotoURL si le Sheet l'a enregistré
+      USER = { ...USER, ...freshData };
+      sessionStorage.setItem('foddeb_user', JSON.stringify(USER));
+      renderUserInfo(USER);
+    }
+  } catch(e) { console.warn('Refresh membre:', e.message); }
+
+  await Promise.all([loadProjets(), loadActivité()]);
+  await loadÉvénements();
+  await loadRessources();
+});
+
+if ('serviceWorker' in navigator) navigator.serviceWorker.register('/sw.js').catch(() => {});
+
+    // ══════════════════════════════════════════════════════════════
+    // PHOTO DE PROFIL
+    // ══════════════════════════════════════════════════════════════
+
+    let PENDING_PHOTO = null; // { base64, mimeType, dataUrl }
+
+    async function handleProfilePhotoChange(input) {
+      const file = input.files[0];
+      if (!file) return;
+      const ALLOWED = ['image/jpeg','image/png','image/webp'];
+      if (!ALLOWED.includes(file.type)) { toast('Format non autorisé. Utilisez JPG, PNG ou WebP.', 'err'); return; }
+      if (file.size > 2 * 1024 * 1024) { toast('Photo trop volumineuse (max 2 Mo).', 'err'); return; }
+      const reader = new FileReader();
+      reader.onload = async e => {
+        const dataUrl = e.target.result;
+        const base64  = dataUrl.split(',')[1];
+        PENDING_PHOTO = { base64, mimeType: file.type, dataUrl };
+        // Preview immédiate dans le profil + nav avatar
+        const profAv = document.getElementById('profAv');
+        if (profAv) profAv.innerHTML = `<img src="${dataUrl}" alt="Photo" style="width:100%;height:100%;object-fit:cover;border-radius:50%"/>`;
+        const navAv = document.getElementById('navAv');
+        // Upload immédiat vers Drive
+        await saveProfilePhoto();
+      };
+      reader.readAsDataURL(file);
+      input.value = '';
+    }
+
+    async function saveProfilePhoto() {
+      if (!PENDING_PHOTO || !USER) return;
+      const status = document.getElementById('photoUploadStatus');
+      if (status) status.style.display = 'block';
+      try {
+        // sessionToken transmis au GAS pour vérification d'identité côté serveur
+        const sessionToken = FODDEB?.session?.getToken?.() ?? null;
+        const res = await FODDEB_API.members.uploadProfilePhoto(
+          PENDING_PHOTO.base64, PENDING_PHOTO.mimeType, USER.ID || USER.id, sessionToken
+        );
+        if (!res.success) throw new Error(res.error || 'Erreur upload');
+        const updated = { ...USER, PhotoURL: res.url, photoURL: res.url };
+        sessionStorage.setItem('foddeb_user', JSON.stringify(updated));
+        USER = updated;
+        toast('Photo de profil enregistrée ✓', 'ok');
+        PENDING_PHOTO = null;
+        // Mettre à jour le badge si le modal est déjà ouvert
+        const badgeModal = document.getElementById('badgeM');
+        if (badgeModal && badgeModal.classList.contains('open')) renderBadge(USER);
+        // Mettre à jour le badge avatar
+        const badgeAv = document.getElementById('badgeAv');
+        if (badgeAv && res.url) {
+          // driveImgUrl() → thumbnail lh3 — crossorigin retiré (post-upload direct)
+          badgeAv.innerHTML = `<img src="${driveImgUrl(res.url)}" alt="Photo" style="width:100%;height:100%;object-fit:cover;border-radius:50%"/>`;
+        }
+      } catch(e) {
+        toast('Erreur upload photo : ' + e.message, 'err');
+      } finally {
+        if (status) status.style.display = 'none';
+      }
+    }
+
+    // ══════════════════════════════════════════════════════════════
+    // BADGE MEMBRE SÉCURISÉ
+    // ══════════════════════════════════════════════════════════════
+
+    // QR code réel via qrcode.js — lisible par n'importe quel scanner
+    function drawRealQR(containerId, text) {
+      const container = document.getElementById(containerId);
+      if (!container) return;
+      container.innerHTML = ''; // vider le conteneur avant régénération
+      try {
+        new QRCode(container, {
+          text: text,
+          width: 46,
+          height: 46,
+          colorDark: '#111111',
+          colorLight: '#ffffff',
+          correctLevel: QRCode.CorrectLevel.M
+        });
+      } catch(e) {
+        // Fallback texte si la lib ne charge pas
+        container.innerHTML = '<span style="font-size:7px;color:#666">QR indisponible</span>';
+      }
+    }
+
+    function renderBadge(user) {
+      if (!user) return;
+      const prénom = user.Prenom || user.Prénom || user.prenom || '';
+      const nom    = user.Nom    || user.nom    || '';
+      const org    = user.Organisation || user.org || '—';
+      const dept   = user.Departement  || user.Département || user.dept || '—';
+      const date   = user.DateAdhesion || user.date || '';
+      const role   = user.Role  || user.role  || 'member';
+      const id     = user.ID    || user.id    || '';
+      const photo  = user.PhotoURL || user.photoURL || '';
+      const init   = ((prénom[0]||'') + (nom[0]||'')).toUpperCase() || '?';
+      const ROLE_LBL = { admin:'Administrateur', manager:'Manager', member:'Membre OSC', donor:'Donateur' };
+      const s = (elId, val) => { const el = document.getElementById(elId); if (el) el.textContent = val; };
+      s('badgeName', prénom + ' ' + nom);
+      s('badgeRole', ROLE_LBL[role] || role);
+      s('badgeOrg',  org.length > 18 ? org.slice(0,16)+'…' : org);
+      s('badgeDept', dept.split(',')[0].trim());
+      s('badgeDate', date ? new Date(date).getFullYear() : '—');
+      // Short ID pour affichage sur le badge (dérivé de l'UUID, lisible)
+      const shortId = user.ShortID || ('FOD-' + id.replace(/-/g,'').slice(0,6).toUpperCase());
+      s('badgeId',   shortId);
+      const badgeAv = document.getElementById('badgeAv');
+      if (badgeAv) {
+        if (photo) {
+          // driveImgUrl() → thumbnail lh3. crossorigin retiré : Drive ne renvoie pas
+          // les headers CORS sur la redirection → l'image échoue avec crossorigin.
+          // La photo s'affiche sur le badge. Le download html2canvas utilise allowTaint.
+          badgeAv.innerHTML = `<img src="${driveImgUrl(photo)}" alt="Photo" onerror="this.parentElement.textContent='${init}'"/>`;
+        } else { badgeAv.textContent = init; }
+      }
+      const verifyUrl = 'https://foddeb.vercel.app/verify?id=' + encodeURIComponent(id); // UUID complet pour la vérification
+      // Génère un vrai QR code lisible par scanner
+      drawRealQR('qrCanvas', verifyUrl);
+    }
+
+    // Intercepter openM pour rendre le badge à l'ouverture
+    // USER est toujours le plus frais grâce au rechargement DOMContentLoaded
+    const _origOpenM = openM;
+    openM = async function(id) {
+      if (id === 'badgeM') {
+        // Si PhotoURL absent dans USER local, tenter un rechargement rapide
+        if (!USER.PhotoURL && !USER.photoURL) {
+          try {
+            const ref = await FODDEB_API.members.get(USER.ID || USER.id);
+            const rd  = ref.membre || ref.member;
+            if (ref.success && rd) {
+              USER = { ...USER, ...rd };
+              sessionStorage.setItem('foddeb_user', JSON.stringify(USER));
+            }
+          } catch(e) { /* silencieux */ }
+        }
+        renderBadge(USER);
+      }
+      _origOpenM(id);
+    };
+
+    // Téléchargement badge — nécessite html2canvas (chargé si disponible)
+    async function downloadBadge() {
+      const card = document.getElementById('badgeCard');
+      if (!card) return;
+      if (typeof html2canvas !== 'function') {
+        toast('Chargement du moteur de rendu…', 'info');
+        await new Promise((res, rej) => {
+          const s = document.createElement('script');
+          s.src = 'https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js';
+          s.onload = res; s.onerror = rej;
+          document.head.appendChild(s);
+        });
+      }
+      // ── Pré-charger la photo en data URI pour éviter le canvas tainted ──
+      const img       = card.querySelector('#badgeAv img');
+      let originalSrc = null;
+      if (img && img.src && !img.src.startsWith('data:')) {
+        try {
+          // Extraire le fileId depuis l'URL thumbnail Drive (?id=XXXX)
+          const mId = img.src.match(/[?&]id=([^&]+)/);
+          if (mId) {
+            toast('Préparation du badge…', 'info');
+            const res = await FODDEB_API.members.getPhotoBase64(mId[1]);
+            if (res && res.dataUri) {
+              originalSrc = img.src;
+              img.src     = res.dataUri;
+              // Attendre que l'image data URI soit rendue
+              await new Promise(r => setTimeout(r, 120));
+            }
+          }
+        } catch(e) {
+          console.warn('[badge] Préchargement base64 échoué :', e.message);
+        }
+      }
+
+      try {
+        const canvas = await html2canvas(card, {
+          scale: 3,
+          useCORS: false,
+          allowTaint: false,  // data URI → pas de taint
+          backgroundColor: null,
+          logging: false
+        });
+        const link   = document.createElement('a');
+        link.download = 'badge-foddeb-' + (USER.ID || USER.id || 'membre') + '.png';
+        link.href     = canvas.toDataURL('image/png');
+        link.click();
+        toast('Badge téléchargé ✓', 'ok');
+      } catch(e) {
+        toast('Erreur téléchargement : ' + e.message, 'err');
+        console.error('[badge download]', e);
+      } finally {
+        if (img && originalSrc) img.src = originalSrc; // Restaurer l'URL d'origine
+      }
+    }
+
+</script>
+</body>
+</html>

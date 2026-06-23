@@ -1,0 +1,773 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Nos projets — FODDEB</title>
+  <meta name="description" content="Decouvrez les projets du FODDEB pour la protection et l'epanouissement des enfants au Bénin."/>
+  <link rel="manifest" href="/manifest.json"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js" defer></script>
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    :root{
+      --g9:#1B3A1F;--g8:#1B5E20;--g7:#2E7D32;--g6:#388E3C;--g5:#4CAF50;--g4:#81C784;--g1:#C8E6C9;--g0:#E8F5E9;
+      --gold:#F9A825;--gold2:#F57F17;--goldf:#FFFDE7;
+      --red:#C62828;--blue:#1565C0;--pur:#6A1B9A;--teal:#00695C;--org:#E65100;
+      --cream:#FAFAF7;--white:#FFFFFF;
+      --dark:#0D1B0F;--gr8:#1C2520;--gr6:#4A5568;--gr4:#A0ADB8;--gr2:#E2E8F0;--gr1:#F1F5F2;--brd:#E8EEE9;
+      --fh:'Playfair Display',Georgia,serif;--fb:'DM Sans',system-ui,sans-serif;
+      --r:12px;--rs:8px;
+      --sh:0 4px 24px rgba(0,0,0,.08);--shm:0 8px 40px rgba(0,0,0,.14);
+      --tr:.3s cubic-bezier(.4,0,.2,1);
+    }
+    html{scroll-behavior:smooth;}
+    body{font-family:var(--fb);background:var(--cream);color:var(--gr8);-webkit-font-smoothing:antialiased;}
+    a{color:inherit;text-decoration:none;}ul{list-style:none;}
+    .container{width:100%;max-width:1200px;margin:0 auto;padding:0 24px;}
+    .topbar{background:var(--g9);color:rgba(255,255,255,.75);font-size:13px;padding:8px 0;}
+    .topbar .container{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px;}
+    .topbar a{color:rgba(255,255,255,.75);transition:color .2s;}.topbar a:hover{color:#fff;}
+    .topbar-info{display:flex;align-items:center;gap:20px;flex-wrap:wrap;}
+    .topbar-info span{display:flex;align-items:center;gap:6px;}
+    .topbar-social{display:flex;gap:14px;}
+    .navbar{background:var(--white);border-bottom:1px solid var(--brd);position:sticky;top:0;z-index:1000;box-shadow:0 2px 12px rgba(0,0,0,.06);}
+    .navbar .container{display:flex;align-items:center;justify-content:space-between;height:72px;}
+    .nav-brand{display:flex;align-items:center;gap:14px;}
+    .nav-logo{width:48px;height:48px;border-radius:50%;background:var(--g8);display:flex;align-items:center;justify-content:center;flex-shrink:0;overflow:hidden;}
+    .nav-logo img{width:100%;height:100%;object-fit:cover;display:block;}
+    .nav-logo-txt{font-family:var(--fh);color:#fff;font-size:14px;font-weight:800;}
+    .nav-name strong{display:block;font-size:18px;font-weight:700;color:var(--g8);}
+    .nav-name span{font-size:11px;color:var(--gr6);}
+    .nav-links{display:flex;align-items:center;gap:4px;}
+    .nav-link{font-size:14px;font-weight:500;color:var(--gr6);padding:8px 14px;border-radius:var(--rs);transition:var(--tr);}
+    .nav-link:hover,.nav-link.active{color:var(--g8);background:var(--g0);}
+    .nav-link.active{font-weight:600;}
+    .nav-cta{display:flex;gap:10px;}
+    .btn{display:inline-flex;align-items:center;gap:8px;font-family:var(--fb);font-size:14px;font-weight:600;padding:10px 20px;border-radius:var(--rs);border:1.5px solid transparent;cursor:pointer;transition:var(--tr);white-space:nowrap;}
+    .btn-p{background:var(--g8);color:#fff;}.btn-p:hover{background:var(--g7);transform:translateY(-1px);}
+    .btn-gold{background:var(--gold);color:var(--dark);}.btn-gold:hover{background:var(--gold2);transform:translateY(-1px);}
+    .btn-sm{font-size:13px;padding:8px 16px;}
+    .btn-dark{background:var(--dark);color:#fff;}.btn-dark:hover{background:var(--g9);}
+    .hamburger{display:none;background:none;border:none;cursor:pointer;padding:6px;flex-direction:column;gap:5px;}
+    .hamburger span{display:block;width:24px;height:2px;background:var(--gr8);border-radius:2px;}
+    .mobile-nav{display:none;position:fixed;inset:0;background:var(--white);z-index:2000;flex-direction:column;padding:24px;overflow-y:auto;}
+    .mobile-nav.open{display:flex;}
+    .mobile-nav-hdr{display:flex;justify-content:space-between;align-items:center;margin-bottom:32px;}
+    .mobile-close{background:none;border:none;cursor:pointer;font-size:28px;color:var(--gr6);}
+    .mobile-links{display:flex;flex-direction:column;gap:4px;}
+    .mobile-links a{font-size:18px;font-weight:500;color:var(--gr8);padding:14px 16px;border-radius:var(--r);border-bottom:1px solid var(--gr1);}
+    .mobile-links a:hover{color:var(--g8);background:var(--g0);}
+    .mobile-footer{margin-top:32px;display:flex;flex-direction:column;gap:12px;}
+    .hero{background:linear-gradient(135deg,var(--g9) 0%,var(--g8) 60%,var(--g7) 100%);padding:72px 0;position:relative;overflow:hidden;}
+    .hero::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(45deg,rgba(249,168,37,.05) 0px,rgba(249,168,37,.05) 1px,transparent 1px,transparent 40px),repeating-linear-gradient(-45deg,rgba(76,175,80,.04) 0px,rgba(76,175,80,.04) 1px,transparent 1px,transparent 40px);}
+    .hero-inner{position:relative;z-index:1;display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center;}
+    .hero-badge{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);background:rgba(249,168,37,.12);border:1px solid rgba(249,168,37,.25);border-radius:99px;padding:4px 14px;margin-bottom:16px;}
+    .hero-title{font-family:var(--fh);font-size:clamp(2rem,4vw,3rem);font-weight:800;color:#fff;line-height:1.12;margin-bottom:18px;}
+    .hero-title span{color:var(--gold);}
+    .hero-desc{font-size:16px;color:rgba(255,255,255,.72);line-height:1.7;margin-bottom:28px;}
+    .hero-actions{display:flex;gap:12px;flex-wrap:wrap;}
+    .hero-stats{display:flex;gap:28px;flex-wrap:wrap;margin-top:36px;padding-top:28px;border-top:1px solid rgba(255,255,255,.15);}
+    .hero-stat strong{display:block;font-family:var(--fh);font-size:1.8rem;font-weight:700;color:var(--gold);}
+    .hero-stat span{font-size:12px;color:rgba(255,255,255,.55);}
+    .hero-visual{display:flex;flex-direction:column;gap:12px;}
+    .mini-card{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);border-radius:var(--r);padding:16px 18px;color:#fff;backdrop-filter:blur(8px);}
+    .mini-card-head{display:flex;align-items:center;gap:10px;margin-bottom:10px;}
+    .mini-card-icon{width:34px;height:34px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px;}
+    .mc-g{background:rgba(76,175,80,.2);color:var(--g4);}
+    .mc-o{background:rgba(249,168,37,.2);color:var(--gold);}
+    .mc-b{background:rgba(21,101,192,.2);color:#90CAF9;}
+    .mini-card-title{font-size:13px;font-weight:600;}
+    .prog{height:5px;background:rgba(255,255,255,.15);border-radius:99px;overflow:hidden;}
+    .prog-f{height:100%;border-radius:99px;}
+    .filters-section{background:var(--white);border-bottom:1px solid var(--brd);padding:20px 0;position:sticky;top:72px;z-index:50;}
+    .filters-inner{display:flex;gap:12px;align-items:center;flex-wrap:wrap;}
+    .filter-search{position:relative;flex:1;min-width:220px;max-width:320px;}
+    .filter-search iconify-icon{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--gr4);font-size:18px;pointer-events:none;}
+    .filter-input{width:100%;padding:9px 12px 9px 38px;border:1px solid var(--brd);border-radius:var(--rs);font-size:14px;font-family:var(--fb);outline:none;background:var(--cream);transition:border-color .2s;}
+    .filter-input:focus{border-color:var(--g5);}
+    .filter-pills{display:flex;gap:8px;flex-wrap:wrap;}
+    .pill{font-size:13px;font-weight:600;padding:7px 16px;border-radius:99px;border:1.5px solid var(--brd);background:var(--white);color:var(--gr6);cursor:pointer;transition:var(--tr);}
+    .pill:hover{border-color:var(--g4);color:var(--g8);}
+    .pill.active{background:var(--g8);color:#fff;border-color:var(--g8);}
+    .filter-count{margin-left:auto;font-size:13px;color:var(--gr4);white-space:nowrap;}
+    .section{padding:72px 0;}
+    .loading-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:24px;}
+    .skel{background:linear-gradient(90deg,var(--gr2) 25%,#e8ece9 50%,var(--gr2) 75%);background-size:200% 100%;animation:shimmer 1.5s infinite;border-radius:var(--r);}
+    @keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+    .skel-card{height:380px;}
+    .projects-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:24px;}
+    .project-card{background:var(--white);border-radius:16px;overflow:hidden;box-shadow:var(--sh);transition:var(--tr);border:1px solid var(--brd);}
+    .project-card:hover{box-shadow:var(--shm);transform:translateY(-4px);border-color:var(--g1);}
+
+    /* IMAGE PROJET — photo Drive ou placeholder icône */
+    .project-img{height:190px;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;}
+    .project-img img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;}
+    .project-img-overlay{position:absolute;inset:0;background:linear-gradient(135deg,rgba(0,0,0,.35),rgba(0,0,0,.1));}
+    .project-status-badge{position:absolute;top:14px;right:14px;z-index:2;}
+    .project-domain-badge{position:absolute;bottom:14px;left:14px;z-index:2;font-size:10.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#fff;background:rgba(0,0,0,.4);backdrop-filter:blur(4px);padding:4px 12px;border-radius:99px;}
+    .proj-icon-big{position:relative;z-index:1;font-size:48px;color:#fff;}
+
+    .project-body{padding:20px;}
+    .project-title{font-family:var(--fh);font-size:1.1rem;font-weight:700;color:var(--dark);margin-bottom:10px;line-height:1.3;}
+    .project-excerpt{font-size:13.5px;color:var(--gr6);line-height:1.65;margin-bottom:14px;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;}
+    .project-meta{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:14px;}
+    .pm-item{display:flex;align-items:center;gap:5px;font-size:12.5px;color:var(--gr4);}
+    .pm-item iconify-icon{font-size:14px;color:var(--g6);}
+    .progress-wrap{margin-bottom:14px;}
+    .progress-head{display:flex;justify-content:space-between;font-size:12.5px;margin-bottom:5px;}
+    .progress-bar{height:6px;background:var(--gr1);border-radius:99px;overflow:hidden;}
+    .progress-fill{height:100%;border-radius:99px;transition:width 1.2s ease;}
+    .project-footer{display:flex;align-items:center;justify-content:space-between;gap:10px;}
+    .proj-budget{font-size:13px;font-weight:700;color:var(--g8);background:var(--g0);padding:4px 12px;border-radius:99px;}
+    .proj-link{font-size:13px;font-weight:600;color:var(--g7);display:flex;align-items:center;gap:5px;transition:var(--tr);}
+    .proj-link:hover{color:var(--g8);}
+    .status-badge{display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:700;padding:4px 11px;border-radius:99px;}
+    .sb-active{background:var(--g5);color:#fff;}
+    .sb-done{background:var(--gold);color:var(--dark);}
+    .sb-planned{background:rgba(255,255,255,.85);color:var(--gr8);}
+    .sb-dot{width:5px;height:5px;border-radius:50%;background:currentColor;display:inline-block;margin-right:3px;}
+    .impact-bg{background:var(--g9);}
+    .impact-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:16px;}
+    .impact-card{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);border-radius:var(--r);padding:28px 20px;text-align:center;transition:var(--tr);}
+    .impact-card:hover{background:rgba(255,255,255,.12);}
+    .impact-icon{font-size:32px;display:block;margin-bottom:12px;color:var(--gold);}
+    .impact-num{font-family:var(--fh);font-size:2.2rem;font-weight:700;color:var(--gold);display:block;}
+    .impact-label{font-size:13px;color:rgba(255,255,255,.6);margin-top:6px;display:block;line-height:1.4;}
+    .cta-section{background:var(--gold);padding:72px 0;}
+    .cta-inner{display:flex;align-items:center;justify-content:space-between;gap:40px;flex-wrap:wrap;}
+    .cta-text h2{font-family:var(--fh);font-size:clamp(1.6rem,3vw,2.2rem);font-weight:700;color:var(--dark);margin-bottom:8px;}
+    .cta-text p{font-size:15px;color:rgba(0,0,0,.65);}
+    .footer{background:var(--g9);color:rgba(255,255,255,.7);padding:56px 0 24px;}
+    .footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:40px;margin-bottom:40px;}
+    .footer-logo{display:flex;align-items:center;gap:12px;margin-bottom:16px;}
+    .footer-logo-i{width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,.1);display:flex;align-items:center;justify-content:center;font-family:var(--fh);color:#fff;font-weight:800;font-size:12px;overflow:hidden;}
+    .footer-logo-i img{width:100%;height:100%;object-fit:cover;}
+    .footer-logo-t strong{display:block;color:#fff;font-size:15px;font-weight:700;}
+    .footer-desc{font-size:13.5px;line-height:1.7;margin-bottom:18px;}
+    .footer-col h4{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:#fff;margin-bottom:16px;}
+    .footer-col ul li{margin-bottom:9px;}
+    .footer-col ul li a{font-size:13.5px;color:rgba(255,255,255,.6);transition:color .2s;}
+    .footer-col ul li a:hover{color:#fff;}
+    .footer-bottom{border-top:1px solid rgba(255,255,255,.1);padding-top:20px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;font-size:13px;}
+    .footer-bottom-links{display:flex;gap:18px;}
+    .footer-bottom-links a{color:rgba(255,255,255,.5);}.footer-bottom-links a:hover{color:#fff;}
+    .empty-state{text-align:center;padding:80px 20px;color:var(--gr4);}
+    .empty-state iconify-icon{font-size:56px;display:block;margin-bottom:14px;opacity:.4;}
+    .empty-state h3{font-size:16px;font-weight:600;color:var(--gr6);margin-bottom:8px;}
+    .error-banner{background:#FFEBEE;border:1px solid #FFCDD2;border-radius:var(--rs);padding:16px 20px;display:flex;align-items:center;gap:12px;font-size:14px;color:var(--red);margin-bottom:24px;}
+    @keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+    .fade-in{opacity:0;transform:translateY(18px);transition:opacity .6s ease,transform .6s ease;}
+    .fade-in.visible{opacity:1;transform:none;}
+    @media(max-width:1024px){.footer-grid{grid-template-columns:1fr 1fr;}}
+    @media(max-width:768px){
+      .nav-links,.nav-cta{display:none;}.hamburger{display:flex;}
+      .hero-inner{grid-template-columns:1fr;}.hero-visual{display:none;}
+      .cta-inner{flex-direction:column;align-items:flex-start;}
+      .footer-grid{grid-template-columns:1fr;}
+      .projects-grid,.loading-grid{grid-template-columns:1fr;}
+    }
+    @media(max-width:480px){
+      .container{padding:0 16px;}
+      .filters-inner{flex-direction:column;align-items:stretch;}
+      .filter-search{max-width:none;}
+    }
+  </style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="container">
+    <div class="topbar-info">
+      <span><iconify-icon icon="mdi:phone" width="13"></iconify-icon><a href="tel:+22901976964826">+229 01 97 69 64 26</a></span>
+      <span><iconify-icon icon="mdi:email-outline" width="13"></iconify-icon><a href="mailto:foddeb15@gmail.com">foddeb15@gmail.com</a></span>
+    </div>
+    <div class="topbar-social">
+      <a href="#" aria-label="Facebook"><iconify-icon icon="mdi:facebook" width="15"></iconify-icon></a>
+      <a href="#" aria-label="Twitter"><iconify-icon icon="mdi:twitter" width="15"></iconify-icon></a>
+      <a href="#" aria-label="LinkedIn"><iconify-icon icon="mdi:linkedin" width="15"></iconify-icon></a>
+    </div>
+  </div>
+</div>
+
+<nav class="navbar">
+  <div class="container">
+    <a href="/" class="nav-brand">
+      <div class="nav-logo">
+        <img src="/assets/img/logo.png" alt="Logo FODDEB" onerror="this.style.display='none';this.nextElementSibling.style.display='block'"/>
+        <span class="nav-logo-txt" style="display:none">FOD</span>
+      </div>
+      <div class="nav-name"><strong>FODDEB</strong><span>Droits de l'Enfant au Bénin</span></div>
+    </a>
+    <div class="nav-links">
+      <a href="/" class="nav-link">Accueil</a>
+      <a href="/pages/organes.html" class="nav-link">Nos organes</a>
+      <a href="/pages/projets.html" class="nav-link active">Projets</a>
+      <a href="/pages/actualites.html" class="nav-link">Actualites</a>
+      <a href="/pages/contact.html" class="nav-link">Contact</a>
+    </div>
+    <div class="nav-cta">
+      <a href="/#don" class="btn btn-gold btn-sm">Faire un don</a>
+      <a href="/auth/login.html" class="btn btn-p btn-sm">Espace membre</a>
+    </div>
+    <button class="hamburger" id="hamburger" aria-label="Ouvrir le menu"><span></span><span></span><span></span></button>
+  </div>
+</nav>
+
+<nav class="mobile-nav" id="mobileNav">
+  <div class="mobile-nav-hdr">
+    <a href="/" class="nav-brand"><div class="nav-logo"><span class="nav-logo-txt">FOD</span></div><div class="nav-name"><strong>FODDEB</strong></div></a>
+    <button class="mobile-close" id="mobileClose">&#x2715;</button>
+  </div>
+  <div class="mobile-links">
+    <a href="/">Accueil</a>
+    <a href="/pages/organes.html">Nos organes</a>
+    <a href="/pages/projets.html">Projets</a>
+    <a href="/pages/actualites.html">Actualites</a>
+    <a href="/pages/contact.html">Contact</a>
+  </div>
+  <div class="mobile-footer">
+    <a href="/#don" class="btn btn-gold">Faire un don</a>
+    <a href="/auth/login.html" class="btn btn-p">Espace membre</a>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="container">
+    <div class="hero-inner">
+      <div>
+        <div class="hero-badge"><iconify-icon icon="mdi:clipboard-list-outline"></iconify-icon>Nos actions terrain</div>
+        <h1 class="hero-title">Des projets qui<br/><span>transforment</span><br/>des vies</h1>
+        <p class="hero-desc">Le FODDEB coordonne des projets concrets dans 12 departements du Benin pour garantir a chaque enfant ses droits fondamentaux.</p>
+        <div class="hero-actions">
+          <a href="#projects-section" class="btn btn-gold">Voir tous les projets</a>
+          <a href="/#don" class="btn" style="color:#fff;border:1.5px solid rgba(255,255,255,.4)">Soutenir un projet</a>
+        </div>
+        <div class="hero-stats">
+          <div class="hero-stat"><strong id="hsProjets">—</strong><span>Projets realises</span></div>
+          <div class="hero-stat"><strong>12</strong><span>Departements</span></div>
+          <div class="hero-stat"><strong id="hsBenef">—</strong><span>Beneficiaires</span></div>
+        </div>
+      </div>
+      <div class="hero-visual">
+        <div class="mini-card">
+          <div class="mini-card-head"><div class="mini-card-icon mc-g"><iconify-icon icon="mdi:shield-account-outline"></iconify-icon></div><div><div class="mini-card-title">Lutte contre les VBG</div><div style="font-size:11px;color:rgba(255,255,255,.5)">Atacora, Donga</div></div></div>
+          <div class="prog"><div class="prog-f" style="width:72%;background:var(--g4)"></div></div>
+          <div style="display:flex;justify-content:space-between;margin-top:5px;font-size:11px;color:rgba(255,255,255,.4)"><span>Progression</span><span>72%</span></div>
+        </div>
+        <div class="mini-card">
+          <div class="mini-card-head"><div class="mini-card-icon mc-o"><iconify-icon icon="mdi:school-outline"></iconify-icon></div><div><div class="mini-card-title">Kits scolaires Alibori</div><div style="font-size:11px;color:rgba(255,255,255,.5)">Alibori</div></div></div>
+          <div class="prog"><div class="prog-f" style="width:85%;background:var(--gold)"></div></div>
+          <div style="display:flex;justify-content:space-between;margin-top:5px;font-size:11px;color:rgba(255,255,255,.4)"><span>Progression</span><span>85%</span></div>
+        </div>
+        <div class="mini-card">
+          <div class="mini-card-head"><div class="mini-card-icon mc-b"><iconify-icon icon="mdi:laptop-outline"></iconify-icon></div><div><div class="mini-card-title">TIC pour jeunes filles</div><div style="font-size:11px;color:rgba(255,255,255,.5)">Cotonou</div></div></div>
+          <div class="prog"><div class="prog-f" style="width:100%;background:#90CAF9"></div></div>
+          <div style="display:flex;justify-content:space-between;margin-top:5px;font-size:11px;color:rgba(255,255,255,.4)"><span>Progression</span><span>100%</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="filters-section">
+  <div class="container">
+    <div class="filters-inner">
+      <div class="filter-search">
+        <iconify-icon icon="mdi:magnify"></iconify-icon>
+        <input type="search" class="filter-input" id="searchInp" placeholder="Rechercher un projet..." oninput="applyFilters()" aria-label="Rechercher"/>
+      </div>
+      <div class="filter-pills">
+        <div class="pill active" onclick="setFilter('all',this)">Tous</div>
+        <div class="pill" onclick="setFilter('Protection',this)"><iconify-icon icon="mdi:shield-account-outline" style="font-size:14px"></iconify-icon>Protection</div>
+        <div class="pill" onclick="setFilter('Education',this)"><iconify-icon icon="mdi:school-outline" style="font-size:14px"></iconify-icon>Education</div>
+        <div class="pill" onclick="setFilter('Sant',this)"><iconify-icon icon="mdi:heart-plus-outline" style="font-size:14px"></iconify-icon>Sante</div>
+        <div class="pill" onclick="setFilter('Num',this)"><iconify-icon icon="mdi:laptop-outline" style="font-size:14px"></iconify-icon>Numerique</div>
+        <div class="pill" onclick="setFilter('Environnement',this)"><iconify-icon icon="mdi:leaf-outline" style="font-size:14px"></iconify-icon>Environnement</div>
+      </div>
+      <span class="filter-count" id="filterCount">Chargement...</span>
+    </div>
+  </div>
+</div>
+
+<section class="section" id="projects-section">
+  <div class="container">
+    <div id="projectsError" class="error-banner" style="display:none">
+      <iconify-icon icon="mdi:alert-circle-outline" style="font-size:20px;flex-shrink:0"></iconify-icon>
+      <span id="projectsErrorMsg">Impossible de charger les projets.</span>
+      <button onclick="loadProjects()" style="margin-left:auto;font-size:13px;font-weight:600;color:var(--red);background:none;border:none;cursor:pointer;text-decoration:underline">Reessayer</button>
+    </div>
+    <div class="loading-grid" id="loadingState">
+      <div class="skel skel-card"></div>
+      <div class="skel skel-card"></div>
+      <div class="skel skel-card"></div>
+    </div>
+    <div class="projects-grid" id="projectsGrid" style="display:none"></div>
+    <div id="emptyState" style="display:none" class="empty-state">
+      <iconify-icon icon="mdi:clipboard-search-outline"></iconify-icon>
+      <h3>Aucun projet trouve</h3>
+      <p>Essayez d'autres filtres de recherche</p>
+    </div>
+  </div>
+</section>
+
+<section class="section impact-bg">
+  <div class="container">
+    <div style="text-align:center;margin-bottom:52px;color:#fff">
+      <div style="display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);background:rgba(249,168,37,.12);border:1px solid rgba(249,168,37,.25);border-radius:99px;padding:4px 14px;margin-bottom:14px">Impact cumule</div>
+      <h2 style="font-family:var(--fh);font-size:clamp(1.8rem,3.5vw,2.6rem);font-weight:700;color:#fff;margin-bottom:14px">Ce que nous avons accompli ensemble</h2>
+      <p style="font-size:16px;color:rgba(255,255,255,.65);max-width:580px;margin:0 auto">Depuis 2015, le reseau FODDEB a transforme des milliers de vies a travers le Benin.</p>
+    </div>
+    <div class="impact-grid">
+      <div class="impact-card"><iconify-icon icon="mdi:account-child-outline" class="impact-icon"></iconify-icon><span class="impact-num">10k+</span><span class="impact-label">Enfants beneficiaires directs</span></div>
+      <div class="impact-card"><iconify-icon icon="mdi:school-outline" class="impact-icon"></iconify-icon><span class="impact-num">5k+</span><span class="impact-label">Kits scolaires distribues</span></div>
+      <div class="impact-card"><iconify-icon icon="mdi:account-heart-outline" class="impact-icon"></iconify-icon><span class="impact-num">2 400</span><span class="impact-label">Femmes accompagnees</span></div>
+      <div class="impact-card"><iconify-icon icon="mdi:medical-bag" class="impact-icon"></iconify-icon><span class="impact-num">800+</span><span class="impact-label">Consultations de Sante</span></div>
+      <div class="impact-card"><iconify-icon icon="mdi:laptop-outline" class="impact-icon"></iconify-icon><span class="impact-num">300</span><span class="impact-label">Jeunes filles formees au Numerique</span></div>
+      <div class="impact-card"><iconify-icon icon="mdi:map-marker-multiple-outline" class="impact-icon"></iconify-icon><span class="impact-num">77</span><span class="impact-label">Communes couvertes</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="cta-section">
+  <div class="container">
+    <div class="cta-inner">
+      <div class="cta-text">
+        <h2>Soutenez nos projets</h2>
+        <p>Votre contribution finance directement les actions sur le terrain pour les enfants les plus vulnerables.</p>
+      </div>
+      <div style="display:flex;gap:12px;flex-wrap:wrap">
+        <a href="/#don" class="btn btn-dark"><iconify-icon icon="mdi:heart-outline"></iconify-icon>Faire un don</a>
+        <a href="/pages/contact.html" class="btn" style="background:transparent;border:2px solid var(--dark);color:var(--dark)"><iconify-icon icon="mdi:handshake-outline"></iconify-icon>Devenir partenaire</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-logo">
+          <div class="footer-logo-i"><img src="/assets/img/logo.png" alt="Logo FODDEB" onerror="this.style.display='none';this.parentElement.textContent='FOD'"/></div>
+          <div class="footer-logo-t"><strong>FODDEB</strong><span style="font-size:11px;color:rgba(255,255,255,.4)">Droits de l'Enfant au Benin</span></div>
+        </div>
+        <p class="footer-desc">Forum des Organisations de Defense des Droits de l'Enfant au Benin — coordonnant les actions de la societe civile depuis 2015.</p>
+      </div>
+      <div class="footer-col"><h4>Navigation</h4><ul>
+        <li><a href="/">Accueil</a></li><li><a href="/pages/organes.html">Nos organes</a></li>
+        <li><a href="/pages/projets.html">Projets</a></li><li><a href="/pages/contact.html">Contact</a></li>
+      </ul></div>
+      <div class="footer-col"><h4>Espace membre</h4><ul>
+        <li><a href="/auth/login.html">Se connecter</a></li><li><a href="/auth/register.html">Adherer</a></li>
+        <li><a href="/dashboard/member.html">Mon espace</a></li>
+      </ul></div>
+      <div class="footer-col"><h4>Contact</h4><ul>
+        <li style="font-size:13.5px;color:rgba(255,255,255,.6);margin-bottom:9px">Agla Akplomey, Cotonou</li>
+        <li><a href="tel:+22901976964826">+229 01 97 69 64 26</a></li>
+        <li><a href="mailto:foddeb15@gmail.com">foddeb15@gmail.com</a></li>
+      </ul></div>
+    </div>
+    <div class="footer-bottom">
+      <p>2025 FODDEB — Tous droits reserves</p>
+      <div class="footer-bottom-links"><a href="/mentions-legales.html">Mentions legales</a><a href="/confidentialite.html">Confidentialite</a></div>
+    </div>
+  </div>
+</footer>
+
+  <!-- MODAL VISIONNEUSE DOCUMENT PUBLIC -->
+<div class="mo" id="docViewerM" style="position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:1000;display:none;align-items:center;justify-content:center;padding:16px;backdrop-filter:blur(4px);">
+  <div style="background:#0d1117;border-radius:14px;width:100%;max-width:780px;overflow:hidden;box-shadow:0 24px 80px rgba(0,0,0,.4);">
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 18px;border-bottom:1px solid rgba(255,255,255,.08);">
+      <div style="display:flex;align-items:center;gap:8px;font-size:13px;color:rgba(255,255,255,.6);">
+        <iconify-icon icon="mdi:file-document-outline"></iconify-icon>
+        <span id="dvNom">Document</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:12px;">
+        <span style="font-size:10px;font-weight:700;padding:3px 10px;border-radius:4px;background:rgba(249,168,37,.15);color:#F9A825;border:1px solid rgba(249,168,37,.25);">Consultation uniquement</span>
+        <button onclick="closeDocViewer()" style="background:rgba(255,255,255,.08);border:none;color:rgba(255,255,255,.6);width:28px;height:28px;border-radius:50%;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;">&#x2715;</button>
+      </div>
+    </div>
+    <!-- Iframe Drive preview + overlay qui bloque clic droit et téléchargement -->
+<div style="position:relative;height:70vh;" oncontextmenu="return false;">
+  <iframe id="dvIframe" src="about:blank"
+          style="width:100%;height:100%;border:none;display:block;"
+          sandbox="allow-scripts allow-same-origin"
+          referrerpolicy="no-referrer"></iframe>
+
+  <!-- Watermark — pointer-events:none pour laisser le scroll passer -->
+  <div style="position:absolute;inset:0;z-index:5;pointer-events:none;
+              display:flex;align-items:center;justify-content:center;overflow:hidden;">
+    <div style="transform:rotate(-35deg);white-space:nowrap;
+                font-size:32px;font-weight:800;letter-spacing:.15em;
+                color:rgba(249,168,37,.12);user-select:none;
+                text-shadow:0 1px 2px rgba(0,0,0,.05);">
+      FODDEB &nbsp;·&nbsp; CONSULTATION UNIQUEMENT &nbsp;·&nbsp;<ember>
+      FODDEB &nbsp;·&nbsp; CONSULTATION UNIQUEMENT</ember>
+    </div>
+  </div>
+</div>
+<div style="padding:6px 14px;border-top:1px solid rgba(255,255,255,.06);display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
+  <iconify-icon icon="mdi:shield-lock-outline" style="color:rgba(249,168,37,.5);font-size:13px;flex-shrink:0"></iconify-icon>
+  <span style="font-size:10px;color:rgba(255,255,255,.3);line-height:1.5">
+  Consultation publique · Téléchargement désactivé · Les captures d'écran restent possibles
+</span>
+</div>
+  </div><!-- /.modal-container -->
+<script src="/assets/js/services/api.js"></script>
+<script>
+'use strict';
+
+/* ── Config domaines ── */
+const DOMAIN_CFG = {
+  'Protection':    { color:'#1B5E20', icon:'mdi:shield-account-outline' },
+  'Education':     { color:'#1565C0', icon:'mdi:school-outline' },
+  'Sant':          { color:'#C62828', icon:'mdi:heart-plus-outline' },
+  'Num':           { color:'#6A1B9A', icon:'mdi:laptop-outline' },
+  'Environnement': { color:'#00695C', icon:'mdi:leaf-outline' },
+  'Developpement': { color:'#E65100', icon:'mdi:home-group' },
+};
+const getDomainCfg = d => {
+  const key = Object.keys(DOMAIN_CFG).find(k => (d||'').includes(k));
+  return DOMAIN_CFG[key] || { color:'#1B5E20', icon:'mdi:clipboard-list-outline' };
+};
+
+const STATUS_CFG = {
+  en_cours:  { label:'En cours',  cls:'sb-active'  },
+  termine:   { label:'Terminé',   cls:'sb-done'    },
+  Terminé:   { label:'Terminé',   cls:'sb-done'    },
+  terminé:   { label:'Terminé',   cls:'sb-done'    },
+  planifie:  { label:'Planifié',  cls:'sb-planned' },
+  soumis:    { label:'En examen', cls:'sb-planned' },
+  'validé':  { label:'Validé',    cls:'sb-active'  },
+  valide:    { label:'Validé',    cls:'sb-active'  },
+  'à revoir':{ label:'À revoir',  cls:'sb-planned' },
+  suspendu:  { label:'Suspendu',  cls:'sb-planned' },
+};
+
+/* ── Formateurs ── */
+const fmtF = n => {
+  const v = parseFloat(n || 0);
+  return isNaN(v) ? '—' : (v / 1000000).toFixed(1) + ' M FCFA';
+};
+
+const fmtN = n => {
+  const v = parseInt(n);
+  return isNaN(v) || v === 0 ? '0' : v.toLocaleString('fr-FR');
+};
+
+const fmtDate = d => {
+  if (!d) return '';
+  try {
+    const dt = new Date(d);
+    if (isNaN(dt)) return d;
+    return dt.toLocaleDateString('fr-FR', { day:'numeric', month:'short', year:'numeric' });
+  } catch { return d; }
+};
+
+// FIX 1 : driveImgUrl déclarée ici au niveau top — était incorrectement
+//          placée DANS l'objet littéral du .map(), ce qui causait le SyntaxError
+function driveImgUrl(url) {
+  if (!url) return '';
+  if (url.includes('thumbnail?id=') || url.includes('lh3.googleusercontent')) return url;
+  const m = url.match(/\/file\/d\/([^/?]+)/);
+  if (m) return 'https://drive.google.com/thumbnail?id=' + m[1] + '&sz=w800';
+  const m2 = url.match(/\/d\/([a-zA-Z0-9_-]+)/);
+  if (m2) return 'https://drive.google.com/thumbnail?id=' + m2[1] + '&sz=w800';
+  const m3 = url.match(/[?&]id=([^&]+)/);
+  return m3 ? 'https://drive.google.com/thumbnail?id=' + m3[1] + '&sz=w800' : url;
+}
+
+  function openDocViewer(url, nom) {
+  const iframe = document.getElementById('dvIframe');
+  const label  = document.getElementById('dvNom');
+  if (iframe) iframe.src = driveEmbedUrl(url);
+  if (label)  label.textContent = nom || 'Document';
+  const m = document.getElementById('docViewerM');
+  if (m) { m.style.display = 'flex'; document.body.style.overflow = 'hidden'; }
+}
+
+function closeDocViewer() {
+  const m = document.getElementById('docViewerM');
+  const iframe = document.getElementById('dvIframe');
+  if (iframe) iframe.src = 'about:blank';
+  if (m) { m.style.display = 'none'; document.body.style.overflow = ''; }
+}
+
+// Convertit URL Drive /view en URL iframe preview
+function driveEmbedUrl(url) {
+  if (!url) return '';
+  const m1 = url.match(/\/d\/([a-zA-Z0-9_-]+)/);
+  if (m1) return `https://drive.google.com/file/d/${m1[1]}/preview?rm=minimal`;
+  const m2 = url.match(/id=([a-zA-Z0-9_-]+)/);
+  if (m2) return `https://drive.google.com/file/d/${m2[1]}/preview?rm=minimal`;
+  return url;
+}
+/* ── État ── */
+let ALL_PROJECTS = [];
+let curFilter = 'all';
+
+/* ═══════════════════════════════════════════════════════════════
+   CONTENU HISTORIQUE FIXE — projets phares antérieurs à la
+   plateforme GAS. Ils ne sont jamais effacés : les nouveaux
+   projets validés (membres/admin) viennent s'AJOUTER à cette
+   liste, jamais la remplacer. IDs préfixés STATIC- pour éviter
+   tout conflit avec les IDs PR-xxxx générés par GAS.
+═══════════════════════════════════════════════════════════════ */
+const FALLBACK_PROJECTS = [
+  {
+    id: 'STATIC-001', titre: "Tribune Citoyenne pour l'accessibilité des Services de l'état civil pour tous",
+    domaine: 'Citoyenneté', dept: 'National', budget: 0, progression: 40, statut: 'en_cours',
+    beneficiaires: 0, partenaires: 'Populations vulnérables', dateDebut: '', dateFin: '',
+    description: "Renforcement de l'accès aux services d'état civil pour les populations les plus vulnérables, afin de garantir la pleine reconnaissance de leurs droits.",
+    imageURL: '', fichierURL: '', fichierNom: 'Document',
+  },
+  {
+    id: 'STATIC-002', titre: 'Renforcement de la participation citoyenne de qualité dans les Communes',
+    domaine: 'Gouvernance', dept: 'Communes cibles', budget: 0, progression: 35, statut: 'en_cours',
+    beneficiaires: 0, partenaires: 'Citoyens & OSC', dateDebut: '', dateFin: '',
+    description: "Appui à la participation active et éclairée des citoyens dans les processus de gouvernance locale pour un développement communautaire inclusif.",
+    imageURL: '', fichierURL: '', fichierNom: 'Document',
+  },
+  {
+    id: 'STATIC-003', titre: 'Renforcement de la Société Civile pour la Réalisation des Droits de l\u2019Enfant',
+    domaine: 'Protection', dept: 'National', budget: 0, progression: 100, statut: 'termine',
+    beneficiaires: 0, partenaires: 'Plan International Bénin', dateDebut: 'Juil. 2021', dateFin: 'Juin 2024',
+    description: "Projet exécuté de juillet 2021 à juin 2024 en partenariat avec Plan International Bénin. Renforcement des capacités des OSC membres sur les droits de l'enfant.",
+    imageURL: '', fichierURL: '', fichierNom: 'Document',
+  },
+  {
+    id: 'STATIC-004', titre: 'Lutte contre la prostitution et la pornographie impliquant des mineurs',
+    domaine: 'Protection', dept: 'Cotonou, Abomey-Calavi, Sèmè-Podji', budget: 0, progression: 100, statut: 'termine',
+    beneficiaires: 0, partenaires: 'CBDH / Union Européenne', dateDebut: 'Août 2022', dateFin: 'Fév. 2023',
+    description: "Projet mené d'août 2022 à février 2023 dans les villes de Cotonou, Abomey-Calavi et Sèmè-Podji. Partenariat avec la CBDH et l'Union Européenne.",
+    imageURL: '', fichierURL: '', fichierNom: 'Document',
+  },
+  {
+    id: 'STATIC-005', titre: "Renforcement de la Société Civile — Droits de l'Enfant",
+    domaine: "Droits de l'enfant", dept: 'National', budget: 0, progression: 100, statut: 'termine',
+    beneficiaires: 0, partenaires: 'Plan International Bénin', dateDebut: '2018', dateFin: '2022',
+    description: "Deux phases d'exécution : 15 août 2018 – 15 juin 2019, puis 1er janvier 2022 – 30 juin 2022. Partenariat Plan International Bénin.",
+    imageURL: '', fichierURL: '', fichierNom: 'Document',
+  },
+  {
+    id: 'STATIC-006', titre: 'Concours de production de presse — 2ème édition',
+    domaine: 'Média & Plaidoyer', dept: 'National', budget: 0, progression: 100, statut: 'termine',
+    beneficiaires: 0, partenaires: 'Journalistes & Blogueurs', dateDebut: '', dateFin: 'Annuel',
+    description: "Concours annuel valorisant les meilleures productions médiatiques (radio, blog, presse) sur la protection de l'enfant, la DSSR et l'éducation inclusive. Cérémonie de remise de prix avec les lauréats, autorités et médias.",
+    imageURL: '', fichierURL: '', fichierNom: 'Document',
+  },
+  {
+    id: 'STATIC-007', titre: 'Elle Inspire — Autonomisation des filles et jeunes femmes',
+    domaine: 'Autonomisation', dept: 'Donga & autres', budget: 0, progression: 100, statut: 'termine',
+    beneficiaires: 0, partenaires: 'Filles & Jeunes femmes', dateDebut: '', dateFin: '',
+    description: "Initiative de sensibilisation, de mentoring et d'accompagnement des adolescentes et jeunes filles vers l'autonomisation, la leadership et l'agentivité. Mise en place dans les départements cibles avec soutien des autorités.",
+    imageURL: '', fichierURL: '', fichierNom: 'Document',
+  },
+];
+
+/* ── Chargement depuis GAS — FUSION avec l'historique, jamais de remplacement total ── */
+async function loadProjects() {
+  showLoading(true);
+  hideError();
+
+  // Afficher immédiatement les données en cache (localStorage) pendant le chargement
+  const CACHE_KEY = 'foddeb_projets_cache';
+  const CACHE_TTL = 5 * 60 * 1000; // 5 minutes
+  try {
+    const cached = JSON.parse(localStorage.getItem(CACHE_KEY) || 'null');
+    if (cached && cached.ts && Date.now() - cached.ts < CACHE_TTL && cached.data?.length) {
+      ALL_PROJECTS = cached.data;
+      showLoading(false);
+      renderGrid();
+    }
+  } catch(e) { /* cache invalide — ignorer */ }
+
+  try {
+    const res = await FODDEB_API.projets.list({});
+    const gasProjects = (res.data || []).map(p => ({
+      id:            p.ID          || p.id,
+      titre:         p.Titre       || p.titre       || 'Projet sans titre',
+      domaine:       p.Domaine     || p.domaine     || '',
+      dept:          p.Departement || p.departement || '—',
+      budget:        parseFloat(p.Budget || p.budget || 0),
+      progression:   parseInt(p.Progression || p.progression || 0),
+      statut:        p.Statut      || p.statut      || 'en_cours',
+      beneficiaires: parseInt(p.Beneficiaires || p.Bénéficiaires || p.beneficiaires || 0),
+      partenaires:   p.Partenaires || p.partenaires || '—',
+      dateDebut:     fmtDate(p.DateDebut  || p.dateDebut  || ''),
+      dateFin:       fmtDate(p.DateFin    || p.dateFin    || ''),
+      description:   p.Description || p.description || '',
+      imageURL:      p.ImageURL    || p.imageURL    || '',
+      fichierURL:    p.FichierURL  || p.fichierURL  || '',
+      fichierNom:    p.FichierNom  || p.fichierNom  || 'Document',
+    }));
+
+    // FUSION : les nouveaux projets validés (GAS) en premier, puis l'historique fixe.
+    // Aucun des deux ensembles n'efface l'autre.
+    ALL_PROJECTS = [...gasProjects, ...FALLBACK_PROJECTS];
+
+    // Stats hero
+    const total = ALL_PROJECTS.length;
+    const benef = ALL_PROJECTS.reduce((s, p) => s + (p.beneficiaires || 0), 0);
+    const hsP = document.getElementById('hsProjets');
+    const hsB = document.getElementById('hsBenef');
+    if (hsP) hsP.textContent = total + '+';
+    if (hsB) hsB.textContent = benef >= 1000 ? Math.round(benef / 1000) + 'k+' : benef + '+';
+
+    showLoading(false);
+    applyFilters();
+    // Mettre à jour le cache avec les données fraîches (fusionnées)
+    try { localStorage.setItem(CACHE_KEY, JSON.stringify({ ts: Date.now(), data: ALL_PROJECTS })); } catch(e) {}
+  } catch(err) {
+    // GAS inaccessible → on garde au minimum l'historique fixe, jamais une page vide
+    ALL_PROJECTS = FALLBACK_PROJECTS;
+    showLoading(false);
+    applyFilters();
+    console.warn('[FODDEB] projets_list indisponible :', err.message, '— Affichage du contenu historique uniquement.');
+  }
+}
+
+/* ── Filtres ── */
+function setFilter(f, btn) {
+  curFilter = f;
+  document.querySelectorAll('.pill').forEach(p => p.classList.remove('active'));
+  btn.classList.add('active');
+  applyFilters();
+}
+
+function applyFilters() {
+  const q = (document.getElementById('searchInp')?.value || '').toLowerCase();
+  const filtered = ALL_PROJECTS.filter(p => {
+    const mf = curFilter === 'all' || p.domaine.includes(curFilter);
+    const mq = !q || p.titre.toLowerCase().includes(q) || p.domaine.toLowerCase().includes(q) || p.dept.toLowerCase().includes(q);
+    return mf && mq;
+  });
+  document.getElementById('filterCount').textContent = filtered.length + ' projet' + (filtered.length > 1 ? 's' : '');
+  renderGrid(filtered);
+}
+
+/* ── Rendu grille ── */
+function renderGrid(projects) {
+  const grid  = document.getElementById('projectsGrid');
+  const empty = document.getElementById('emptyState');
+  if (!projects.length) { grid.style.display='none'; empty.style.display='block'; return; }
+  grid.style.display='grid'; empty.style.display='none';
+
+  grid.innerHTML = projects.map((p, i) => {
+    const cfg   = getDomainCfg(p.domaine);
+    const stCfg = STATUS_CFG[p.statut] || { label: p.statut, cls: 'sb-planned' };
+    const hasProgress = p.progression > 0 || p.statut === 'en_cours';
+
+    // Afficher l'image Drive si disponible, sinon icône placeholder
+    const imgHTML = p.imageURL
+      ? `<img src="${driveImgUrl(p.imageURL)}" alt="${p.titre}"
+             onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"
+             loading="lazy"/>
+         <div class="project-img-overlay"></div>
+         <div style="display:none;position:absolute;inset:0;align-items:center;justify-content:center;background:${cfg.color}">
+           <iconify-icon icon="${cfg.icon}" class="proj-icon-big"></iconify-icon>
+         </div>`
+      : `<div class="project-img-overlay"></div>
+         <iconify-icon icon="${cfg.icon}" class="proj-icon-big"></iconify-icon>`;
+
+    // FIX 3 : ${p.fichierURL ? ...} déplacé ICI à l'intérieur du .map()
+    //          — était flottant APRÈS grid.innerHTML en dehors du scope de `p`
+   // Après (les deux coexistent)
+const fichierLink = `
+  <a href="/#don" class="proj-link" onclick="event.stopPropagation()">
+    Soutenir <iconify-icon icon="mdi:arrow-right"></iconify-icon>
+  </a>
+  ${p.fichierURL
+    ? `<button onclick="event.stopPropagation();openDocViewer('${p.fichierURL}','${p.fichierNom}')"
+   class="proj-link" style="background:none;border:none;cursor:pointer;margin-left:8px">
+   <iconify-icon icon="mdi:file-document-outline"></iconify-icon>Document
+ </button>`
+    : ''}`;
+    return `
+    <div class="project-card fade-in" style="animation:fadeUp .4s ease ${i*.06}s both;cursor:pointer" onclick="window.location.href='/pages/projet-detail.html?id=${p.id}'">
+      <div class="project-img" style="background:${cfg.color}">
+        ${imgHTML}
+        <div class="project-status-badge">
+          <span class="status-badge ${stCfg.cls}"><span class="sb-dot"></span>${stCfg.label}</span>
+        </div>
+        <div class="project-domain-badge">${p.domaine || 'Projet'}</div>
+      </div>
+      <div class="project-body">
+        <h3 class="project-title">${p.titre}</h3>
+        <p class="project-excerpt">${p.description || 'Projet mené par le FODDEB dans le cadre de sa mission de protection des droits de l\'enfant au Bénin.'}</p>
+        <div class="project-meta">
+          <div class="pm-item"><iconify-icon icon="mdi:map-marker-outline"></iconify-icon>${p.dept}</div>
+          <div class="pm-item"><iconify-icon icon="mdi:account-group-outline"></iconify-icon>${fmtN(p.beneficiaires)} bénéficiaires</div>
+          ${p.dateDebut ? `<div class="pm-item"><iconify-icon icon="mdi:calendar-outline"></iconify-icon>${p.dateDebut}${p.dateFin ? ' → ' + p.dateFin : ''}</div>` : ''}
+        </div>
+        ${hasProgress ? `
+        <div class="progress-wrap">
+          <div class="progress-head">
+            <span style="font-size:12.5px;color:var(--gr6)">Progression</span>
+            <span style="font-weight:700;color:var(--gr8)">${p.progression}%</span>
+          </div>
+          <div class="progress-bar">
+            <div class="progress-fill" style="width:${p.progression}%;background:${cfg.color}"></div>
+          </div>
+        </div>` : ''}
+        <div class="project-footer">
+          <span class="proj-budget">${fmtF(p.budget)}</span>
+          <a href="/pages/projet-detail.html?id=${p.id}"
+             class="proj-link"
+             onclick="event.stopPropagation()">
+            En savoir plus <iconify-icon icon="mdi:arrow-right"></iconify-icon>
+          </a>
+          ${fichierLink}
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+
+  observeFadeIn();
+}
+
+/* ── UI helpers ── */
+function showLoading(v) {
+  document.getElementById('loadingState').style.display = v ? 'grid' : 'none';
+  if (v) document.getElementById('projectsGrid').style.display = 'none';
+}
+function showError(msg) {
+  const el = document.getElementById('projectsError');
+  const em = document.getElementById('projectsErrorMsg');
+  if (el) el.style.display = 'flex';
+  if (em) em.textContent = msg;
+}
+function hideError() {
+  const el = document.getElementById('projectsError');
+  if (el) el.style.display = 'none';
+}
+function observeFadeIn() {
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); } });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.fade-in:not(.visible)').forEach(el => obs.observe(el));
+}
+
+/* ── Mobile nav ── */
+document.getElementById('hamburger').addEventListener('click', () => {
+  document.getElementById('mobileNav').classList.add('open');
+  document.body.style.overflow = 'hidden';
+});
+document.getElementById('mobileClose').addEventListener('click', () => {
+  document.getElementById('mobileNav').classList.remove('open');
+  document.body.style.overflow = '';
+});
+document.querySelectorAll('.mobile-links a').forEach(a => a.addEventListener('click', () => {
+  document.getElementById('mobileNav').classList.remove('open');
+  document.body.style.overflow = '';
+}));
+
+/* ── Init ── */
+loadProjects();
+if ('serviceWorker' in navigator) navigator.serviceWorker.register('/sw.js').catch(() => {});
+</script>
+</body>
+</html>

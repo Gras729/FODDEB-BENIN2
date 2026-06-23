@@ -1,0 +1,934 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="robots" content="noindex, nofollow"/>
+  <title>Cartographie d'impact — FODDEB Admin</title>
+  <link rel="manifest" href="/manifest.json"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@500;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js" defer></script>
+
+  <!-- Leaflet CSS + JS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css"/>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --sw: 260px; --swc: 68px; --hh: 64px;
+      --g9: #0F2713; --g8: #1B5E20; --g7: #2E7D32; --g6: #388E3C;
+      --g5: #4CAF50; --g4: #81C784; --g1: #C8E6C9; --g0: #E8F5E9;
+      --gold: #F9A825; --gold2: #F57F17; --goldf: #FFFDE7;
+      --red: #C62828; --redf: #FFEBEE;
+      --blue: #1565C0; --bluef: #E3F2FD;
+      --pur: #6A1B9A; --purf: #F3E5F5;
+      --teal: #00695C; --tealf: #E0F2F1;
+      --bg: #F4F6F5; --surf: #FFFFFF;
+      --dark: #0D1B0F; --gr8: #1C2520; --gr6: #4A5568;
+      --gr4: #9AA5B1; --gr2: #E2E8F0; --gr1: #F7FAFC; --brd: #E8EEE9;
+      --fh: 'Syne', sans-serif; --fb: 'DM Sans', system-ui, sans-serif;
+      --r: 12px; --rs: 8px;
+      --sh: 0 1px 4px rgba(0,0,0,.06), 0 4px 16px rgba(0,0,0,.06);
+      --shm: 0 4px 24px rgba(0,0,0,.10);
+      --tr: .25s cubic-bezier(.4,0,.2,1);
+    }
+    html, body { height: 100%; overflow: hidden; }
+    body { font-family: var(--fb); background: var(--bg); color: var(--gr8); display: flex; -webkit-font-smoothing: antialiased; }
+    a { color: inherit; text-decoration: none; }
+    ul { list-style: none; }
+    button { font-family: var(--fb); cursor: pointer; border: none; background: none; }
+
+    /* ===== SIDEBAR ===== */
+    .sb { width: var(--sw); min-height: 100vh; background: var(--g9); display: flex; flex-direction: column; position: fixed; left: 0; top: 0; bottom: 0; z-index: 200; overflow: hidden; transition: width var(--tr); }
+    .sb.col { width: var(--swc); }
+    .sb-logo { display: flex; align-items: center; gap: 12px; padding: 20px 18px; border-bottom: 1px solid rgba(255,255,255,.08); min-height: var(--hh); }
+    .sb-logo-i { width: 36px; height: 36px; border-radius: 10px; background: var(--g7); display: flex; align-items: center; justify-content: center; font-family: var(--fh); color: #fff; font-size: 11px; font-weight: 800; flex-shrink: 0; }
+    .sb-logo-t { overflow: hidden; white-space: nowrap; }
+    .sb-logo-t strong { display: block; color: #fff; font-size: 15px; font-weight: 700; }
+    .sb-logo-t span { font-size: 11px; color: rgba(255,255,255,.45); }
+    .sb-sec { padding: 12px 10px 4px; }
+    .sb-lbl { font-size: 10px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: rgba(255,255,255,.3); padding: 0 8px; margin-bottom: 4px; white-space: nowrap; }
+    .sb.col .sb-lbl { opacity: 0; }
+    .ni { display: flex; align-items: center; gap: 12px; padding: 10px 12px; border-radius: var(--rs); color: rgba(255,255,255,.6); font-size: 14px; font-weight: 500; cursor: pointer; transition: var(--tr); white-space: nowrap; overflow: hidden; }
+    .ni iconify-icon { flex-shrink: 0; font-size: 20px; }
+    .ni .nb { margin-left: auto; background: var(--g6); color: #fff; font-size: 10px; font-weight: 700; padding: 1px 7px; border-radius: 99px; flex-shrink: 0; }
+    .ni:hover { background: rgba(255,255,255,.08); color: #fff; }
+    .ni.act { background: var(--g7); color: #fff; }
+    .ni.act iconify-icon { color: var(--g4); }
+    .sb.col .ni .nl, .sb.col .nb { display: none; }
+    .sb.col .ni { justify-content: center; padding: 12px; }
+    .sb-foot { margin-top: auto; border-top: 1px solid rgba(255,255,255,.08); padding: 12px 10px; }
+    .sb-user { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: var(--rs); cursor: pointer; }
+    .sb-av { width: 36px; height: 36px; border-radius: 50%; background: var(--g6); display: flex; align-items: center; justify-content: center; color: #fff; font-weight: 700; font-size: 14px; flex-shrink: 0; }
+    .sb-ui { overflow: hidden; flex: 1; }
+    .sb-ui strong { display: block; font-size: 13px; color: #fff; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .sb-ui span { font-size: 11px; color: rgba(255,255,255,.4); }
+    .sb.col .sb-ui { display: none; }
+    .sb.col .sb-user { justify-content: center; }
+
+    /* ===== MAIN WRAP ===== */
+    .mw { margin-left: var(--sw); flex: 1; height: 100vh; display: flex; flex-direction: column; transition: margin-left var(--tr); overflow: hidden; }
+    .mw.col { margin-left: var(--swc); }
+
+    /* ===== HEADER ===== */
+    .ah { background: var(--surf); border-bottom: 1px solid var(--brd); height: var(--hh); display: flex; align-items: center; padding: 0 20px; gap: 14px; flex-shrink: 0; z-index: 100; }
+    .ht { width: 36px; height: 36px; border-radius: var(--rs); display: flex; align-items: center; justify-content: center; color: var(--gr6); font-size: 20px; transition: var(--tr); }
+    .ht:hover { background: var(--gr1); }
+    .hbc { display: flex; align-items: center; gap: 8px; font-size: 14px; color: var(--gr6); }
+    .hbc strong { color: var(--gr8); font-weight: 600; }
+    .hr { margin-left: auto; display: flex; align-items: center; gap: 10px; }
+    .hbtn { width: 38px; height: 38px; border-radius: var(--rs); display: flex; align-items: center; justify-content: center; color: var(--gr6); font-size: 20px; position: relative; transition: var(--tr); }
+    .hbtn:hover { background: var(--gr1); }
+    .nd { position: absolute; top: 6px; right: 6px; width: 8px; height: 8px; background: var(--red); border-radius: 50%; border: 2px solid var(--surf); }
+    .hu { display: flex; align-items: center; gap: 10px; padding: 6px 12px 6px 6px; border-radius: var(--r); cursor: pointer; transition: var(--tr); border: 1px solid var(--brd); }
+    .hu:hover { background: var(--gr1); }
+    .hav { width: 32px; height: 32px; border-radius: 50%; background: var(--g7); display: flex; align-items: center; justify-content: center; color: #fff; font-weight: 700; font-size: 12px; }
+    .hui strong { display: block; font-size: 13px; font-weight: 600; }
+    .hui span { font-size: 11px; color: var(--gr4); }
+
+    /* ===== MAP LAYOUT ===== */
+    .map-layout { display: flex; flex: 1; overflow: hidden; }
+
+    /* ===== LEFT PANEL ===== */
+    .left-panel { width: 320px; flex-shrink: 0; background: var(--surf); border-right: 1px solid var(--brd); display: flex; flex-direction: column; overflow: hidden; }
+    .panel-header { padding: 16px 18px; border-bottom: 1px solid var(--brd); flex-shrink: 0; }
+    .panel-title { font-family: var(--fh); font-size: 15px; font-weight: 700; color: var(--dark); margin-bottom: 4px; display: flex; align-items: center; gap: 8px; }
+    .panel-title iconify-icon { font-size: 18px; color: var(--g7); }
+    .panel-sub { font-size: 12.5px; color: var(--gr4); }
+
+    /* Search */
+    .panel-search { padding: 12px 16px; border-bottom: 1px solid var(--brd); flex-shrink: 0; position: relative; }
+    .panel-search iconify-icon { position: absolute; left: 28px; top: 50%; transform: translateY(-50%); color: var(--gr4); font-size: 17px; pointer-events: none; }
+    .search-inp { width: 100%; padding: 8px 10px 8px 36px; border: 1px solid var(--brd); border-radius: var(--rs); font-size: 13.5px; font-family: var(--fb); outline: none; background: var(--gr1); transition: border-color .2s; }
+    .search-inp:focus { border-color: var(--g5); }
+
+    /* Filters */
+    .panel-filters { padding: 12px 16px; border-bottom: 1px solid var(--brd); display: flex; gap: 6px; flex-wrap: wrap; flex-shrink: 0; }
+    .filter-pill { font-size: 11.5px; font-weight: 600; padding: 5px 12px; border-radius: 99px; border: 1.5px solid var(--brd); background: var(--surf); color: var(--gr6); cursor: pointer; transition: var(--tr); }
+    .filter-pill:hover { border-color: var(--g4); color: var(--g8); }
+    .filter-pill.active { background: var(--g8); color: #fff; border-color: var(--g8); }
+
+    /* Stats strip */
+    .panel-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 0; border-bottom: 1px solid var(--brd); flex-shrink: 0; }
+    .pstat { padding: 12px 16px; text-align: center; border-right: 1px solid var(--brd); }
+    .pstat:last-child { border-right: none; }
+    .pstat:nth-child(3), .pstat:nth-child(4) { border-top: 1px solid var(--brd); }
+    .pstat strong { display: block; font-family: var(--fh); font-size: 1.3rem; font-weight: 700; color: var(--dark); }
+    .pstat span { font-size: 11px; color: var(--gr4); font-weight: 500; }
+
+    /* Project list */
+    .project-list { flex: 1; overflow-y: auto; padding: 8px 0; }
+    .project-list::-webkit-scrollbar { width: 4px; }
+    .project-list::-webkit-scrollbar-track { background: transparent; }
+    .project-list::-webkit-scrollbar-thumb { background: var(--gr2); border-radius: 4px; }
+    .proj-item { display: flex; gap: 12px; align-items: flex-start; padding: 12px 16px; cursor: pointer; transition: background var(--tr); border-bottom: 1px solid var(--brd); }
+    .proj-item:hover { background: var(--gr1); }
+    .proj-item.selected { background: var(--g0); border-left: 3px solid var(--g7); }
+    .proj-dot { width: 12px; height: 12px; border-radius: 50%; flex-shrink: 0; margin-top: 4px; }
+    .proj-info { flex: 1; }
+    .proj-name { font-size: 13.5px; font-weight: 600; color: var(--dark); margin-bottom: 3px; line-height: 1.3; }
+    .proj-meta { font-size: 11.5px; color: var(--gr4); display: flex; gap: 8px; flex-wrap: wrap; }
+    .proj-meta span { display: flex; align-items: center; gap: 3px; }
+    .proj-prog { margin-top: 6px; }
+    .prog-bar { height: 4px; background: var(--gr2); border-radius: 99px; overflow: hidden; }
+    .prog-f { height: 100%; border-radius: 99px; transition: width 1s ease; }
+    .proj-badge { font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 99px; white-space: nowrap; }
+    .pb-active { background: var(--g0); color: var(--g7); }
+    .pb-done { background: var(--goldf); color: #92400E; }
+    .pb-planned { background: var(--gr1); color: var(--gr6); }
+
+    /* ===== MAP CONTAINER ===== */
+    .map-container { flex: 1; position: relative; overflow: hidden; }
+    #map { width: 100%; height: 100%; z-index: 1; }
+
+    /* ===== MAP CONTROLS OVERLAY ===== */
+    .map-controls { position: absolute; top: 14px; right: 14px; z-index: 400; display: flex; flex-direction: column; gap: 8px; }
+    .map-ctrl-btn { width: 38px; height: 38px; background: var(--surf); border: 1px solid var(--brd); border-radius: var(--rs); display: flex; align-items: center; justify-content: center; font-size: 18px; color: var(--gr6); cursor: pointer; box-shadow: var(--sh); transition: var(--tr); }
+    .map-ctrl-btn:hover { border-color: var(--g4); color: var(--g8); background: var(--g0); }
+    .map-ctrl-btn.active { background: var(--g8); color: #fff; border-color: var(--g8); }
+
+    /* Legend */
+    .map-legend { position: absolute; bottom: 28px; right: 14px; z-index: 400; background: var(--surf); border: 1px solid var(--brd); border-radius: var(--r); padding: 14px 16px; box-shadow: var(--sh); min-width: 160px; }
+    .legend-title { font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--gr4); margin-bottom: 10px; }
+    .legend-item { display: flex; align-items: center; gap: 8px; font-size: 12.5px; color: var(--gr6); margin-bottom: 7px; }
+    .legend-item:last-child { margin-bottom: 0; }
+    .legend-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+    .legend-dot.ring { border: 2px solid; background: transparent; }
+
+    /* Map info banner */
+    .map-info { position: absolute; top: 14px; left: 14px; z-index: 400; background: var(--surf); border: 1px solid var(--brd); border-radius: var(--r); padding: 10px 14px; box-shadow: var(--sh); font-size: 12.5px; color: var(--gr6); display: flex; align-items: center; gap: 8px; }
+    .map-info iconify-icon { font-size: 15px; color: var(--g7); }
+
+    /* ===== DETAIL PANEL ===== */
+    .detail-panel { position: absolute; bottom: 0; left: 0; right: 0; z-index: 400; background: var(--surf); border-top: 1px solid var(--brd); box-shadow: 0 -4px 24px rgba(0,0,0,.1); padding: 16px 20px; display: none; max-height: 45%; overflow-y: auto; }
+    .detail-panel.open { display: block; animation: slideUp .3s ease; }
+    @keyframes slideUp { from { transform: translateY(100%); opacity: 0; } to { transform: none; opacity: 1; } }
+    .detail-header { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 14px; }
+    .detail-title { font-family: var(--fh); font-size: 1.05rem; font-weight: 700; color: var(--dark); }
+    .detail-close { width: 28px; height: 28px; border-radius: 50%; background: var(--gr1); display: flex; align-items: center; justify-content: center; font-size: 16px; color: var(--gr6); cursor: pointer; flex-shrink: 0; }
+    .detail-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 10px; margin-bottom: 14px; }
+    .detail-stat { background: var(--gr1); border-radius: var(--rs); padding: 10px 12px; }
+    .detail-stat-val { font-family: var(--fh); font-size: 1.2rem; font-weight: 700; color: var(--dark); }
+    .detail-stat-label { font-size: 11px; color: var(--gr4); margin-top: 2px; }
+    .detail-progress { margin-bottom: 12px; }
+    .detail-prog-head { display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 5px; }
+    .detail-prog-bar { height: 8px; background: var(--gr2); border-radius: 99px; overflow: hidden; }
+    .detail-prog-fill { height: 100%; border-radius: 99px; transition: width 1s ease; }
+    .detail-tags { display: flex; gap: 6px; flex-wrap: wrap; }
+    .detail-tag { font-size: 11.5px; font-weight: 600; padding: 3px 10px; border-radius: 99px; background: var(--gr1); color: var(--gr6); }
+
+    /* ===== LEAFLET CUSTOM MARKERS ===== */
+    .custom-marker { display: flex; align-items: center; justify-content: center; border-radius: 50%; border: 3px solid #fff; box-shadow: 0 2px 8px rgba(0,0,0,.25); font-weight: 700; font-size: 12px; color: #fff; font-family: 'DM Sans', sans-serif; cursor: pointer; transition: transform .2s; }
+    .custom-marker:hover { transform: scale(1.15); }
+
+    /* Leaflet popup custom */
+    .leaflet-popup-content-wrapper { border-radius: 12px !important; box-shadow: 0 8px 32px rgba(0,0,0,.18) !important; border: 1px solid var(--brd) !important; padding: 0 !important; overflow: hidden; font-family: 'DM Sans', sans-serif !important; }
+    .leaflet-popup-content { margin: 0 !important; width: auto !important; }
+    .leaflet-popup-tip-container { display: none; }
+    .popup-inner { padding: 16px 18px; min-width: 220px; max-width: 280px; }
+    .popup-tag { font-size: 10.5px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; margin-bottom: 5px; }
+    .popup-title { font-family: 'Syne', sans-serif; font-size: 14px; font-weight: 700; color: #0D1B0F; margin-bottom: 10px; line-height: 1.3; }
+    .popup-meta { display: flex; flex-direction: column; gap: 5px; margin-bottom: 12px; }
+    .popup-meta-item { display: flex; align-items: center; gap: 6px; font-size: 12.5px; color: #4A5568; }
+    .popup-prog { }
+    .popup-prog-bar { height: 5px; background: #E2E8F0; border-radius: 99px; overflow: hidden; margin-top: 4px; }
+    .popup-prog-fill { height: 100%; border-radius: 99px; }
+    .popup-footer { padding: 10px 18px; border-top: 1px solid #E8EEE9; display: flex; justify-content: flex-end; }
+    .popup-btn { font-size: 12.5px; font-weight: 600; color: #2E7D32; display: flex; align-items: center; gap: 4px; cursor: pointer; background: none; border: none; font-family: 'DM Sans', sans-serif; }
+
+    /* ===== HEATMAP LAYER TOGGLE ===== */
+    .layer-switcher { position: absolute; top: 64px; right: 14px; z-index: 400; background: var(--surf); border: 1px solid var(--brd); border-radius: var(--r); padding: 10px 12px; box-shadow: var(--sh); min-width: 140px; }
+    .layer-title { font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--gr4); margin-bottom: 8px; }
+    .layer-item { display: flex; align-items: center; gap: 8px; font-size: 12.5px; color: var(--gr6); margin-bottom: 6px; cursor: pointer; }
+    .layer-item:last-child { margin-bottom: 0; }
+    .layer-item input { accent-color: var(--g7); }
+
+    /* Sidebar overlay mobile */
+    .ov { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.5); z-index: 190; }
+    .ov.v { display: block; }
+
+    /* Toast */
+    #tc { position: fixed; top: 20px; right: 20px; z-index: 9999; display: flex; flex-direction: column; gap: 8px; }
+    .toast { background: var(--g8); color: #fff; padding: 11px 16px; border-radius: 10px; font-size: 13.5px; display: flex; align-items: center; gap: 8px; box-shadow: var(--shm); animation: tIn .3s ease; }
+    @keyframes tIn { from { opacity:0; transform: translateX(20px); } to { opacity:1; transform:none; } }
+
+    @media (max-width: 1100px) { .left-panel { width: 280px; } }
+    @media (max-width: 900px) {
+      .left-panel { display: none; }
+      .left-panel.mobile-open { display: flex; position: fixed; left: 0; top: var(--hh); bottom: 0; z-index: 300; width: 300px; box-shadow: var(--shm); }
+    }
+    @media (max-width: 768px) {
+      .sb { transform: translateX(-100%); }
+      .sb.mob { transform: none; }
+      .mw { margin-left: 0 !important; }
+      .hui { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="ov" id="ov" onclick="closeSb()"></div>
+<div id="tc"></div>
+
+<!-- SIDEBAR -->
+<aside class="sb" id="sb">
+  <div class="sb-logo"><img src="/assets/icons/logo-small.png" alt="FODDEB" style="width:36px;height:36px;border-radius:10px;object-fit:contain;background:#fff;padding:3px;flex-shrink:0"><div class="sb-logo-t"><strong>FODDEB</strong><span>Administration</span></div></div>
+  <div class="sb-sec">
+    <div class="sb-lbl">Principal</div>
+    <ul>
+      <li class="ni" onclick="location.href='/admin/dashboard.html'"><iconify-icon icon="mdi:view-dashboard-outline"></iconify-icon><span class="nl">Tableau de bord</span></li>
+      <li class="ni" onclick="location.href='/admin/membres.html'"><iconify-icon icon="mdi:account-group-outline"></iconify-icon><span class="nl">Membres</span></li>
+      <li class="ni" onclick="location.href='/admin/dons.html'"><iconify-icon icon="mdi:heart-outline"></iconify-icon><span class="nl">Dons &amp; Paiements</span></li>
+      <li class="ni" onclick="location.href='/admin/projets.html'"><iconify-icon icon="mdi:clipboard-list-outline"></iconify-icon><span class="nl">Projets</span></li>
+      <li class="ni" onclick="location.href='/admin/actualites.html'"><iconify-icon icon="mdi:newspaper-variant-outline"></iconify-icon><span class="nl">Actualités</span></li>
+    </ul>
+  </div>
+  <div class="sb-sec">
+    <div class="sb-lbl">Communication</div>
+    <ul>
+      <li class="ni" onclick="location.href='/admin/newsletter.html'"><iconify-icon icon="mdi:email-newsletter"></iconify-icon><span class="nl">Newsletter</span></li>
+      <li class="ni"><iconify-icon icon="mdi:message-text-outline"></iconify-icon><span class="nl">Messages</span><span class="nb">7</span></li>
+      <li class="ni act"><iconify-icon icon="mdi:map-outline"></iconify-icon><span class="nl">Cartographie</span></li>
+    </ul>
+  </div>
+  <div class="sb-foot"><div class="sb-user" onclick="changeAdminPhoto()"><div class="sb-av" id="sbAv">AD</div><div class="sb-ui"><strong id="sbName">Administrateur</strong><span id="sbRole">Super Admin</span></div></div></div>
+</aside>
+
+<!-- MAIN -->
+<div class="mw" id="mw">
+
+  <!-- HEADER -->
+  <header class="ah">
+    <button class="ht" onclick="toggleSb()"><iconify-icon icon="mdi:menu"></iconify-icon></button>
+    <nav class="hbc"><a href="/admin/dashboard.html">FODDEB</a><iconify-icon icon="mdi:chevron-right"></iconify-icon><strong>Cartographie d'impact</strong></nav>
+    <div class="hr">
+      <button class="ht" onclick="toggleLeftPanel()" title="Projets" style="display:none" id="mobileListBtn"><iconify-icon icon="mdi:format-list-bulleted"></iconify-icon></button>
+      <button class="hbtn"><iconify-icon icon="mdi:bell-outline"></iconify-icon><span class="nd"></span></button>
+      <div class="hu"><div class="hav" id="hdrAv">AD</div><div class="hui"><strong id="hdrName">Administrateur</strong><span id="hdrRole">Super Admin</span></div></div>
+    </div>
+  </header>
+
+  <!-- MAP LAYOUT -->
+  <div class="map-layout">
+
+    <!-- LEFT PANEL -->
+    <div class="left-panel" id="leftPanel">
+      <div class="panel-header">
+        <div class="panel-title"><iconify-icon icon="mdi:map-marker-multiple-outline"></iconify-icon>Projets sur la carte</div>
+        <div class="panel-sub" id="panelSub">7 projets · 12 départements</div>
+      </div>
+
+      <!-- Search -->
+      <div class="panel-search">
+        <iconify-icon icon="mdi:magnify"></iconify-icon>
+        <input type="search" class="search-inp" id="searchProj" placeholder="Rechercher un projet…" oninput="filterProjects()" aria-label="Rechercher"/>
+      </div>
+
+      <!-- Filters -->
+      <div class="panel-filters">
+        <div class="filter-pill active" onclick="setFilter('all',this)">Tous</div>
+        <div class="filter-pill" onclick="setFilter('en_cours',this)">En cours</div>
+        <div class="filter-pill" onclick="setFilter('termine',this)">Terminés</div>
+        <div class="filter-pill" onclick="setFilter('planifie',this)">Planifiés</div>
+      </div>
+
+      <!-- Stats strip -->
+      <div class="panel-stats">
+        <div class="pstat"><strong id="ps1">7</strong><span>Projets</span></div>
+        <div class="pstat"><strong id="ps2">10k+</strong><span>Bénéficiaires</span></div>
+        <div class="pstat"><strong id="ps3">12</strong><span>Départements</span></div>
+        <div class="pstat"><strong id="ps4">29 M</strong><span>Budget FCFA</span></div>
+      </div>
+
+      <!-- Project list -->
+      <div class="project-list" id="projectList"></div>
+    </div>
+
+    <!-- MAP -->
+    <div class="map-container">
+      <!-- Map info -->
+      <div class="map-info">
+        <iconify-icon icon="mdi:information-outline"></iconify-icon>
+        Cliquez sur un marqueur pour voir le détail du projet
+      </div>
+
+      <!-- Map container -->
+      <div id="map"></div>
+
+      <!-- Controls -->
+      <div class="map-controls">
+        <button class="map-ctrl-btn" onclick="resetView()" title="Recentrer"><iconify-icon icon="mdi:crosshairs-gps"></iconify-icon></button>
+        <button class="map-ctrl-btn" onclick="toggleClusters()" id="clusterBtn" title="Grouper les marqueurs"><iconify-icon icon="mdi:circle-multiple-outline"></iconify-icon></button>
+        <button class="map-ctrl-btn" onclick="exportMap()" title="Exporter"><iconify-icon icon="mdi:download-outline"></iconify-icon></button>
+        <button class="map-ctrl-btn" onclick="printMap()" title="Imprimer"><iconify-icon icon="mdi:printer-outline"></iconify-icon></button>
+      </div>
+
+      <!-- Layer switcher -->
+      <div class="layer-switcher">
+        <div class="layer-title">Couches</div>
+        <label class="layer-item"><input type="checkbox" id="layerProjects" checked onchange="toggleLayer('projects')"/> Projets</label>
+        <label class="layer-item"><input type="checkbox" id="layerBenef" onchange="toggleLayer('benef')"/> Bénéficiaires</label>
+        <label class="layer-item"><input type="checkbox" id="layerDepts" checked onchange="toggleLayer('depts')"/> Départements</label>
+      </div>
+
+      <!-- Legend -->
+      <div class="map-legend">
+        <div class="legend-title">Légende</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#2E7D32"></div>En cours</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#F9A825"></div>Terminé</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#9AA5B1"></div>Planifié</div>
+        <div class="legend-item"><div class="legend-dot ring" style="border-color:#1565C0;width:12px;height:12px"></div>Zone d'impact</div>
+      </div>
+
+      <!-- Detail panel -->
+      <div class="detail-panel" id="detailPanel">
+        <div class="detail-header">
+          <div class="detail-title" id="detailTitle">—</div>
+          <div class="detail-close" onclick="closeDetail()">✕</div>
+        </div>
+        <div class="detail-grid" id="detailStats"></div>
+        <div class="detail-progress" id="detailProgress"></div>
+        <div class="detail-tags" id="detailTags"></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script src="/assets/js/config.js"></script>
+<script src="/assets/js/services/auth.js"></script>
+<script src="/assets/js/services/api.js"></script>
+<script src="/assets/js/utils.js"></script>
+
+<script>
+'use strict';
+
+/* ===== DATA — Projets avec coordonnées GPS (Bénin) ===== */
+const DEMO_PROJECTS = [
+  {
+    id: 1,
+    title: 'Lutte contre les VBG',
+    domain: 'Protection de l\'enfant',
+    dept: 'Atacora, Donga',
+    status: 'en_cours',
+    progress: 72,
+    budget: 8000000,
+    beneficiaires: 500,
+    partners: 'UNICEF, Plan Bénin',
+    resp: 'Adjovi Rosine',
+    start: 'Jan 2024',
+    end: 'Juin 2025',
+    lat: 10.30,
+    lng: 1.50,
+    radius: 40000,
+    color: '#2E7D32',
+    icon: '🛡️'
+  },
+  {
+    id: 2,
+    title: 'Kits scolaires Alibori',
+    domain: 'Éducation',
+    dept: 'Alibori',
+    status: 'en_cours',
+    progress: 85,
+    budget: 4500000,
+    beneficiaires: 1200,
+    partners: 'Helvetas',
+    resp: 'Bello Ibrahim',
+    start: 'Mars 2024',
+    end: 'Mars 2025',
+    lat: 11.50,
+    lng: 3.00,
+    radius: 55000,
+    color: '#2E7D32',
+    icon: '📚'
+  },
+  {
+    id: 3,
+    title: 'TIC pour jeunes filles',
+    domain: 'Numérique',
+    dept: 'Cotonou, Abomey-Calavi',
+    status: 'termine',
+    progress: 100,
+    budget: 3000000,
+    beneficiaires: 300,
+    partners: 'OIF',
+    resp: 'Tchassou Mireille',
+    start: 'Jan 2024',
+    end: 'Déc 2024',
+    lat: 6.37,
+    lng: 2.43,
+    radius: 20000,
+    color: '#F9A825',
+    icon: '💻'
+  },
+  {
+    id: 4,
+    title: 'Santé reproductive jeunes',
+    domain: 'Santé',
+    dept: 'Ouémé, Plateau',
+    status: 'en_cours',
+    progress: 40,
+    budget: 6000000,
+    beneficiaires: 800,
+    partners: 'PNUD',
+    resp: 'Alimatou Garba',
+    start: 'Jan 2025',
+    end: 'Déc 2025',
+    lat: 6.70,
+    lng: 2.65,
+    radius: 35000,
+    color: '#2E7D32',
+    icon: '💊'
+  },
+  {
+    id: 5,
+    title: 'Sensibilisation climatique',
+    domain: 'Environnement',
+    dept: 'Borgou',
+    status: 'planifie',
+    progress: 0,
+    budget: 2500000,
+    beneficiaires: 200,
+    partners: 'GIZ Bénin',
+    resp: 'Kpade Mathieu',
+    start: 'Juin 2025',
+    end: 'Nov 2025',
+    lat: 9.30,
+    lng: 2.60,
+    radius: 45000,
+    color: '#9AA5B1',
+    icon: '🌱'
+  },
+  {
+    id: 6,
+    title: 'Cohésion sociale Atacora',
+    domain: 'Développement local',
+    dept: 'Atacora',
+    status: 'termine',
+    progress: 100,
+    budget: 3500000,
+    beneficiaires: 1500,
+    partners: 'Ambassade France',
+    resp: 'Gnahore Nestor',
+    start: 'Juin 2023',
+    end: 'Mai 2024',
+    lat: 10.60,
+    lng: 1.20,
+    radius: 38000,
+    color: '#F9A825',
+    icon: '🤝'
+  },
+  {
+    id: 7,
+    title: 'Développement local Mono',
+    domain: 'Développement local',
+    dept: 'Mono',
+    status: 'en_cours',
+    progress: 20,
+    budget: 5000000,
+    beneficiaires: 600,
+    partners: 'AFD',
+    resp: 'Rodrigue Houessou',
+    start: 'Fév 2025',
+    end: 'Déc 2025',
+    lat: 6.90,
+    lng: 1.65,
+    radius: 28000,
+    color: '#2E7D32',
+    icon: '🏘️'
+  }
+];
+
+
+/* ═══ CARTOGRAPHIE — DONNÉES RÉELLES GAS ═══ */
+
+// Coordonnées GPS par département du Bénin
+const DEPT_COORDS = {
+  'Alibori':        { lat: 11.50, lng: 3.00, radius: 60000 },
+  'Atacora':        { lat: 10.60, lng: 1.20, radius: 55000 },
+  'Atlantique':     { lat: 6.50,  lng: 2.10, radius: 25000 },
+  'Borgou':         { lat: 9.30,  lng: 2.60, radius: 55000 },
+  'Collines':       { lat: 8.20,  lng: 2.30, radius: 40000 },
+  'Couffo':         { lat: 7.00,  lng: 1.85, radius: 25000 },
+  'Donga':          { lat: 9.70,  lng: 1.70, radius: 40000 },
+  'Littoral':       { lat: 6.37,  lng: 2.43, radius: 10000 },
+  'Cotonou':        { lat: 6.37,  lng: 2.43, radius: 12000 },
+  'Abomey-Calavi':  { lat: 6.45,  lng: 2.35, radius: 15000 },
+  'Mono':           { lat: 6.90,  lng: 1.65, radius: 25000 },
+  'Oueme':          { lat: 6.70,  lng: 2.65, radius: 25000 },
+  'Plateau':        { lat: 7.20,  lng: 2.80, radius: 30000 },
+  'Zou':            { lat: 7.20,  lng: 2.10, radius: 35000 },
+  'default':        { lat: 9.50,  lng: 2.35, radius: 40000 },
+};
+
+const STATUT_COLOR = {
+  en_cours: '#2E7D32', planifie: '#9AA5B1', en_attente: '#F9A825',
+  suspendu: '#C62828', termine: '#F9A825',  valide: '#1565C0',
+  soumis: '#9AA5B1',   rejete: '#C62828',
+};
+
+const DOMAINE_ICON = {
+  'Education':'\uD83D\uDCDA','Sante':'\uD83D\uDC8A','Numerique':'\uD83D\uDCBB',
+  'Environnement':'\uD83C\uDF31','Developpement':'\uD83C\uDFD8',
+  'Protection':'\uD83D\uDEE1','default':'\uD83D\uDCCC',
+};
+
+function getCoords(dept) {
+  if (!dept) return DEPT_COORDS.default;
+  for (const k of Object.keys(DEPT_COORDS)) {
+    if (dept.toLowerCase().includes(k.toLowerCase()) || k.toLowerCase().includes(dept.split(',')[0].trim().toLowerCase()))
+      return DEPT_COORDS[k];
+  }
+  return DEPT_COORDS.default;
+}
+
+function normalizeStr(s) {
+  return (s||'').toString().trim().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/\s+/g,'_');
+}
+
+function gasProjetToMap(p, idx) {
+  const statut = normalizeStr(p.Statut || p.statut) || 'planifie';
+  const dept1  = (p.Departement || p.dept || '').split(',')[0].trim();
+  const coords = getCoords(dept1);
+  const color  = STATUT_COLOR[statut] || '#9AA5B1';
+  const dom    = normalizeStr(p.Domaine || p.domaine || '');
+  const icon   = DOMAINE_ICON[dom] || DOMAINE_ICON.default;
+  // Jitter léger pour éviter la superposition de marqueurs au même point
+  const jLat = coords.lat + Math.sin(idx * 2.3) * 0.08;
+  const jLng = coords.lng + Math.cos(idx * 1.7) * 0.08;
+  return {
+    id: p.ID || p.id || 'p-' + idx,
+    title: p.Titre || p.titre || '—',
+    domain: p.Domaine || p.domaine || '—',
+    dept: p.Departement || p.dept || '—',
+    status: statut,
+    progress: parseInt(p.Progression || p.progression) || 0,
+    budget: parseFloat(p.Budget || p.budget) || 0,
+    beneficiaires: parseInt(p.Beneficiaires || p.beneficiaires) || 0,
+    partners: p.Partenaires || p.partenaires || '—',
+    resp: p.Responsable || p.responsable || '—',
+    start: p.DateDebut || '',
+    end: p.DateFin || '',
+    lat: jLat, lng: jLng, radius: coords.radius,
+    color, icon,
+    imageURL: p.ImageURL || '', fichierURL: p.FichierURL || '',
+  };
+}
+
+async function loadProjectsFromGAS() {
+  try {
+    const u = (typeof getUser === 'function') ? getUser() : {};
+    const res = await FODDEB_API.projets.list({ role: u.role||'admin', membreId: u.ID||u.id||'', limit: 500 });
+    const rows = res.data || res.projets || [];
+    PROJECTS = rows.map(gasProjetToMap);
+    console.log('[FODDEB carto] ' + PROJECTS.length + ' projets chargés depuis GAS.');
+  } catch(e) {
+    console.warn('[FODDEB carto] Fallback demo :', e.message);
+    PROJECTS = DEMO_PROJECTS.map(gasProjetToMap);
+  }
+}
+
+/* ═══ PHOTO PROFIL ADMIN ═══ */
+function getUser() {
+  try { return JSON.parse(sessionStorage.getItem('foddeb_user')); } catch { return null; }
+}
+function renderAdminAvatar() {
+  const user = getUser();
+  const photo = user && (user.Photo || user.PhotoURL || '');
+  const prenom = user ? (user.Prenom||user.prenom||'A') : 'A';
+  const nom    = user ? (user.Nom||user.nom||'') : '';
+  const init   = (((prenom||'')[0]||'') + ((nom||'')[0]||'')).toUpperCase() || '?';
+  ['sbAv','hdrAv'].forEach(function(id) {
+    const el = document.getElementById(id);
+    if (!el) return;
+    if (photo) {
+      el.innerHTML = ''; el.style.background = 'transparent';
+      const img = document.createElement('img');
+      img.src = photo;
+      img.style.cssText = 'width:100%;height:100%;border-radius:50%;object-fit:cover;display:block';
+      img.onerror = function() { el.textContent = init; el.style.background = '#2E7D32'; };
+      el.appendChild(img);
+    } else { el.textContent = init; el.style.background = '#2E7D32'; }
+  });
+  const sbName = document.getElementById('sbName');
+  const sbRole = document.getElementById('sbRole');
+  if (sbName) sbName.textContent = (prenom+' '+nom).trim() || 'Administrateur';
+  if (sbRole) sbRole.textContent = user ? (user.Role||user.role||'Admin') : 'Admin';
+}
+async function changeAdminPhoto() {
+  const input = document.createElement('input');
+  input.type='file'; input.accept='image/jpeg,image/png,image/webp';
+  input.onchange = async function() {
+    const file = input.files[0];
+    if (!file||file.size>3*1024*1024) { toast('Max 3 Mo.'); return; }
+    toast('Upload…');
+    try {
+      const b64 = await new Promise((res,rej)=>{ const r=new FileReader(); r.onload=()=>res(r.result.split(',')[1]); r.onerror=rej; r.readAsDataURL(file); });
+      const user = getUser()||{};
+      const up = await FODDEB_API.members.uploadProfilePhoto(b64,file.type,user.ID||user.id||'',user.sessionToken||'');
+      if (up&&up.success) { user.Photo=up.url||up.photoUrl||''; sessionStorage.setItem('foddeb_user',JSON.stringify(user)); renderAdminAvatar(); toast('Photo mise à jour.'); }
+      else toast('Erreur upload.');
+    } catch(e) { toast('Erreur : '+e.message); }
+  };
+  input.click();
+}
+
+let PROJECTS = [];
+
+const ST_CFG = {
+  en_cours: { label: 'En cours', cls: 'pb-active' },
+  termine:  { label: 'Terminé',  cls: 'pb-done' },
+  planifie: { label: 'Planifié', cls: 'pb-planned' }
+};
+
+const fmtF = n => n.toLocaleString('fr-FR') + ' FCFA';
+const fmtD = d => { try { return new Date(d).toLocaleDateString('fr-FR',{day:'numeric',month:'short',year:'numeric'}); } catch { return d; } };
+
+let map, markers = {}, circles = {}, selectedId = null, curFilter = 'all';
+let layerGroups = { projects: null, benef: null, depts: null };
+let layerVisible = { projects: true, benef: false, depts: true };
+
+/* ===== INIT MAP ===== */
+function initMap() {
+  map = L.map('map', {
+    center: [9.5, 2.35],
+    zoom: 7,
+    zoomControl: true,
+    attributionControl: true
+  });
+
+  // Tile layer — OpenStreetMap
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+    maxZoom: 18
+  }).addTo(map);
+
+  // Layer groups
+  layerGroups.projects = L.layerGroup().addTo(map);
+  layerGroups.benef    = L.layerGroup();
+  layerGroups.depts    = L.layerGroup().addTo(map);
+
+  // Render all
+  PROJECTS.forEach(p => addProjectMarker(p));
+  renderProjectList();
+  updatePanelStats();
+}
+
+/* ===== ADD MARKER ===== */
+function addProjectMarker(p) {
+  // Circle (impact zone)
+  const circle = L.circle([p.lat, p.lng], {
+    radius: p.radius,
+    fillColor: p.color,
+    fillOpacity: 0.12,
+    color: p.color,
+    weight: 1.5,
+    dashArray: '4 4',
+  });
+  layerGroups.depts.addLayer(circle);
+  circles[p.id] = circle;
+
+  // Custom marker HTML
+  const size = p.status === 'en_cours' ? 40 : 34;
+  const markerHtml = `
+    <div class="custom-marker" style="
+      width:${size}px;height:${size}px;
+      background:${p.color};
+      font-size:${size === 40 ? 18 : 15}px;
+      box-shadow:0 2px 12px ${p.color}66;
+    ">${p.icon}</div>`;
+
+  const icon = L.divIcon({
+    html: markerHtml,
+    className: '',
+    iconSize: [size, size],
+    iconAnchor: [size/2, size/2],
+    popupAnchor: [0, -(size/2 + 8)]
+  });
+
+  const marker = L.marker([p.lat, p.lng], { icon });
+
+  // Popup content
+  const popupContent = `
+    <div class="popup-inner">
+      <div class="popup-tag" style="color:${p.color}">${p.domain}</div>
+      <div class="popup-title">${p.title}</div>
+      <div class="popup-meta">
+        <div class="popup-meta-item">📍 ${p.dept}</div>
+        <div class="popup-meta-item">👥 ${p.beneficiaires.toLocaleString('fr-FR')} bénéficiaires</div>
+        <div class="popup-meta-item">💰 ${(p.budget/1000000).toFixed(1)} M FCFA</div>
+        <div class="popup-meta-item">👤 ${p.resp}</div>
+      </div>
+      ${p.progress > 0 ? `
+      <div class="popup-prog">
+        <div style="display:flex;justify-content:space-between;font-size:12px;color:#4A5568;margin-bottom:4px"><span>Progression</span><span style="font-weight:700">${p.progress}%</span></div>
+        <div class="popup-prog-bar"><div class="popup-prog-fill" style="width:${p.progress}%;background:${p.color}"></div></div>
+      </div>` : ''}
+    </div>
+    <div class="popup-footer">
+      <button class="popup-btn" onclick="showDetail(${p.id})">Voir le détail →</button>
+    </div>`;
+
+  marker.bindPopup(popupContent, {
+    closeButton: false,
+    maxWidth: 290,
+    minWidth: 220
+  });
+
+  marker.on('click', () => {
+    selectProject(p.id);
+    marker.openPopup();
+  });
+
+  layerGroups.projects.addLayer(marker);
+  markers[p.id] = marker;
+}
+
+/* ===== PROJECT LIST ===== */
+function renderProjectList() {
+  const q = (document.getElementById('searchProj').value || '').toLowerCase();
+  const filtered = PROJECTS.filter(p => {
+    const mf = curFilter === 'all' || p.status === curFilter;
+    const mq = !q || p.title.toLowerCase().includes(q) || p.dept.toLowerCase().includes(q);
+    return mf && mq;
+  });
+
+  document.getElementById('projectList').innerHTML = filtered.map(p => {
+    const st = ST_CFG[p.status] || { label: p.status, cls: 'pb-planned' };
+    return `
+      <div class="proj-item ${selectedId === p.id ? 'selected' : ''}" onclick="selectProject(${p.id})">
+        <div class="proj-dot" style="background:${p.color}"></div>
+        <div class="proj-info">
+          <div class="proj-name">${p.title}</div>
+          <div class="proj-meta">
+            <span>📍 ${p.dept}</span>
+            <span>👥 ${p.beneficiaires.toLocaleString('fr-FR')}</span>
+          </div>
+          ${p.progress > 0 ? `
+          <div class="proj-prog">
+            <div class="prog-bar"><div class="prog-f" style="width:${p.progress}%;background:${p.color}"></div></div>
+          </div>` : ''}
+          <div style="margin-top:6px">
+            <span class="proj-badge ${st.cls}">${st.label}</span>
+          </div>
+        </div>
+      </div>`;
+  }).join('');
+}
+
+/* ===== SELECT PROJECT ===== */
+function selectProject(id) {
+  selectedId = id;
+  renderProjectList();
+  const p = PROJECTS.find(x => x.id === id);
+  if (!p) return;
+  map.setView([p.lat, p.lng], 10, { animate: true });
+  markers[id]?.openPopup();
+}
+
+/* ===== DETAIL PANEL ===== */
+function showDetail(id) {
+  const p = PROJECTS.find(x => x.id === id);
+  if (!p) return;
+  const st = ST_CFG[p.status] || { label: p.status };
+
+  document.getElementById('detailTitle').textContent = p.title;
+  document.getElementById('detailStats').innerHTML = [
+    { val: fmtF(p.budget), label: 'Budget total' },
+    { val: p.beneficiaires.toLocaleString('fr-FR'), label: 'Bénéficiaires' },
+    { val: p.dept, label: 'Département(s)' },
+    { val: p.partners, label: 'Partenaires' },
+    { val: p.resp, label: 'Responsable' },
+    { val: `${p.start} → ${p.end}`, label: 'Période' },
+  ].map(s => `<div class="detail-stat"><div class="detail-stat-val">${s.val}</div><div class="detail-stat-label">${s.label}</div></div>`).join('');
+
+  document.getElementById('detailProgress').innerHTML = p.progress > 0 ? `
+    <div class="detail-prog-head">
+      <span style="font-size:13px;color:var(--gr6)">Avancement global</span>
+      <span style="font-weight:700;color:var(--g8)">${p.progress}%</span>
+    </div>
+    <div class="detail-prog-bar"><div class="detail-prog-fill" style="width:${p.progress}%;background:${p.color}"></div></div>` : '';
+
+  document.getElementById('detailTags').innerHTML = [p.domain, p.dept, st.label].map(t =>
+    `<span class="detail-tag">${t}</span>`).join('');
+
+  document.getElementById('detailPanel').classList.add('open');
+}
+
+function closeDetail() {
+  document.getElementById('detailPanel').classList.remove('open');
+}
+
+/* ===== FILTER ===== */
+function setFilter(f, btn) {
+  curFilter = f;
+  document.querySelectorAll('.filter-pill').forEach(p => p.classList.remove('active'));
+  btn.classList.add('active');
+
+  // Show/hide markers
+  PROJECTS.forEach(p => {
+    const m = markers[p.id];
+    const c = circles[p.id];
+    const show = f === 'all' || p.status === f;
+    if (m) {
+      if (show) { if (!layerGroups.projects.hasLayer(m)) layerGroups.projects.addLayer(m); }
+      else { layerGroups.projects.removeLayer(m); }
+    }
+    if (c) {
+      if (show && layerVisible.depts) { if (!layerGroups.depts.hasLayer(c)) layerGroups.depts.addLayer(c); }
+      else { layerGroups.depts.removeLayer(c); }
+    }
+  });
+  renderProjectList();
+  updatePanelStats();
+}
+
+function filterProjects() { renderProjectList(); }
+
+/* ===== STATS ===== */
+function updatePanelStats() {
+  const vis = PROJECTS.filter(p => curFilter === 'all' || p.status === curFilter);
+  document.getElementById('ps1').textContent = vis.length;
+  document.getElementById('ps2').textContent = vis.reduce((s,p) => s+p.beneficiaires, 0).toLocaleString('fr-FR');
+  const depts = new Set(vis.flatMap(p => p.dept.split(',').map(d => d.trim())));
+  document.getElementById('ps3').textContent = depts.size;
+  const budget = vis.reduce((s,p) => s+p.budget, 0);
+  document.getElementById('ps4').textContent = (budget/1000000).toFixed(0)+' M';
+}
+
+/* ===== MAP CONTROLS ===== */
+function resetView() { map.setView([9.5, 2.35], 7, { animate: true }); toast('Vue réinitialisée.'); }
+
+function toggleClusters() {
+  document.getElementById('clusterBtn').classList.toggle('active');
+  toast('Regroupement des marqueurs — Prochainement.');
+}
+
+function exportMap() { toast('Export de la carte en PNG — Prochainement disponible.'); }
+function printMap()  { window.print(); }
+
+function toggleLayer(layer) {
+  layerVisible[layer] = !layerVisible[layer];
+  if (layerGroups[layer]) {
+    if (layerVisible[layer]) map.addLayer(layerGroups[layer]);
+    else map.removeLayer(layerGroups[layer]);
+  }
+}
+
+function toggleLeftPanel() {
+  const p = document.getElementById('leftPanel');
+  p.classList.toggle('mobile-open');
+}
+
+/* ===== SIDEBAR ===== */
+let sbC = false, mobO = false;
+function toggleSb() {
+  const isMobile = window.innerWidth <= 768;
+  if (isMobile) {
+    mobO = !mobO;
+    document.getElementById('sb').classList.toggle('mob', mobO);
+    document.getElementById('ov').classList.toggle('v', mobO);
+  } else {
+    sbC = !sbC;
+    document.getElementById('sb').classList.toggle('col', sbC);
+    document.getElementById('mw').classList.toggle('col', sbC);
+    setTimeout(() => map.invalidateSize(), 300);
+  }
+}
+function closeSb() { mobO = false; document.getElementById('sb').classList.remove('mob'); document.getElementById('ov').classList.remove('v'); }
+
+/* ===== TOAST ===== */
+function toast(msg) {
+  const c = document.getElementById('tc');
+  const t = document.createElement('div');
+  t.className = 'toast';
+  t.innerHTML = `<iconify-icon icon="mdi:check-circle-outline"></iconify-icon><span>${msg}</span>`;
+  c.appendChild(t);
+  setTimeout(() => { t.style.opacity = '0'; t.style.transition = '.3s'; setTimeout(() => t.remove(), 300); }, 3000);
+}
+
+/* ===== RESPONSIVE ===== */
+function handleResize() {
+  const mobile = window.innerWidth <= 900;
+  document.getElementById('mobileListBtn').style.display = mobile ? 'flex' : 'none';
+  if (!mobile) document.getElementById('leftPanel').classList.remove('mobile-open');
+  if (map) map.invalidateSize();
+}
+window.addEventListener('resize', handleResize);
+handleResize();
+
+/* ===== INIT ===== */
+document.addEventListener('DOMContentLoaded', async () => {
+  await loadProjectsFromGAS();
+  initMap();
+  renderAdminAvatar();
+});
+
+if ('serviceWorker' in navigator) navigator.serviceWorker.register('/sw.js').catch(() => {});
+</script>
+</body>
+</html>

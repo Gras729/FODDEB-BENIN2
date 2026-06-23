@@ -1,0 +1,1151 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="robots" content="noindex, nofollow"/>
+  <title>Projets — FODDEB Admin</title>
+  <link rel="manifest" href="/manifest.json"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@500;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js" defer></script>
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    :root{
+      --sw:260px;--swc:68px;--hh:64px;
+      --g9:#0F2713;--g8:#1B5E20;--g7:#2E7D32;--g6:#388E3C;--g5:#4CAF50;--g4:#81C784;--g1:#C8E6C9;--g0:#E8F5E9;
+      --gold:#F9A825;--gold2:#F57F17;--goldf:#FFFDE7;
+      --red:#C62828;--redf:#FFEBEE;--blue:#1565C0;--bluef:#E3F2FD;
+      --pur:#6A1B9A;--purf:#F3E5F5;--teal:#00695C;--tealf:#E0F2F1;
+      --bg:#F4F6F5;--surf:#FFFFFF;
+      --dark:#0D1B0F;--gr8:#1C2520;--gr6:#4A5568;--gr4:#9AA5B1;--gr2:#E2E8F0;--gr1:#F7FAFC;--brd:#E8EEE9;
+      --fh:'Syne',sans-serif;--fb:'DM Sans',system-ui,sans-serif;
+      --r:12px;--rs:8px;
+      --sh:0 1px 4px rgba(0,0,0,.06),0 4px 16px rgba(0,0,0,.06);
+      --shm:0 4px 24px rgba(0,0,0,.10);
+      --tr:.25s cubic-bezier(.4,0,.2,1);
+    }
+    html,body{height:100%;}
+    body{font-family:var(--fb);background:var(--bg);color:var(--gr8);display:flex;-webkit-font-smoothing:antialiased;}
+    a{color:inherit;text-decoration:none;}ul{list-style:none;}button{font-family:var(--fb);cursor:pointer;border:none;background:none;}
+
+    /* SIDEBAR */
+    .sb{width:var(--sw);min-height:100vh;background:var(--g9);display:flex;flex-direction:column;position:fixed;left:0;top:0;bottom:0;z-index:200;overflow:hidden;transition:width var(--tr);}
+    .sb.col{width:var(--swc);}
+    .sb-logo{display:flex;align-items:center;gap:12px;padding:20px 18px;border-bottom:1px solid rgba(255,255,255,.08);min-height:var(--hh);}
+    .sb-logo-i{width:36px;height:36px;border-radius:10px;background:var(--g7);display:flex;align-items:center;justify-content:center;font-family:var(--fh);color:#fff;font-size:11px;font-weight:800;flex-shrink:0;}
+    .sb-logo-t strong{display:block;color:#fff;font-size:15px;font-weight:700;overflow:hidden;white-space:nowrap;}
+    .sb-logo-t span{font-size:11px;color:rgba(255,255,255,.45);}
+    .sb-sec{padding:12px 10px 4px;}
+    .sb-lbl{font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.3);padding:0 8px;margin-bottom:4px;white-space:nowrap;}
+    .sb.col .sb-lbl{opacity:0;}
+    .ni{display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:var(--rs);color:rgba(255,255,255,.6);font-size:14px;font-weight:500;cursor:pointer;transition:var(--tr);white-space:nowrap;overflow:hidden;}
+    .ni iconify-icon{flex-shrink:0;font-size:20px;}
+    .nl{overflow:hidden;}
+    .ni:hover{background:rgba(255,255,255,.08);color:#fff;}
+    .ni.act{background:var(--g7);color:#fff;}
+    .ni.act iconify-icon{color:var(--g4);}
+    .sb.col .nl{display:none;}
+    .sb.col .ni{justify-content:center;padding:12px;}
+    .sb-foot{margin-top:auto;border-top:1px solid rgba(255,255,255,.08);padding:12px 10px;}
+    .sb-user{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:var(--rs);}
+    .sb-av{width:36px;height:36px;border-radius:50%;background:var(--g6);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:14px;flex-shrink:0;}
+    .sb-ui strong{display:block;font-size:13px;color:#fff;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+    .sb-ui span{font-size:11px;color:rgba(255,255,255,.4);}
+    .sb.col .sb-ui{display:none;}
+    .sb.col .sb-user{justify-content:center;}
+    .mw{margin-left:var(--sw);flex:1;min-height:100vh;display:flex;flex-direction:column;transition:margin-left var(--tr);}
+    .mw.col{margin-left:var(--swc);}
+    .ah{background:var(--surf);border-bottom:1px solid var(--brd);height:var(--hh);display:flex;align-items:center;padding:0 24px;gap:16px;position:sticky;top:0;z-index:100;}
+    .ht{width:36px;height:36px;border-radius:var(--rs);display:flex;align-items:center;justify-content:center;color:var(--gr6);font-size:20px;transition:var(--tr);}
+    .ht:hover{background:var(--gr1);}
+    .hbc{display:flex;align-items:center;gap:8px;font-size:14px;color:var(--gr6);}
+    .hbc strong{color:var(--gr8);font-weight:600;}
+    .hbc a{color:var(--g7);}
+    .hr{margin-left:auto;display:flex;align-items:center;gap:10px;}
+    .hbtn{width:38px;height:38px;border-radius:var(--rs);display:flex;align-items:center;justify-content:center;color:var(--gr6);font-size:20px;transition:var(--tr);}
+    .hbtn:hover{background:var(--gr1);}
+    .hu{display:flex;align-items:center;gap:10px;padding:6px 12px 6px 6px;border-radius:var(--r);cursor:pointer;border:1px solid var(--brd);}
+    .hav{width:32px;height:32px;border-radius:50%;background:var(--g7);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:12px;}
+    .hui strong{display:block;font-size:13px;font-weight:600;}
+    .hui span{font-size:11px;color:var(--gr4);}
+
+    /* PAGE */
+    .pc{padding:28px;flex:1;}
+    .ph{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:24px;flex-wrap:wrap;gap:16px;}
+    .pt{font-family:var(--fh);font-size:1.6rem;font-weight:700;color:var(--dark);}
+    .ps{font-size:14px;color:var(--gr6);margin-top:4px;}
+    .pa{display:flex;gap:10px;align-items:center;}
+    .btn{display:inline-flex;align-items:center;gap:8px;font-family:var(--fb);font-size:14px;font-weight:600;padding:10px 18px;border-radius:var(--rs);border:1.5px solid transparent;cursor:pointer;transition:var(--tr);white-space:nowrap;}
+    .btn-p{background:var(--g8);color:#fff;}
+    .btn-p:hover{background:var(--g7);}
+    .btn-o{background:var(--surf);color:var(--gr8);border-color:var(--brd);}
+    .btn-o:hover{border-color:var(--g4);color:var(--g8);}
+    .btn-sm{font-size:12.5px;padding:6px 13px;}
+    .bi{width:32px;height:32px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:16px;border:1px solid var(--brd);background:var(--surf);color:var(--gr6);cursor:pointer;transition:var(--tr);}
+    .bi:hover{border-color:var(--g4);color:var(--g8);}
+
+    /* STATS */
+    .sg{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:16px;margin-bottom:24px;}
+    .sc{background:var(--surf);border:1px solid var(--brd);border-radius:var(--r);padding:18px 20px;box-shadow:var(--sh);display:flex;align-items:center;gap:14px;}
+    .si{width:44px;height:44px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;}
+    .ig{background:var(--g0);color:var(--g7);}
+    .igl{background:var(--goldf);color:var(--gold2);}
+    .ib{background:var(--bluef);color:var(--blue);}
+    .ir{background:var(--redf);color:var(--red);}
+    .si-inf strong{display:block;font-family:var(--fh);font-size:1.6rem;font-weight:700;color:var(--dark);line-height:1;}
+    .si-inf span{font-size:12px;color:var(--gr4);font-weight:500;margin-top:3px;display:block;}
+
+    /* SKELETON */
+    .skel{background:linear-gradient(90deg,var(--gr2) 25%,#e8ece9 50%,var(--gr2) 75%);background-size:200% 100%;animation:shimmer 1.5s infinite;border-radius:var(--r);}
+    @keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+    @keyframes spin{to{transform:rotate(360deg)}}
+    .spin{animation:spin 1s linear infinite;display:inline-block;}
+
+    /* TABS */
+    .tabs{display:flex;gap:2px;background:var(--gr1);border-radius:var(--rs);padding:4px;width:fit-content;}
+    .tab{font-size:13px;font-weight:600;padding:7px 16px;border-radius:6px;color:var(--gr6);cursor:pointer;transition:var(--tr);}
+    .tab.act{background:var(--surf);color:var(--g8);box-shadow:0 1px 4px rgba(0,0,0,.08);}
+
+    /* VIEW TOGGLE */
+    .vt{display:flex;gap:2px;background:var(--gr1);border-radius:6px;padding:3px;}
+    .vb{width:30px;height:30px;border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:16px;color:var(--gr4);cursor:pointer;transition:var(--tr);}
+    .vb.act{background:var(--surf);color:var(--g8);box-shadow:0 1px 3px rgba(0,0,0,.08);}
+
+    /* KANBAN */
+    .kanban{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:24px;overflow-x:auto;}
+    .kb-col{background:var(--gr1);border-radius:var(--r);padding:14px;min-width:240px;}
+    .kb-col-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;}
+    .kb-col-title{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:700;color:var(--gr8);}
+    .kb-count{background:var(--surf);border:1px solid var(--brd);border-radius:99px;font-size:11px;font-weight:700;padding:1px 8px;color:var(--gr6);}
+    .kb-card{background:var(--surf);border:1px solid var(--brd);border-radius:var(--rs);padding:14px;margin-bottom:10px;cursor:pointer;transition:var(--tr);box-shadow:var(--sh);}
+    .kb-card:hover{box-shadow:var(--shm);border-color:var(--g1);transform:translateY(-2px);}
+    .kb-tag{font-size:10.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;margin-bottom:8px;}
+    .kb-title{font-size:13.5px;font-weight:600;color:var(--dark);margin-bottom:8px;line-height:1.35;}
+    .kb-meta{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;flex-wrap:wrap;gap:6px;}
+    .kb-dept{font-size:11px;color:var(--gr4);display:flex;align-items:center;gap:4px;}
+    .kb-budget{font-size:11.5px;font-weight:700;color:var(--g8);background:var(--g0);padding:2px 8px;border-radius:4px;}
+    .prog{height:4px;background:var(--gr2);border-radius:99px;overflow:hidden;}
+    .prog-f{height:100%;border-radius:99px;transition:width 1s ease;}
+    .kb-footer{display:flex;align-items:center;justify-content:space-between;margin-top:10px;}
+    .kb-date{font-size:11px;color:var(--gr4);}
+    .sm-wrap{position:relative;display:inline-block}
+    .sm-btn{background:none;border:none;cursor:pointer;padding:4px 6px;border-radius:6px;display:flex;align-items:center;gap:4px;font-size:11.5px;font-weight:600;transition:.15s}
+    .sm-btn:hover{background:var(--gr2)}
+    .sm-dd{position:absolute;right:0;top:calc(100% + 4px);background:#fff;border:1px solid var(--brd);border-radius:10px;box-shadow:0 8px 24px rgba(0,0,0,.12);min-width:170px;z-index:99;padding:4px;display:none;animation:fadeUp .15s ease}
+    .sm-dd.open{display:block}
+    .sm-item{display:flex;align-items:center;gap:8px;padding:7px 10px;border-radius:7px;cursor:pointer;font-size:12.5px;font-weight:500;color:var(--gr8);transition:.1s;border:none;background:none;width:100%;text-align:left}
+    .sm-item:hover{background:var(--gr1)}
+    .sm-item.current{background:var(--g0);color:var(--g8);font-weight:700}
+
+    /* TABLE */
+    .card{background:var(--surf);border-radius:var(--r);border:1px solid var(--brd);box-shadow:var(--sh);overflow:hidden;margin-bottom:20px;}
+    .ch{padding:18px 22px;border-bottom:1px solid var(--brd);display:flex;align-items:center;justify-content:space-between;gap:12px;}
+    .ct{font-family:var(--fh);font-size:15px;font-weight:700;color:var(--dark);display:flex;align-items:center;gap:8px;}
+    .ct iconify-icon{font-size:18px;color:var(--g7);}
+    .tw{overflow-x:auto;}
+    table{width:100%;border-collapse:collapse;}
+    thead th{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--gr4);padding:11px 16px;text-align:left;border-bottom:1px solid var(--brd);white-space:nowrap;background:var(--gr1);}
+    tbody tr{transition:background var(--tr);}
+    tbody tr:hover{background:var(--gr1);}
+    tbody td{font-size:13.5px;padding:13px 16px;border-bottom:1px solid var(--brd);vertical-align:middle;}
+    tbody tr:last-child td{border-bottom:none;}
+    .ac{display:flex;gap:6px;}
+
+    /* BADGES */
+    .badge{display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:700;padding:3px 10px;border-radius:99px;}
+    .bg-s{background:var(--g0);color:var(--g7);}
+    .bg-w{background:var(--goldf);color:#92400E;}
+    .bg-i{background:var(--bluef);color:var(--blue);}
+    .bg-d{background:var(--redf);color:var(--red);}
+    .bg-n{background:var(--gr1);color:var(--gr6);}
+    .bd{width:5px;height:5px;border-radius:50%;background:currentColor;}
+
+    /* PROGRESS BAR */
+    .pb-wrap{margin-bottom:4px;}
+    .pb-head{display:flex;justify-content:space-between;margin-bottom:6px;font-size:13px;}
+    .pb-bar{height:8px;background:var(--gr2);border-radius:99px;overflow:hidden;}
+    .pb-fill{height:100%;border-radius:99px;transition:width 1s ease;}
+
+    /* MODAL */
+    .mo{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:500;display:none;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(3px);}
+    .mo.open{display:flex;}
+    .modal{background:var(--surf);border-radius:16px;width:100%;max-width:680px;max-height:92vh;overflow-y:auto;box-shadow:0 24px 80px rgba(0,0,0,.2);animation:mIn .3s cubic-bezier(.34,1.2,.64,1);}
+    @keyframes mIn{from{opacity:0;transform:scale(.94)translateY(12px)}to{opacity:1;transform:none}}
+    .mh{display:flex;align-items:center;justify-content:space-between;padding:20px 24px;border-bottom:1px solid var(--brd);}
+    .mt{font-family:var(--fh);font-size:1.1rem;font-weight:700;color:var(--dark);}
+    .mc{width:30px;height:30px;border-radius:50%;background:var(--gr1);display:flex;align-items:center;justify-content:center;font-size:17px;color:var(--gr6);cursor:pointer;}
+    .mb{padding:24px;}
+    .mf{padding:16px 24px;border-top:1px solid var(--brd);display:flex;gap:10px;justify-content:flex-end;}
+    .mfr{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+    .fg{margin-bottom:16px;}
+    .fl{display:block;font-size:12.5px;font-weight:600;color:var(--gr8);margin-bottom:6px;}
+    .fl .req{color:var(--red);margin-left:3px;}
+    .fi,.fsel,.fta{width:100%;padding:10px 13px;border:1.5px solid var(--gr2);border-radius:var(--rs);font-family:var(--fb);font-size:14px;color:var(--gr8);background:var(--gr1);outline:none;transition:all .2s;}
+    .fta{min-height:80px;resize:vertical;}
+    .fi:focus,.fsel:focus,.fta:focus{border-color:var(--g5);background:#fff;box-shadow:0 0 0 3px rgba(76,175,80,.12);}
+
+    /* OVERLAY */
+    .ov{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:190;}
+    .ov.v{display:block;}
+
+    /* TOAST */
+    #tc{position:fixed;top:20px;right:20px;z-index:9999;display:flex;flex-direction:column;gap:8px;}
+    .toast{padding:12px 16px;border-radius:10px;font-size:13.5px;display:flex;align-items:center;gap:8px;box-shadow:var(--shm);animation:tIn .3s ease;max-width:320px;color:#fff;}
+    .toast.ok{background:var(--g8);}
+    .toast.err{background:var(--red);}
+    .toast.warn{background:var(--gold);color:var(--dark);}
+    @keyframes tIn{from{opacity:0;transform:translateX(20px)}to{opacity:1;transform:none}}
+    @keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+    .ai{animation:fadeUp .35s ease both;}
+
+    @media(max-width:1200px){.kanban{grid-template-columns:repeat(2,1fr);}}
+    @media(max-width:768px){
+      .sb{transform:translateX(-100%)}.sb.mob{transform:none}
+      .mw{margin-left:0!important}.pc{padding:16px}
+      .sg{grid-template-columns:1fr 1fr}
+      .kanban{grid-template-columns:1fr}
+      .mfr{grid-template-columns:1fr}
+      .hui{display:none}
+    }
+    @media(max-width:480px){.sg{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+<div class="ov" id="ov" onclick="closeSb()"></div>
+<div id="tc"></div>
+
+<!-- SIDEBAR -->
+<aside class="sb" id="sb">
+  <div class="sb-logo"><div class="sb-logo-i">FOD</div><div class="sb-logo-t"><strong>FODDEB</strong><span>Administration</span></div></div>
+  <div class="sb-sec">
+    <div class="sb-lbl">Principal</div>
+    <ul>
+      <li class="ni" onclick="go('/admin/dashboard.html')"><iconify-icon icon="mdi:view-dashboard-outline"></iconify-icon><span class="nl">Tableau de bord</span></li>
+      <li class="ni" onclick="go('/admin/membres.html')"><iconify-icon icon="mdi:account-group-outline"></iconify-icon><span class="nl">Membres</span></li>
+      <li class="ni" onclick="go('/admin/dons.html')"><iconify-icon icon="mdi:heart-outline"></iconify-icon><span class="nl">Dons et Paiements</span></li>
+      <li class="ni act"><iconify-icon icon="mdi:clipboard-list-outline"></iconify-icon><span class="nl">Projets</span></li>
+      <li class="ni" onclick="go('/admin/actualites.html')"><iconify-icon icon="mdi:newspaper-variant-outline"></iconify-icon><span class="nl">Actualites</span></li>
+    </ul>
+  </div>
+  <div class="sb-sec">
+    <div class="sb-lbl">Communication</div>
+    <ul>
+      <li class="ni" onclick="go('/admin/newsletter.html')"><iconify-icon icon="mdi:email-newsletter"></iconify-icon><span class="nl">Newsletter</span></li>
+      <li class="ni" onclick="go('/admin/messages.html')"><iconify-icon icon="mdi:message-text-outline"></iconify-icon><span class="nl">Messages</span></li>
+    </ul>
+  </div>
+  <div class="sb-sec">
+    <div class="sb-lbl">Systeme</div>
+    <ul>
+      <li class="ni" onclick="go('/admin/bailleurs.html')"><iconify-icon icon="mdi:domain"></iconify-icon><span class="nl">Portail bailleurs</span></li>
+      <li class="ni" onclick="go('/admin/parametres.html')"><iconify-icon icon="mdi:cog-outline"></iconify-icon><span class="nl">Parametres</span></li>
+    </ul>
+  </div>
+  <div class="sb-foot">
+    <div class="sb-user">
+      <div class="sb-av" id="sbAv">AD</div>
+      <div class="sb-ui"><strong id="sbName">Admin</strong><span id="sbRole">Super Admin</span></div>
+    </div>
+  </div>
+</aside>
+
+<!-- MAIN -->
+<div class="mw" id="mw">
+  <header class="ah">
+    <button class="ht" onclick="toggleSb()"><iconify-icon icon="mdi:menu"></iconify-icon></button>
+    <nav class="hbc"><a href="/admin/dashboard.html">FODDEB</a><iconify-icon icon="mdi:chevron-right"></iconify-icon><strong>Projets</strong></nav>
+    <div class="hr">
+      <button class="hbtn"><iconify-icon icon="mdi:bell-outline"></iconify-icon></button>
+      <div class="hu"><div class="hav" id="hdrAv">AD</div><div class="hui"><strong id="hdrName">Admin</strong><span id="hdrRole">Super Admin</span></div></div>
+    </div>
+  </header>
+
+  <main class="pc">
+    <div class="ph ai">
+      <div><h1 class="pt">Gestion des projets</h1><p class="ps">Suivi des objectifs, budgets, activites et avancement</p></div>
+      <div class="pa">
+        <button class="btn btn-o" onclick="exportCSV()"><iconify-icon icon="mdi:download-outline"></iconify-icon>Exporter</button>
+        <button class="btn btn-p" onclick="openM('newM')"><iconify-icon icon="mdi:plus"></iconify-icon>Nouveau projet</button>
+      </div>
+    </div>
+
+    <!-- Stats -->
+    <div class="sg ai">
+      <div class="sc"><div class="si ig"><iconify-icon icon="mdi:clipboard-list-outline"></iconify-icon></div><div class="si-inf"><strong id="sAll"><iconify-icon icon="mdi:loading" class="spin" style="font-size:18px"></iconify-icon></strong><span>Total</span></div></div>
+      <div class="sc"><div class="si ig"><iconify-icon icon="mdi:play-circle-outline"></iconify-icon></div><div class="si-inf"><strong id="sAct">—</strong><span>En cours</span></div></div>
+      <div class="sc"><div class="si igl"><iconify-icon icon="mdi:clock-outline"></iconify-icon></div><div class="si-inf"><strong id="sPlan">—</strong><span>Planifies</span></div></div>
+      <div class="sc"><div class="si ig"><iconify-icon icon="mdi:check-circle-outline"></iconify-icon></div><div class="si-inf"><strong id="sDone">—</strong><span>Termines</span></div></div>
+      <div class="sc"><div class="si ib"><iconify-icon icon="mdi:cash-multiple"></iconify-icon></div><div class="si-inf"><strong id="sBudg">—</strong><span>Budget total</span></div></div>
+    </div>
+
+    <!-- Tabs + controls -->
+    <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin-bottom:20px" class="ai">
+      <div class="tabs">
+        <div class="tab act" onclick="setTab('all',this)">Tous</div>
+        <div class="tab" onclick="setTab('en_cours',this)">En cours</div>
+        <div class="tab" onclick="setTab('planifie',this)">Planifies</div>
+        <div class="tab" onclick="setTab('termine',this)">Termines</div>
+        <div class="tab" onclick="setTab('suspendu',this)">Suspendus</div>
+      </div>
+      <div style="margin-left:auto;display:flex;gap:8px;align-items:center">
+        <input type="search" id="searchP" placeholder="Rechercher un projet..." oninput="applyFilters()" style="padding:8px 12px;border:1px solid var(--brd);border-radius:var(--rs);font-size:13.5px;outline:none;width:220px;font-family:var(--fb);background:var(--surf)"/>
+        <div class="vt">
+          <div class="vb act" id="vKb" onclick="setView('kanban')" title="Kanban"><iconify-icon icon="mdi:view-column-outline"></iconify-icon></div>
+          <div class="vb" id="vTb" onclick="setView('table')" title="Table"><iconify-icon icon="mdi:format-list-bulleted"></iconify-icon></div>
+        </div>
+        <button class="bi" onclick="loadProjets()" title="Actualiser"><iconify-icon icon="mdi:refresh"></iconify-icon></button>
+      </div>
+    </div>
+
+    <!-- Loading skeletons -->
+    <div id="loadingState">
+      <div class="kanban">
+        <div class="skel" style="height:320px"></div>
+        <div class="skel" style="height:320px"></div>
+        <div class="skel" style="height:320px"></div>
+        <div class="skel" style="height:320px"></div>
+      </div>
+    </div>
+
+    <!-- Error -->
+    <div id="errorState" style="display:none;text-align:center;padding:60px 20px;color:var(--gr4)">
+      <iconify-icon icon="mdi:alert-circle-outline" style="font-size:40px;display:block;margin-bottom:12px;color:var(--red)"></iconify-icon>
+      <h3 style="font-size:15px;font-weight:600;color:var(--gr6);margin-bottom:8px">Erreur de chargement</h3>
+      <p id="errorMsg" style="font-size:13px;margin-bottom:16px"></p>
+      <button class="btn btn-o btn-sm" onclick="loadProjets()"><iconify-icon icon="mdi:refresh"></iconify-icon>Reessayer</button>
+    </div>
+
+    <!-- KANBAN VIEW -->
+    <div id="kanbanView" style="display:none" class="ai">
+      <div class="kanban" id="kanbanBoard"></div>
+    </div>
+
+    <!-- TABLE VIEW -->
+    <div id="tableView" style="display:none" class="ai">
+      <div class="card">
+        <div class="ch"><span class="ct"><iconify-icon icon="mdi:table"></iconify-icon>Liste des projets</span></div>
+        <div class="tw">
+          <table>
+            <thead><tr><th>Projet</th><th>Domaine</th><th>Departement</th><th>Budget</th><th>Avancement</th><th>Statut</th><th>Fin prevue</th><th>Actions</th></tr></thead>
+            <tbody id="tableBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<!-- MODAL — Nouveau / Modifier projet -->
+<div class="mo" id="newM" role="dialog" aria-modal="true">
+  <div class="modal">
+    <div class="mh"><h3 class="mt" id="mTitle">Nouveau projet</h3><button class="mc" onclick="closeM('newM')">&#x2715;</button></div>
+    <div class="mb">
+      <input type="hidden" id="editId"/>
+      <div class="fg"><label class="fl">Titre du projet <span class="req">*</span></label><input type="text" id="nTitle" class="fi" placeholder="Ex: Lutte contre les VBG en Atacora"/></div>
+      <div class="fg"><label class="fl">Description <span class="req">*</span></label><textarea id="nDesc" class="fta" placeholder="Objectifs, contexte, beneficiaires vises..."></textarea></div>
+      <div class="mfr">
+        <div class="fg"><label class="fl">Domaine <span class="req">*</span></label>
+          <select id="nDomain" class="fsel">
+            <option>Protection de l'enfant</option><option>Education et Formation</option>
+            <option>Sante</option><option>Numerique et TIC</option>
+            <option>Developpement local</option><option>Environnement et Climat</option>
+          </select>
+        </div>
+        <div class="fg"><label class="fl">Departement(s)</label><input type="text" id="nDept" class="fi" placeholder="Ex: Atacora, Donga"/></div>
+      </div>
+      <div class="mfr">
+        <div class="fg"><label class="fl">Budget (FCFA) <span class="req">*</span></label><input type="number" id="nBudget" class="fi" placeholder="5000000" min="0"/></div>
+        <div class="fg"><label class="fl">Budget depense (FCFA)</label><input type="number" id="nSpent" class="fi" placeholder="0" min="0"/></div>
+      </div>
+      <div class="mfr">
+        <div class="fg"><label class="fl">Date de debut</label><input type="date" id="nStart" class="fi"/></div>
+        <div class="fg"><label class="fl">Date de fin prevue</label><input type="date" id="nEnd" class="fi"/></div>
+      </div>
+      <div class="mfr">
+        <div class="fg"><label class="fl">Statut</label>
+          <select id="nStatus" class="fsel">
+            <option value="planifie">Planifie</option>
+            <option value="en_cours">En cours</option>
+            <option value="termine">Termine</option>
+            <option value="suspendu">Suspendu</option>
+          </select>
+        </div>
+        <div class="fg"><label class="fl">Responsable</label><input type="text" id="nResp" class="fi" placeholder="Nom du chef de projet"/></div>
+      </div>
+      <div class="fg"><label class="fl">Nombre de beneficiaires</label><input type="number" id="nBenef" class="fi" placeholder="0" min="0"/></div>
+      <div class="fg"><label class="fl">Objectifs et indicateurs</label><textarea id="nObj" class="fta" style="min-height:60px" placeholder="Indicateurs cles de resultats..."></textarea></div>
+      <div class="fg"><label class="fl">Partenaires financiers</label><input type="text" id="nPartners" class="fi" placeholder="Ex: UNICEF, GIZ, PNUD"/></div>
+
+      <!-- Image de couverture -->
+      <div class="fg">
+        <label class="fl">Image de couverture <span style="color:var(--gr4);font-weight:400;font-size:12px">(JPG/PNG, max 5 Mo)</span></label>
+        <div id="imgDropZone" style="border:2px dashed var(--brd);border-radius:var(--rs);padding:18px;text-align:center;cursor:pointer;transition:.2s;background:var(--gr1)" onclick="document.getElementById('nImageFile').click()" ondragover="event.preventDefault();this.style.borderColor='var(--g7)'" ondragleave="this.style.borderColor='var(--brd)'" ondrop="handleFileDrop(event,'image')">
+          <iconify-icon icon="mdi:image-plus-outline" width="28" style="color:var(--gr4)"></iconify-icon>
+          <div id="imgLabel" style="font-size:13px;color:var(--gr4);margin-top:6px">Cliquer ou glisser une image ici</div>
+        </div>
+        <input type="file" id="nImageFile" accept="image/jpeg,image/png,image/webp" style="display:none" onchange="handleFileSelect(this,'image')"/>
+        <div id="imgPreviewWrap" style="display:none;margin-top:8px">
+          <img id="imgPreview" style="max-width:100%;max-height:140px;border-radius:6px;object-fit:cover;border:1px solid var(--brd)"/>
+          <button type="button" onclick="clearFile('image')" style="font-size:11px;color:var(--red);background:none;border:none;cursor:pointer;margin-top:4px;display:block">Supprimer</button>
+        </div>
+      </div>
+
+      <!-- Pièce jointe (document PDF) -->
+      <div class="fg">
+        <label class="fl">Pièce jointe <span style="color:var(--gr4);font-weight:400;font-size:12px">(PDF, max 5 Mo — pour bailleurs et public)</span></label>
+        <div id="fileDropZone" style="border:2px dashed var(--brd);border-radius:var(--rs);padding:18px;text-align:center;cursor:pointer;transition:.2s;background:var(--gr1)" onclick="document.getElementById('nPieceJointe').click()" ondragover="event.preventDefault();this.style.borderColor='var(--g7)'" ondragleave="this.style.borderColor='var(--brd)'" ondrop="handleFileDrop(event,'fichier')">
+          <iconify-icon icon="mdi:file-pdf-box" width="28" style="color:var(--gr4)"></iconify-icon>
+          <div id="fileLabel" style="font-size:13px;color:var(--gr4);margin-top:6px">Cliquer ou glisser un PDF ici</div>
+        </div>
+        <input type="file" id="nPieceJointe" accept="application/pdf" style="display:none" onchange="handleFileSelect(this,'fichier')"/>
+        <div id="fileInfoWrap" style="display:none;margin-top:8px;padding:8px 12px;background:var(--gr1);border-radius:6px;font-size:13px;display:none;align-items:center;gap:8px">
+          <iconify-icon icon="mdi:file-pdf-box" style="color:var(--red)" width="20"></iconify-icon>
+          <span id="fileName" style="flex:1;color:var(--gr8)"></span>
+          <button type="button" onclick="clearFile('fichier')" style="color:var(--red);background:none;border:none;cursor:pointer">
+            <iconify-icon icon="mdi:close-circle-outline" width="18"></iconify-icon>
+          </button>
+        </div>
+      </div>
+
+    </div>
+    <div class="mf">
+      <button class="btn btn-o btn-sm" onclick="closeM('newM')">Annuler</button>
+      <button class="btn btn-p btn-sm" id="saveBtn" onclick="saveProjet()"><iconify-icon icon="mdi:content-save-outline"></iconify-icon>Enregistrer</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL — Detail projet -->
+<div class="mo" id="detailM" role="dialog" aria-modal="true">
+  <div class="modal" style="max-width:720px">
+    <div class="mh"><h3 class="mt" id="dTitle">Detail du projet</h3><button class="mc" onclick="closeM('detailM')">&#x2715;</button></div>
+    <div class="mb" id="dBody"></div>
+    <div class="mf">
+      <button class="btn btn-o btn-sm" onclick="closeM('detailM')">Fermer</button>
+      <button class="btn btn-p btn-sm" id="dEditBtn"><iconify-icon icon="mdi:pencil-outline"></iconify-icon>Modifier</button>
+    </div>
+  </div>
+</div>
+
+<script src="/assets/js/config.js"></script>
+<script src="/assets/js/utils.js"></script>
+<script src="/assets/js/services/api.js"></script>
+<script src="/assets/js/services/auth.js"></script>
+<script>
+'use strict';
+
+/* ═══ CONFIG ═══ */
+const COLORS = ['#1B5E20','#1565C0','#6A1B9A','#C62828','#E65100','#00695C','#F57F17'];
+const DOM_ICONS = {
+  'Protection de l\'enfant':'mdi:shield-account-outline',
+  'Education et Formation':'mdi:school-outline',
+  'Sante':'mdi:heart-plus-outline',
+  'Numerique et TIC':'mdi:laptop-outline',
+  'Developpement local':'mdi:home-group',
+  'Environnement et Climat':'mdi:leaf-outline',
+};
+const STATUS_CFG = {
+  soumis:    { label:'Soumis',       cls:'bg-n', color:'var(--gr4)', icon:'mdi:send-circle-outline' },
+  planifie:  { label:'Planifie',     cls:'bg-w', color:'#92400E',   icon:'mdi:clock-outline' },
+  en_cours:  { label:'En cours',     cls:'bg-s', color:'var(--g7)', icon:'mdi:play-circle-outline' },
+  en_attente:{ label:'En attente',   cls:'bg-w', color:'#D97706',   icon:'mdi:clock-alert-outline' },
+  suspendu:  { label:'Suspendu',     cls:'bg-d', color:'var(--red)',icon:'mdi:pause-circle-outline' },
+  termine:   { label:'Termine',      cls:'bg-i', color:'var(--blue)',icon:'mdi:check-circle-outline' },
+  valide:    { label:'Valide',       cls:'bg-s', color:'var(--g7)', icon:'mdi:check-decagram-outline' },
+  rejete:    { label:'Rejete',       cls:'bg-d', color:'var(--red)',icon:'mdi:close-circle-outline' },
+  a_revoir:  { label:'A revoir',     cls:'bg-w', color:'#D97706',   icon:'mdi:refresh-circle' },
+};
+
+// Transitions autorisées par statut courant — guide l'admin
+const STATUS_TRANSITIONS = {
+  soumis:     ['planifie','en_cours','a_revoir','rejete'],
+  planifie:   ['en_cours','en_attente','suspendu','rejete'],
+  en_cours:   ['en_attente','suspendu','termine','a_revoir'],
+  en_attente: ['en_cours','planifie','suspendu'],
+  suspendu:   ['en_cours','planifie','rejete'],
+  termine:    ['en_cours','valide'],
+  a_revoir:   ['soumis','planifie','rejete'],
+  valide:     ['en_cours'],
+  rejete:     ['planifie'],
+};
+
+const go    = url => window.location.href = url;
+const fmtF  = n => Number(n||0).toLocaleString('fr-FR') + ' FCFA';
+const fmtM  = n => (parseFloat(n||0)/1000000).toFixed(1) + ' M';
+const fmtD  = d => { try { return new Date(d).toLocaleDateString('fr-FR',{day:'numeric',month:'short',year:'numeric'}); } catch { return d||'—'; } };
+const gc    = i => COLORS[i % COLORS.length];
+
+/* ═══ ETAT ═══ */
+let ALL    = [];
+let FILT   = [];
+let curTab = 'all';
+let curView= 'kanban';
+
+/* ═══ GUARD SESSION ═══ */
+function getUser() { try { return JSON.parse(sessionStorage.getItem('foddeb_user')); } catch { return null; } }
+function requireAdmin() {
+  const u = getUser();
+  if (!u) { window.location.href = '/auth/login.html'; return null; }
+  if (u.role !== 'admin' && u.role !== 'manager') { window.location.href = '/auth/login.html'; return null; }
+  return u;
+}
+function loadUserInfo() {
+  const u = getUser() || {};
+  const p = u.Prenom || u.prenom || 'Admin';
+  const n = u.Nom    || u.nom    || '';
+  const r = u.role   || 'admin';
+  const i = ((p[0]||'')+(n[0]||'')).toUpperCase()||'AD';
+  const rl= {admin:'Super Admin',manager:'Gestionnaire',member:'Membre',donor:'Donateur'}[r]||r;
+  ['sbAv','hdrAv'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent=i;});
+  ['sbName','hdrName'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent=p+' '+n;});
+  ['sbRole','hdrRole'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent=rl;});
+}
+
+/* ═══ CHARGEMENT API GAS ═══ */
+async function loadProjets() {
+  document.getElementById('loadingState').style.display = 'block';
+  document.getElementById('kanbanView').style.display   = 'none';
+  document.getElementById('tableView').style.display    = 'none';
+  document.getElementById('errorState').style.display   = 'none';
+
+  try {
+    const u = getUser() || {};
+    // Override explicite : getSession() dans api.js peut retourner null si FODDEB.session
+    // n'est pas initialisé dans les pages admin. On force role + membreId ici.
+    const res = await FODDEB_API.projets.list({
+      role:     u.role || 'admin',
+      membreId: u.ID   || u.id   || '',
+      limit:    500,
+    });
+    // Log debug temporaire — à retirer après vérification
+    console.log('[FODDEB projets] role:', u.role, '| membreId:', u.ID || u.id, '| res:', res);
+    ALL = (res.data || []).map(p => ({
+      ID:           p.ID           || p.id           || '',
+      Titre:        p.Titre        || p.titre        || '—',
+      Domaine:      p.Domaine      || p.domaine      || '—',
+      Departement:  p.Departement  || p.departement  || '—',
+      Budget:       parseFloat(p.Budget       || p.budget       || 0),
+      Depense:      parseFloat(p.Depense      || p.depense      || 0),
+      Progression:  parseInt(p.Progression   || p.progression   || 0),
+      Statut:       (function(s) {
+        // Normaliser : minuscules + sans accents + espaces → underscores
+        // Couvre : 'En cours', 'en_cours', 'planifié', 'planifie', 'validé', 'soumis', 'suspendu', 'terminé', 'termine'
+        if (!s) return 'planifie';
+        var n = s.toString().trim().toLowerCase()
+          .normalize('NFD').replace(/[̀-ͯ]/g, '')
+          .replace(/\s+/g, '_');
+        // Alias : 'soumis' et 'valide' → 'planifie' pour l'affichage kanban
+        if (n === 'soumis' || n === 'a_revoir') return 'planifie';
+        if (n === 'valide') return 'en_cours';
+        return n;
+      })(p.Statut || p.statut),
+      Responsable:  p.Responsable  || p.responsable  || '—',
+      Partenaires:  p.Partenaires  || p.partenaires  || '—',
+      DateDebut:    p.DateDebut    || p.dateDebut    || '',
+      DateFin:      p.DateFin      || p.dateFin      || '',
+      Beneficiaires:parseInt(p.Beneficiaires || p.beneficiaires || 0),
+      Description:  p.Description  || p.description  || '',
+      Objectifs:    p.Objectifs    || p.objectifs    || '',
+      ImageURL:     p.ImageURL     || p.imageURL     || '',
+      FichierURL:   p.FichierURL   || p.fichierURL   || '',
+      FichierNom:   p.FichierNom   || p.fichierNom   || '',
+      MembreID:     p.MembreID     || p.membreId     || '',
+    }));
+    updateStats();
+    applyFilters();
+  } catch(e) {
+    document.getElementById('loadingState').style.display = 'none';
+    document.getElementById('errorState').style.display   = 'block';
+    document.getElementById('errorMsg').textContent = e.message || 'Impossible de contacter le serveur.';
+    console.error('loadProjets:', e);
+  }
+}
+
+/* ═══ STATS ═══ */
+function updateStats() {
+  document.getElementById('sAll').textContent  = ALL.length;
+  document.getElementById('sAct').textContent  = ALL.filter(p=>p.Statut==='en_cours').length;
+  document.getElementById('sPlan').textContent = ALL.filter(p=>p.Statut==='planifie').length;
+  document.getElementById('sDone').textContent = ALL.filter(p=>p.Statut==='termine').length;
+  const total = ALL.reduce((s,p)=>s+p.Budget,0);
+  document.getElementById('sBudg').textContent = fmtM(total) + ' F';
+}
+
+/* ═══ FILTRES ═══ */
+function applyFilters() {
+  const q = (document.getElementById('searchP')?.value || '').toLowerCase();
+  FILT = ALL.filter(p => {
+    const mt = curTab==='all' || p.Statut===curTab;
+    const mq = !q || p.Titre.toLowerCase().includes(q) || p.Domaine.toLowerCase().includes(q) || p.Departement.toLowerCase().includes(q);
+    return mt && mq;
+  });
+  document.getElementById('loadingState').style.display = 'none';
+  if (curView==='kanban') renderKanban();
+  else renderTable();
+}
+
+function setTab(t, btn) {
+  curTab = t;
+  document.querySelectorAll('.tab').forEach(b=>b.classList.remove('act'));
+  btn.classList.add('act');
+  applyFilters();
+}
+
+/* ═══ VUE ═══ */
+function setView(v) {
+  curView = v;
+  document.getElementById('kanbanView').style.display = v==='kanban' ? 'block' : 'none';
+  document.getElementById('tableView').style.display  = v==='table'  ? 'block' : 'none';
+  document.getElementById('vKb').classList.toggle('act', v==='kanban');
+  document.getElementById('vTb').classList.toggle('act', v==='table');
+  applyFilters();
+}
+
+/* ═══ KANBAN ═══ */
+function renderKanban() {
+  document.getElementById('kanbanView').style.display = 'block';
+  document.getElementById('tableView').style.display  = 'none';
+  const cols = [
+    { key:'planifie', label:'Planifie',  color:'#92400E' },
+    { key:'en_cours', label:'En cours',  color:'var(--g7)' },
+    { key:'suspendu', label:'Suspendu',  color:'var(--red)' },
+    { key:'termine',  label:'Termine',   color:'var(--blue)' },
+  ];
+  document.getElementById('kanbanBoard').innerHTML = cols.map(col => {
+    const items = FILT.filter(p=>p.Statut===col.key);
+    const stCfg = STATUS_CFG[col.key] || {};
+    return `
+    <div class="kb-col">
+      <div class="kb-col-hdr">
+        <div class="kb-col-title">
+          <iconify-icon icon="${stCfg.icon||'mdi:circle-outline'}" style="color:${col.color};font-size:16px"></iconify-icon>
+          ${col.label}
+        </div>
+        <span class="kb-count">${items.length}</span>
+      </div>
+      ${items.map(p => {
+        const color = gc(ALL.indexOf(p));
+        const domIcon = DOM_ICONS[p.Domaine] || 'mdi:clipboard-list-outline';
+        return `
+        <div class="kb-card" onclick="openDetail('${p.ID}')">
+          <div class="kb-tag" style="color:${color}">
+            <iconify-icon icon="${domIcon}" style="font-size:12px;vertical-align:middle"></iconify-icon>
+            ${p.Domaine}
+          </div>
+          <div class="kb-title">${p.Titre}</div>
+          <div class="kb-meta">
+            <span class="kb-dept"><iconify-icon icon="mdi:map-marker-outline"></iconify-icon>${p.Departement}</span>
+            <span class="kb-budget">${fmtM(p.Budget)} M</span>
+          </div>
+          <div class="prog"><div class="prog-f" style="width:${p.Progression}%;background:${color}"></div></div>
+          <div class="kb-footer">
+            <span class="kb-date">Fin : ${fmtD(p.DateFin)}</span>
+            <div style="display:flex;align-items:center;gap:6px">
+              <span style="font-size:12px;font-weight:700;color:var(--gr6)">${p.Progression}%</span>
+              ${buildStatusMenu(p, true)}
+            </div>
+          </div>
+        </div>`;
+      }).join('')}
+      ${items.length===0 ? `<div style="text-align:center;padding:24px 12px;color:var(--gr4);font-size:13px">Aucun projet</div>` : ''}
+    </div>`;
+  }).join('');
+}
+
+/* ═══ TABLE ═══ */
+function renderTable() {
+  document.getElementById('kanbanView').style.display = 'none';
+  document.getElementById('tableView').style.display  = 'block';
+  const tbody = document.getElementById('tableBody');
+  if (!FILT.length) {
+    tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;padding:40px;color:var(--gr4)">Aucun projet trouve</td></tr>';
+    return;
+  }
+  tbody.innerHTML = FILT.map((p,i) => {
+    const st = STATUS_CFG[p.Statut] || { label:p.Statut, cls:'bg-n' };
+    const color = gc(ALL.indexOf(p));
+    const domIcon = DOM_ICONS[p.Domaine] || 'mdi:clipboard-list-outline';
+    return `
+    <tr style="animation:fadeUp .2s ease ${i*.04}s both">
+      <td>
+        <div style="display:flex;align-items:center;gap:10px">
+          <div style="width:34px;height:34px;border-radius:8px;background:${color}22;color:${color};display:flex;align-items:center;justify-content:center;flex-shrink:0">
+            <iconify-icon icon="${domIcon}" style="font-size:18px"></iconify-icon>
+          </div>
+          <div>
+            <div style="font-weight:600;font-size:13.5px;color:var(--dark)">${p.Titre}</div>
+            <div style="font-size:11.5px;color:var(--gr4)">${p.Responsable}</div>
+          </div>
+        </div>
+      </td>
+      <td style="color:var(--gr6);font-size:13px">${p.Domaine}</td>
+      <td><span class="badge bg-n">${p.Departement}</span></td>
+      <td style="font-family:var(--fh);font-weight:700;color:var(--g8);font-size:13.5px">${fmtM(p.Budget)} M</td>
+      <td>
+        <div style="display:flex;align-items:center;gap:8px;min-width:120px">
+          <div class="prog" style="flex:1"><div class="prog-f" style="width:${p.Progression}%;background:${color}"></div></div>
+          <span style="font-size:12px;font-weight:700;color:var(--gr6);min-width:30px">${p.Progression}%</span>
+        </div>
+      </td>
+      <td>${buildStatusMenu(p)}</td>
+      <td style="color:var(--gr4);font-size:12.5px">${fmtD(p.DateFin)}</td>
+      <td><div class="ac">
+        <button class="bi" onclick="openDetail('${p.ID}')" title="Voir"><iconify-icon icon="mdi:eye-outline"></iconify-icon></button>
+        <button class="bi" onclick="editProjet('${p.ID}')" title="Modifier"><iconify-icon icon="mdi:pencil-outline"></iconify-icon></button>
+        <button class="bi" onclick="deleteProjet('${p.ID}','${p.Titre.replace(/'/g,"\\'")}')}" title="Supprimer" style="color:var(--red)"><iconify-icon icon="mdi:delete-outline"></iconify-icon></button>
+      </div></td>
+    </tr>`;
+  }).join('');
+}
+
+/* ═══ DETAIL ═══ */
+function openDetail(id) {
+  const p = ALL.find(x=>x.ID===id);
+  if (!p) return;
+  const st    = STATUS_CFG[p.Statut] || { label:p.Statut, cls:'bg-n' };
+  const color = gc(ALL.indexOf(p));
+  const pct   = p.Budget > 0 ? Math.round((p.Depense/p.Budget)*100) : 0;
+  const domIcon = DOM_ICONS[p.Domaine] || 'mdi:clipboard-list-outline';
+
+  document.getElementById('dTitle').textContent = p.Titre;
+  document.getElementById('dBody').innerHTML = `
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:20px">
+      <div>
+        <div style="width:40px;height:40px;border-radius:10px;background:${color}22;color:${color};display:flex;align-items:center;justify-content:center;margin-bottom:10px">
+          <iconify-icon icon="${domIcon}" style="font-size:22px"></iconify-icon>
+        </div>
+        <p style="font-size:13.5px;color:var(--gr6);line-height:1.6;margin-bottom:14px">${p.Description || 'Aucune description.'}</p>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <span class="badge ${st.cls}"><span class="bd"></span>${st.label}</span>
+          <span class="badge bg-n">${p.Domaine}</span>
+          <span class="badge bg-n">${p.Departement}</span>
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:10px">
+        ${[
+          ['Responsable', p.Responsable, 'mdi:account-outline'],
+          ['Partenaires',  p.Partenaires, 'mdi:handshake-outline'],
+          ['Beneficiaires', p.Beneficiaires.toLocaleString('fr-FR') + ' personnes', 'mdi:account-group-outline'],
+          ['Debut',  fmtD(p.DateDebut), 'mdi:calendar-start'],
+          ['Fin prevue', fmtD(p.DateFin), 'mdi:calendar-end'],
+        ].map(([l,v,ic]) => `
+        <div style="display:flex;align-items:flex-start;gap:10px">
+          <iconify-icon icon="${ic}" style="font-size:16px;color:var(--g7);margin-top:2px;flex-shrink:0"></iconify-icon>
+          <div>
+            <div style="font-size:11px;color:var(--gr4);font-weight:600;text-transform:uppercase;letter-spacing:.06em">${l}</div>
+            <div style="font-size:13.5px;font-weight:500">${v||'—'}</div>
+          </div>
+        </div>`).join('')}
+      </div>
+    </div>
+
+    <div style="background:var(--gr1);border-radius:var(--rs);padding:16px;margin-bottom:16px">
+      <div style="font-weight:700;font-size:14px;margin-bottom:12px;color:var(--dark)">Avancement</div>
+      <div class="pb-wrap">
+        <div class="pb-head"><span style="font-size:13px;color:var(--gr6)">Realisation globale</span><span style="font-weight:700;color:var(--g8)">${p.Progression}%</span></div>
+        <div class="pb-bar"><div class="pb-fill" style="width:${p.Progression}%;background:${color}"></div></div>
+      </div>
+      <div class="pb-wrap" style="margin-top:10px">
+        <div class="pb-head"><span style="font-size:13px;color:var(--gr6)">Budget consomme</span><span style="font-weight:700;color:var(--g8)">${pct}% — ${fmtF(p.Depense)} / ${fmtF(p.Budget)}</span></div>
+        <div class="pb-bar"><div class="pb-fill" style="width:${Math.min(pct,100)}%;background:${pct>90?'var(--red)':'var(--gold)'}"></div></div>
+      </div>
+    </div>
+
+    ${p.Objectifs ? `
+    <div style="margin-bottom:16px">
+      <div style="font-weight:700;font-size:14px;margin-bottom:8px;color:var(--dark)">Objectifs et indicateurs</div>
+      <div style="background:var(--g0);border:1px solid var(--g1);border-radius:var(--rs);padding:14px;font-size:13.5px;color:var(--g7);white-space:pre-line;line-height:1.7">${p.Objectifs}</div>
+    </div>` : ''}
+
+    <div style="background:var(--goldf);border:1px solid #FDE68A;border-radius:var(--rs);padding:14px;margin-bottom:16px">
+      <div style="font-size:13px;font-weight:600;color:#92400E;margin-bottom:10px">Mettre a jour l'avancement</div>
+      <div style="display:flex;gap:10px;align-items:center">
+        <input type="range" id="progSlider" min="0" max="100" value="${p.Progression}" style="flex:1;accent-color:var(--g7)" oninput="document.getElementById('progVal').textContent=this.value+'%'"/>
+        <span id="progVal" style="font-weight:700;min-width:40px;color:var(--g8)">${p.Progression}%</span>
+        <button class="btn btn-p btn-sm" onclick="applyProgress('${p.ID}')"><iconify-icon icon="mdi:check"></iconify-icon>Appliquer</button>
+      </div>
+    </div>
+
+    <div style="background:var(--gr1);border:1px solid var(--brd);border-radius:var(--rs);padding:14px">
+      <div style="font-size:13px;font-weight:700;color:var(--dark);margin-bottom:10px">
+        <iconify-icon icon="mdi:swap-horizontal-circle-outline" style="vertical-align:middle;margin-right:6px;color:var(--g7)"></iconify-icon>
+        Changer le statut
+      </div>
+      <div style="display:flex;flex-wrap:wrap;gap:8px">
+        ${(STATUS_TRANSITIONS[p.Statut] || Object.keys(STATUS_CFG)).map(s => {
+          const cfg = STATUS_CFG[s] || { label:s, icon:'mdi:circle-outline' };
+          const isCurrent = s === p.Statut;
+          return '<button class="sm-item' + (isCurrent ? ' current' : '') + '" onclick="setStatut(\'' + p.ID + '\',\'' + s + '\')" style="border:1px solid var(--brd);border-radius:8px;padding:6px 12px;flex-shrink:0' + (isCurrent ? ';background:var(--g0);color:var(--g8)' : '') + '">'
+            + '<iconify-icon icon="' + cfg.icon + '" style="font-size:15px;color:' + cfg.color + '"></iconify-icon>'
+            + cfg.label
+            + (isCurrent ? ' <span style="font-size:10px;opacity:.6">(actuel)</span>' : '')
+            + '</button>';
+        }).join('')}
+      </div>
+      ${p.Statut === 'en_cours' || p.Statut === 'soumis' ? '<div style="margin-top:10px"><textarea id="statutNote" placeholder="Note optionnelle (visible dans le rapport)..." style="width:100%;border:1px solid var(--brd);border-radius:8px;padding:8px 10px;font-size:12.5px;resize:vertical;min-height:52px;box-sizing:border-box;font-family:var(--ff)"></textarea></div>' : ''}
+    </div>`;
+
+  document.getElementById('dEditBtn').onclick = () => { closeM('detailM'); editProjet(id); };
+  openM('detailM');
+}
+
+/* ═══ MENU STATUT RAPIDE ═══ */
+function buildStatusMenu(p, compact) {
+  const st  = STATUS_CFG[p.Statut] || { label: p.Statut, cls:'bg-n', color:'var(--gr4)', icon:'mdi:circle-outline' };
+  const transitions = STATUS_TRANSITIONS[p.Statut] || Object.keys(STATUS_CFG);
+  const items = transitions.map(s => {
+    const c = STATUS_CFG[s] || { label:s, icon:'mdi:circle-outline', color:'var(--gr4)' };
+    return '<button class="sm-item" onclick="event.stopPropagation();setStatut(\'' + p.ID + '\',\'' + s + '\')">'
+      + '<iconify-icon icon="' + c.icon + '" style="font-size:15px;color:' + c.color + '"></iconify-icon>'
+      + c.label + '</button>';
+  }).join('');
+
+  if (compact) {
+    // Version icône seule pour la carte Kanban
+    return '<div class="sm-wrap">'
+      + '<button class="sm-btn" onclick="event.stopPropagation();toggleStatusMenu(this)" title="Changer le statut">'
+      + '<iconify-icon icon="mdi:swap-horizontal" style="font-size:14px;color:var(--gr6)"></iconify-icon>'
+      + '</button>'
+      + '<div class="sm-dd">' + items + '</div></div>';
+  }
+  // Version badge cliquable pour la table
+  return '<div class="sm-wrap">'
+    + '<button class="sm-btn" onclick="toggleStatusMenu(this)">'
+    + '<span class="badge ' + st.cls + '"><span class="bd"></span>' + st.label + '</span>'
+    + '<iconify-icon icon="mdi:chevron-down" style="font-size:14px;color:var(--gr4)"></iconify-icon>'
+    + '</button>'
+    + '<div class="sm-dd">' + items + '</div></div>';
+}
+
+function toggleStatusMenu(btn) {
+  // Fermer tous les autres dropdowns ouverts
+  document.querySelectorAll('.sm-dd.open').forEach(d => {
+    if (d !== btn.nextElementSibling) d.classList.remove('open');
+  });
+  btn.nextElementSibling.classList.toggle('open');
+  // Fermer au clic dehors
+  setTimeout(() => {
+    document.addEventListener('click', function close(e) {
+      if (!e.target.closest('.sm-wrap')) {
+        document.querySelectorAll('.sm-dd.open').forEach(d => d.classList.remove('open'));
+      }
+      document.removeEventListener('click', close);
+    });
+  }, 0);
+}
+
+async function setStatut(id, newStatut) {
+  // Fermer tous les dropdowns
+  document.querySelectorAll('.sm-dd.open').forEach(d => d.classList.remove('open'));
+
+  const p = ALL.find(x => x.ID === id);
+  if (!p) return;
+  if (p.Statut === newStatut) return;
+
+  const u = getUser() || {};
+  const cfg = STATUS_CFG[newStatut] || { label: newStatut };
+
+  // Note optionnelle depuis le modal detail si disponible
+  const noteEl = document.getElementById('statutNote');
+  const note   = noteEl ? noteEl.value.trim() : '';
+
+  try {
+    const res = await FODDEB_API.projets.update(id, {
+      membreId: u.ID || u.id || '',
+      role:     u.role || 'admin',
+      Statut:   newStatut,
+      Notes:    note || undefined,
+    });
+    if (!res.success) throw new Error(res.error || 'Erreur inconnue');
+
+    // Mise a jour locale immediate
+    p.Statut = newStatut;
+    if (newStatut === 'termine') p.Progression = 100;
+
+    updateStats();
+    applyFilters();
+    toast('Statut mis a jour : ' + cfg.label + '.');
+
+    // Si le modal detail est ouvert, le rafraichir
+    if (document.getElementById('detailM').classList.contains('open')) {
+      closeM('detailM');
+      setTimeout(() => openDetail(id), 150);
+    }
+  } catch(e) {
+    toast('Erreur : ' + e.message, 'err');
+  }
+}
+
+/* ═══ MISE A JOUR PROGRESSION ═══ */
+async function applyProgress(id) {
+  const prog = parseInt(document.getElementById('progSlider').value);
+  try {
+    const res = await FODDEB_API.projets.updateProgress(id, prog);
+    if (!res.success) throw new Error(res.error);
+    const p = ALL.find(x=>x.ID===id);
+    if (p) { p.Progression = prog; if (prog===100) p.Statut='termine'; }
+    updateStats(); applyFilters();
+    toast(`Avancement mis a jour : ${prog}%.`);
+    closeM('detailM');
+  } catch(e) { toast('Erreur : ' + e.message, 'err'); }
+}
+
+/* ═══ EDIT ═══ */
+function editProjet(id) {
+  const p = ALL.find(x=>x.ID===id);
+  if (!p) return;
+  document.getElementById('mTitle').textContent  = 'Modifier le projet';
+  document.getElementById('editId').value         = p.ID;
+  document.getElementById('nTitle').value         = p.Titre;
+  document.getElementById('nDesc').value          = p.Description;
+  document.getElementById('nDomain').value        = p.Domaine;
+  document.getElementById('nDept').value          = p.Departement;
+  document.getElementById('nBudget').value        = p.Budget;
+  document.getElementById('nSpent').value         = p.Depense;
+  document.getElementById('nStart').value         = p.DateDebut;
+  document.getElementById('nEnd').value           = p.DateFin;
+  document.getElementById('nStatus').value        = p.Statut;
+  document.getElementById('nResp').value          = p.Responsable;
+  document.getElementById('nBenef').value         = p.Beneficiaires;
+  document.getElementById('nObj').value           = p.Objectifs;
+  document.getElementById('nPartners').value      = p.Partenaires;
+  openM('newM');
+}
+
+/* ═══ CREER / MODIFIER ═══ */
+async function saveProjet() {
+  const titre  = document.getElementById('nTitle').value.trim();
+  const budget = parseFloat(document.getElementById('nBudget').value) || 0;
+  if (!titre)   { toast('Titre requis.', 'err'); return; }
+  if (budget<1) { toast('Budget requis.', 'err'); return; }
+
+  const btn = document.getElementById('saveBtn');
+  const resetBtn = () => {
+    btn.disabled = false;
+    btn.innerHTML = '<iconify-icon icon="mdi:content-save-outline"></iconify-icon>Enregistrer';
+  };
+  btn.disabled = true;
+  btn.innerHTML = '<span style="width:14px;height:14px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;display:inline-block;vertical-align:middle"></span> Envoi...';
+
+  const editId   = document.getElementById('editId').value;
+  const u        = getUser() || {};
+  const membreId = u.ID || u.id || u.membreId || '';
+
+  // Upload image — try/catch isolé, ne bloque jamais le bouton
+  let imageURL = '';
+  if (_uploadFiles.image) {
+    try {
+      toast('Upload image en cours…', 'info');
+      const b64   = await fileToBase64(_uploadFiles.image);
+      const upRes = await FODDEB_API.members.uploadProjectFile(
+        b64, _uploadFiles.image.name, _uploadFiles.image.type, 'projet', editId || 'new'
+      );
+      if (upRes && upRes.success) imageURL = upRes.url || upRes.fileUrl || '';
+      else toast('Image non uploadée : ' + ((upRes && upRes.error) || 'erreur inconnue'), 'warn');
+    } catch(upErr) {
+      toast('Upload image ignoré (timeout) — le projet sera enregistré sans image.', 'warn');
+    }
+  }
+
+  // Upload pièce jointe PDF — try/catch isolé
+  let fichierURL = '', fichierNom = '';
+  if (_uploadFiles.fichier) {
+    try {
+      toast('Upload document en cours…', 'info');
+      const b64   = await fileToBase64(_uploadFiles.fichier);
+      const upRes = await FODDEB_API.members.uploadProjectFile(
+        b64, _uploadFiles.fichier.name, 'application/pdf', 'projet_doc', editId || 'new'
+      );
+      if (upRes && upRes.success) {
+        fichierURL = upRes.url || upRes.fileUrl || '';
+        fichierNom = _uploadFiles.fichier.name;
+      } else toast('Document non uploadé : ' + ((upRes && upRes.error) || 'erreur inconnue'), 'warn');
+    } catch(upErr) {
+      toast('Upload document ignoré (timeout) — le projet sera enregistré sans pièce jointe.', 'warn');
+    }
+  }
+
+  const payload = {
+    membreId,
+    role:          u.role || 'admin',
+    Titre:         titre,
+    Description:   document.getElementById('nDesc').value.trim(),
+    Domaine:       document.getElementById('nDomain').value,
+    Departement:   document.getElementById('nDept').value.trim() || '—',
+    Budget:        budget,
+    Depense:       parseFloat(document.getElementById('nSpent').value) || 0,
+    DateDebut:     document.getElementById('nStart').value,
+    DateFin:       document.getElementById('nEnd').value,
+    Statut:        document.getElementById('nStatus').value,
+    Responsable:   document.getElementById('nResp').value.trim(),
+    Beneficiaires: parseInt(document.getElementById('nBenef').value) || 0,
+    Objectifs:     document.getElementById('nObj').value.trim(),
+    Partenaires:   document.getElementById('nPartners').value.trim(),
+    ImageURL:      imageURL,
+    FichierURL:    fichierURL,
+    FichierNom:    fichierNom,
+  };
+
+  try {
+    let res;
+    if (editId) {
+      res = await FODDEB_API.projets.update(editId, payload);
+    } else {
+      res = await FODDEB_API.projets.create(payload);
+    }
+    if (!res.success) throw new Error(res.error || 'Erreur inconnue');
+    closeM('newM');
+    document.getElementById('editId').value = '';
+    document.getElementById('mTitle').textContent = 'Nouveau projet';
+    clearFile('image'); clearFile('fichier');
+    // Créer/mettre à jour le Google Doc de description
+    if (res.id || (res.data && res.data.ID)) {
+      const pId = res.id || res.data.ID;
+      const desc = document.getElementById('nDesc')?.value || '';
+      const titre = document.getElementById('nTitle')?.value || 'Projet';
+      try { await FODDEB_API.projetsDocs.create(pId, titre, desc); } catch(e) { console.warn('[projetDoc]', e.message); }
+    }
+    toast(editId ? 'Projet mis à jour.' : 'Projet créé avec succès.');
+    await loadProjets();
+  } catch(e) {
+    toast('Erreur : ' + e.message, 'err');
+  } finally {
+    resetBtn();
+  }
+}
+
+/* ═══ SUPPRIMER ═══ */
+async function deleteProjet(id, titre) {
+  if (!confirm(`Supprimer le projet "${titre}" ? Cette action est irreversible.`)) return;
+  try {
+    const res = await FODDEB_API.projets.delete(id);
+    if (!res.success) throw new Error(res.error);
+    ALL = ALL.filter(x=>x.ID!==id);
+    updateStats(); applyFilters();
+    toast('Projet supprime.');
+  } catch(e) { toast('Erreur : ' + e.message, 'err'); }
+}
+
+/* ═══ EXPORT CSV ═══ */
+function exportCSV() {
+  const data = FILT.length ? FILT : ALL;
+  const h = ['Titre','Domaine','Departement','Budget','Depense','Progression','Statut','DateDebut','DateFin','Responsable','Beneficiaires'];
+  const rows = data.map(p => h.map(k => `"${(p[k]||'').toString().replace(/"/g,'""')}"`).join(','));
+  const csv  = [h.join(','), ...rows].join('\n');
+  const a    = document.createElement('a');
+  a.href     = URL.createObjectURL(new Blob(['\uFEFF'+csv],{type:'text/csv;charset=utf-8'}));
+  a.download = `projets_foddeb_${new Date().toISOString().split('T')[0]}.csv`;
+  a.click();
+  toast('Export CSV telecharge.');
+}
+
+/* ═══ UPLOAD FICHIERS ═══ */
+// State local des fichiers sélectionnés
+const _uploadFiles = { image: null, fichier: null };
+
+function handleFileSelect(input, type) {
+  const file = input.files[0];
+  if (!file) return;
+  const maxSize = 5 * 1024 * 1024;
+  if (file.size > maxSize) { toast('Fichier trop volumineux (max 5 Mo).', 'err'); input.value = ''; return; }
+  _uploadFiles[type] = file;
+  if (type === 'image') {
+    const reader = new FileReader();
+    reader.onload = e => {
+      document.getElementById('imgPreview').src = e.target.result;
+      document.getElementById('imgPreviewWrap').style.display = 'block';
+      document.getElementById('imgLabel').textContent = file.name;
+      document.getElementById('imgDropZone').style.borderColor = 'var(--g7)';
+    };
+    reader.readAsDataURL(file);
+  } else {
+    document.getElementById('fileName').textContent = file.name;
+    document.getElementById('fileInfoWrap').style.display = 'flex';
+    document.getElementById('fileLabel').textContent = file.name;
+    document.getElementById('fileDropZone').style.borderColor = 'var(--g7)';
+  }
+}
+
+function handleFileDrop(event, type) {
+  event.preventDefault();
+  document.getElementById(type === 'image' ? 'imgDropZone' : 'fileDropZone').style.borderColor = 'var(--brd)';
+  const file = event.dataTransfer.files[0];
+  if (!file) return;
+  const input = document.getElementById(type === 'image' ? 'nImageFile' : 'nPieceJointe');
+  const dt = new DataTransfer(); dt.items.add(file); input.files = dt.files;
+  handleFileSelect(input, type);
+}
+
+function clearFile(type) {
+  _uploadFiles[type] = null;
+  if (type === 'image') {
+    document.getElementById('nImageFile').value = '';
+    document.getElementById('imgPreviewWrap').style.display = 'none';
+    document.getElementById('imgLabel').textContent = 'Cliquer ou glisser une image ici';
+    document.getElementById('imgDropZone').style.borderColor = 'var(--brd)';
+  } else {
+    document.getElementById('nPieceJointe').value = '';
+    document.getElementById('fileInfoWrap').style.display = 'none';
+    document.getElementById('fileLabel').textContent = 'Cliquer ou glisser un PDF ici';
+    document.getElementById('fileDropZone').style.borderColor = 'var(--brd)';
+  }
+}
+
+function fileToBase64(file) {
+  return new Promise((res, rej) => {
+    const r = new FileReader();
+    r.onload  = () => res(r.result.split(',')[1]);
+    r.onerror = () => rej(new Error('Lecture fichier échouée'));
+    r.readAsDataURL(file);
+  });
+}
+
+/* ═══ MODAL ═══ */
+function openM(id) {
+  document.getElementById(id).classList.add('open');
+  document.body.style.overflow = 'hidden';
+  if (id==='newM' && !document.getElementById('editId').value) {
+    ['nTitle','nDesc','nDept','nBudget','nSpent','nStart','nEnd','nResp','nBenef','nObj','nPartners'].forEach(fid => {
+      const el = document.getElementById(fid); if(el) el.value='';
+    });
+    document.getElementById('mTitle').textContent = 'Nouveau projet';
+  }
+}
+function closeM(id) { document.getElementById(id).classList.remove('open'); document.body.style.overflow=''; }
+document.querySelectorAll('.mo').forEach(o => o.addEventListener('click', e => { if(e.target===o){o.classList.remove('open');document.body.style.overflow='';} }));
+document.addEventListener('keydown', e => { if(e.key==='Escape') document.querySelectorAll('.mo.open').forEach(o=>{o.classList.remove('open');document.body.style.overflow='';}); });
+
+/* ═══ TOAST ═══ */
+function toast(msg, type='ok') {
+  const c = document.getElementById('tc');
+  const t = document.createElement('div');
+  t.className = 'toast ' + type;
+  t.innerHTML = `<iconify-icon icon="${type==='err'?'mdi:alert-circle-outline':'mdi:check-circle-outline'}"></iconify-icon><span>${msg}</span>`;
+  c.appendChild(t);
+  setTimeout(()=>{t.style.opacity='0';t.style.transition='.3s';setTimeout(()=>t.remove(),300);},3500);
+}
+
+/* ═══ SIDEBAR ═══ */
+let sbC=false, mobO=false;
+function toggleSb() {
+  const mob = window.innerWidth<=768;
+  if(mob){mobO=!mobO;document.getElementById('sb').classList.toggle('mob',mobO);document.getElementById('ov').classList.toggle('v',mobO);}
+  else{sbC=!sbC;document.getElementById('sb').classList.toggle('col',sbC);document.getElementById('mw').classList.toggle('col',sbC);}
+}
+function closeSb(){mobO=false;document.getElementById('sb').classList.remove('mob');document.getElementById('ov').classList.remove('v');}
+
+/* ═══ INIT ═══ */
+document.addEventListener('DOMContentLoaded', async () => {
+  const user = requireAdmin();
+  if (!user) return;
+  loadUserInfo();
+  await loadProjets();
+});
+
+if ('serviceWorker' in navigator) navigator.serviceWorker.register('/sw.js').catch(()=>{});
+</script>
+</body>
+</html>

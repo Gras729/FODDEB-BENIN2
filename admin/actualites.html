@@ -1,0 +1,895 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="robots" content="noindex, nofollow"/>
+  <title>Actualites — FODDEB Admin</title>
+  <link rel="manifest" href="/manifest.json"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@500;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js" defer></script>
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    :root{
+      --sw:260px;--swc:68px;--hh:64px;
+      --g9:#0F2713;--g8:#1B5E20;--g7:#2E7D32;--g6:#388E3C;--g5:#4CAF50;--g4:#81C784;--g1:#C8E6C9;--g0:#E8F5E9;
+      --gold:#F9A825;--gold2:#F57F17;--goldf:#FFFDE7;
+      --red:#C62828;--redf:#FFEBEE;--blue:#1565C0;--bluef:#E3F2FD;
+      --bg:#F4F6F5;--surf:#FFFFFF;
+      --dark:#0D1B0F;--gr8:#1C2520;--gr6:#4A5568;--gr4:#9AA5B1;--gr2:#E2E8F0;--gr1:#F7FAFC;--brd:#E8EEE9;
+      --fh:'Syne',sans-serif;--fb:'DM Sans',system-ui,sans-serif;
+      --r:12px;--rs:8px;
+      --sh:0 1px 4px rgba(0,0,0,.06),0 4px 16px rgba(0,0,0,.06);
+      --shm:0 4px 24px rgba(0,0,0,.10);
+      --tr:.25s cubic-bezier(.4,0,.2,1);
+    }
+    html,body{height:100%;}
+    body{font-family:var(--fb);background:var(--bg);color:var(--gr8);display:flex;-webkit-font-smoothing:antialiased;}
+    a{color:inherit;text-decoration:none;}ul{list-style:none;}button{font-family:var(--fb);cursor:pointer;border:none;background:none;}
+
+    /* SIDEBAR */
+    .sb{width:var(--sw);min-height:100vh;background:var(--g9);display:flex;flex-direction:column;position:fixed;left:0;top:0;bottom:0;z-index:200;overflow:hidden;transition:width var(--tr);}
+    .sb.col{width:var(--swc);}
+    .sb-logo{display:flex;align-items:center;gap:12px;padding:20px 18px;border-bottom:1px solid rgba(255,255,255,.08);min-height:var(--hh);}
+    .sb-logo-i{width:36px;height:36px;border-radius:10px;background:var(--g7);display:flex;align-items:center;justify-content:center;font-family:var(--fh);color:#fff;font-size:11px;font-weight:800;flex-shrink:0;}
+    .sb-logo-t{overflow:hidden;white-space:nowrap;}
+    .sb-logo-t strong{display:block;color:#fff;font-size:15px;font-weight:700;}
+    .sb-logo-t span{font-size:11px;color:rgba(255,255,255,.45);}
+    .sb-sec{padding:12px 10px 4px;}
+    .sb-lbl{font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.3);padding:0 8px;margin-bottom:4px;white-space:nowrap;}
+    .sb.col .sb-lbl{opacity:0;}
+    .ni{display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:var(--rs);color:rgba(255,255,255,.6);font-size:14px;font-weight:500;cursor:pointer;transition:var(--tr);white-space:nowrap;overflow:hidden;}
+    .ni iconify-icon{flex-shrink:0;font-size:20px;}
+    .ni:hover{background:rgba(255,255,255,.08);color:#fff;}
+    .ni.act{background:var(--g7);color:#fff;}
+    .ni.act iconify-icon{color:var(--g4);}
+    .nl{overflow:hidden;}
+    .sb.col .nl{display:none;}
+    .sb.col .ni{justify-content:center;padding:12px;}
+    .sb-foot{margin-top:auto;border-top:1px solid rgba(255,255,255,.08);padding:12px 10px;}
+    .sb-user{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:var(--rs);cursor:pointer;}
+    .sb-av{width:36px;height:36px;border-radius:50%;background:var(--g6);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:14px;flex-shrink:0;}
+    .sb-ui{overflow:hidden;flex:1;}
+    .sb-ui strong{display:block;font-size:13px;color:#fff;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+    .sb-ui span{font-size:11px;color:rgba(255,255,255,.4);}
+    .sb.col .sb-ui{display:none;}
+    .sb.col .sb-user{justify-content:center;}
+    .mw{margin-left:var(--sw);flex:1;min-height:100vh;display:flex;flex-direction:column;transition:margin-left var(--tr);}
+    .mw.col{margin-left:var(--swc);}
+    .ah{background:var(--surf);border-bottom:1px solid var(--brd);height:var(--hh);display:flex;align-items:center;padding:0 24px;gap:16px;position:sticky;top:0;z-index:100;}
+    .ht{width:36px;height:36px;border-radius:var(--rs);display:flex;align-items:center;justify-content:center;color:var(--gr6);font-size:20px;transition:var(--tr);}
+    .ht:hover{background:var(--gr1);}
+    .hbc{display:flex;align-items:center;gap:8px;font-size:14px;color:var(--gr6);}
+    .hbc strong{color:var(--gr8);font-weight:600;}
+    .hbc a{color:var(--g7);}
+    .hr{margin-left:auto;display:flex;align-items:center;gap:10px;}
+    .hbtn{width:38px;height:38px;border-radius:var(--rs);display:flex;align-items:center;justify-content:center;color:var(--gr6);font-size:20px;transition:var(--tr);}
+    .hbtn:hover{background:var(--gr1);}
+    .hu{display:flex;align-items:center;gap:10px;padding:6px 12px 6px 6px;border-radius:var(--r);cursor:pointer;border:1px solid var(--brd);}
+    .hav{width:32px;height:32px;border-radius:50%;background:var(--g7);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:12px;}
+    .hui strong{display:block;font-size:13px;font-weight:600;}
+    .hui span{font-size:11px;color:var(--gr4);}
+
+    /* PAGE */
+    .pc{padding:28px;flex:1;}
+    .ph{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:24px;flex-wrap:wrap;gap:16px;}
+    .pt{font-family:var(--fh);font-size:1.6rem;font-weight:700;color:var(--dark);}
+    .ps{font-size:14px;color:var(--gr6);margin-top:4px;}
+    .pa{display:flex;gap:10px;}
+    .btn{display:inline-flex;align-items:center;gap:8px;font-family:var(--fb);font-size:14px;font-weight:600;padding:10px 18px;border-radius:var(--rs);border:1.5px solid transparent;cursor:pointer;transition:var(--tr);white-space:nowrap;}
+    .btn-p{background:var(--g8);color:#fff;}
+    .btn-p:hover{background:var(--g7);}
+    .btn-o{background:var(--surf);color:var(--gr8);border-color:var(--brd);}
+    .btn-o:hover{border-color:var(--g4);color:var(--g8);}
+    .btn-sm{font-size:12.5px;padding:6px 13px;}
+    .bi{width:32px;height:32px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:16px;border:1px solid var(--brd);background:var(--surf);color:var(--gr6);cursor:pointer;transition:var(--tr);}
+    .bi:hover{border-color:var(--g4);color:var(--g8);}
+
+    /* STATS */
+    .sg{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:24px;}
+    .sc{background:var(--surf);border:1px solid var(--brd);border-radius:var(--r);padding:14px 16px;box-shadow:var(--sh);text-align:center;}
+    .sc strong{display:block;font-family:var(--fh);font-size:1.5rem;font-weight:700;color:var(--dark);}
+    .sc span{font-size:12px;color:var(--gr4);}
+
+    /* LAYOUT */
+    .main-grid{display:grid;grid-template-columns:1fr 320px;gap:20px;}
+
+    /* ARTICLES GRID */
+    .articles-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:16px;margin-bottom:20px;}
+    .art-card{background:var(--surf);border:1px solid var(--brd);border-radius:var(--r);overflow:hidden;box-shadow:var(--sh);transition:var(--tr);}
+    .art-card:hover{box-shadow:var(--shm);transform:translateY(-3px);border-color:var(--g1);}
+    .art-img{height:130px;display:flex;align-items:center;justify-content:center;position:relative;}
+    .art-img-overlay{position:absolute;inset:0;background:linear-gradient(135deg,rgba(0,0,0,.4),rgba(0,0,0,.15));}
+    .art-status{position:absolute;top:10px;right:10px;z-index:1;}
+    .art-icon-big{position:relative;z-index:1;font-size:40px;color:var(--g4);}
+    .art-body{padding:14px;}
+    .art-cat{font-size:10.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--g7);margin-bottom:5px;}
+    .art-title{font-size:14px;font-weight:700;color:var(--dark);margin-bottom:6px;line-height:1.35;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+    .art-excerpt{font-size:12.5px;color:var(--gr6);line-height:1.5;margin-bottom:10px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+    .art-footer{display:flex;align-items:center;justify-content:space-between;gap:8px;}
+    .art-date{font-size:11.5px;color:var(--gr4);display:flex;align-items:center;gap:4px;}
+    .art-actions{display:flex;gap:5px;}
+
+    /* TABS */
+    .tabs{display:flex;gap:2px;background:var(--gr1);border-radius:var(--rs);padding:4px;width:fit-content;margin-bottom:20px;}
+    .tab{font-size:13px;font-weight:600;padding:7px 16px;border-radius:6px;color:var(--gr6);cursor:pointer;transition:var(--tr);}
+    .tab.act{background:var(--surf);color:var(--g8);box-shadow:0 1px 4px rgba(0,0,0,.08);}
+    .tc{background:var(--gr2);color:var(--gr6);font-size:10px;font-weight:700;padding:1px 7px;border-radius:99px;margin-left:5px;}
+    .tab.act .tc{background:var(--g1);color:var(--g8);}
+
+    /* BADGE */
+    .badge{display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:700;padding:3px 10px;border-radius:99px;}
+    .bg-s{background:var(--g0);color:var(--g7);}
+    .bg-w{background:var(--goldf);color:#92400E;}
+    .bg-n{background:var(--gr1);color:var(--gr6);}
+    .bd{width:5px;height:5px;border-radius:50%;background:currentColor;}
+
+    /* SIDE PANEL */
+    .side-panel{display:flex;flex-direction:column;gap:16px;}
+    .panel-card{background:var(--surf);border:1px solid var(--brd);border-radius:var(--r);box-shadow:var(--sh);overflow:hidden;}
+    .panel-hd{padding:14px 16px;border-bottom:1px solid var(--brd);font-family:var(--fh);font-size:13px;font-weight:700;color:var(--dark);display:flex;align-items:center;gap:6px;}
+    .panel-hd iconify-icon{font-size:16px;color:var(--g7);}
+    .panel-bd{padding:14px 16px;}
+    .fg{margin-bottom:12px;}
+    .fl{display:block;font-size:12.5px;font-weight:600;color:var(--gr8);margin-bottom:6px;}
+    .fl .req{color:var(--red);}
+    .fi,.fsel,.fta{width:100%;padding:10px 12px;border:1.5px solid var(--gr2);border-radius:var(--rs);font-family:var(--fb);font-size:14px;color:var(--gr8);background:var(--gr1);outline:none;transition:all .2s;}
+    .fta{min-height:80px;resize:vertical;}
+    .fi:focus,.fsel:focus,.fta:focus{border-color:var(--g5);background:#fff;box-shadow:0 0 0 3px rgba(76,175,80,.12);}
+
+    /* LOADING */
+    @keyframes spin{to{transform:rotate(360deg)}}
+    .spin{animation:spin 1s linear infinite;display:inline-block;}
+    .skel{background:linear-gradient(90deg,var(--gr2) 25%,#e8ece9 50%,var(--gr2) 75%);background-size:200% 100%;animation:shimmer 1.5s infinite;border-radius:var(--rs);}
+    @keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+
+    /* MODAL */
+    .mo{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:500;display:none;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(3px);}
+    .mo.open{display:flex;}
+    .modal{background:var(--surf);border-radius:16px;width:100%;max-width:620px;max-height:90vh;overflow-y:auto;box-shadow:0 24px 80px rgba(0,0,0,.2);animation:mIn .3s cubic-bezier(.34,1.2,.64,1);}
+    @keyframes mIn{from{opacity:0;transform:scale(.94)translateY(12px)}to{opacity:1;transform:none}}
+    .mh{display:flex;align-items:center;justify-content:space-between;padding:18px 22px;border-bottom:1px solid var(--brd);}
+    .mt{font-family:var(--fh);font-size:1.05rem;font-weight:700;color:var(--dark);}
+    .mc{width:30px;height:30px;border-radius:50%;background:var(--gr1);display:flex;align-items:center;justify-content:center;font-size:16px;color:var(--gr6);cursor:pointer;}
+    .mb{padding:22px;}
+    .mf{padding:14px 22px;border-top:1px solid var(--brd);display:flex;gap:10px;justify-content:flex-end;}
+    .mfr{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+
+    /* EDITOR */
+    .editor-wrap{border:1.5px solid var(--gr2);border-radius:var(--rs);overflow:hidden;}
+    .editor-tb{display:flex;gap:4px;padding:8px 10px;background:var(--gr1);border-bottom:1px solid var(--gr2);flex-wrap:wrap;}
+    .eb{width:28px;height:28px;border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:14px;color:var(--gr6);cursor:pointer;transition:var(--tr);}
+    .eb:hover{background:var(--gr2);color:var(--gr8);}
+    .editor-area{min-height:200px;padding:14px;outline:none;font-family:var(--fb);font-size:14px;line-height:1.7;color:var(--gr8);}
+    .editor-area:empty::before{content:'Redigez le contenu de l\'article ici...';color:var(--gr4);}
+
+    /* SIDEBAR OVERLAY */
+    .ov{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:190;}
+    .ov.v{display:block;}
+
+    /* TOAST */
+    #tc{position:fixed;top:20px;right:20px;z-index:9999;display:flex;flex-direction:column;gap:8px;}
+    .toast{padding:11px 16px;border-radius:10px;font-size:13.5px;display:flex;align-items:center;gap:8px;box-shadow:var(--shm);animation:tIn .3s ease;max-width:300px;color:#fff;}
+    .toast.ok{background:var(--g8);}
+    .toast.err{background:var(--red);}
+    .toast.warn{background:var(--gold);color:var(--dark);}
+    @keyframes tIn{from{opacity:0;transform:translateX(20px)}to{opacity:1;transform:none}}
+
+    @keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+    .ai{animation:fadeUp .3s ease both;}
+
+    @media(max-width:1100px){.main-grid{grid-template-columns:1fr;}}
+    @media(max-width:768px){
+      .sb{transform:translateX(-100%)}.sb.mob{transform:none}
+      .mw{margin-left:0!important}.pc{padding:16px}
+      .articles-grid{grid-template-columns:1fr}
+      .sg{grid-template-columns:1fr 1fr}
+      .hui{display:none}
+      .mfr{grid-template-columns:1fr}
+    }
+    @media(max-width:480px){.sg{grid-template-columns:1fr 1fr}}
+  </style>
+</head>
+<body>
+<div class="ov" id="ov" onclick="closeSb()"></div>
+<div id="tc"></div>
+
+<!-- SIDEBAR -->
+<aside class="sb" id="sb">
+  <div class="sb-logo"><img src="/assets/icons/logo-small.png" alt="FODDEB" style="width:36px;height:36px;border-radius:10px;object-fit:contain;background:#fff;padding:3px;flex-shrink:0"><div class="sb-logo-t"><strong>FODDEB</strong><span>Administration</span></div></div>
+  <div class="sb-sec">
+    <div class="sb-lbl">Principal</div>
+    <ul>
+      <li class="ni" onclick="go('/admin/dashboard.html')"><iconify-icon icon="mdi:view-dashboard-outline"></iconify-icon><span class="nl">Tableau de bord</span></li>
+      <li class="ni" onclick="go('/admin/membres.html')"><iconify-icon icon="mdi:account-group-outline"></iconify-icon><span class="nl">Membres</span></li>
+      <li class="ni" onclick="go('/admin/dons.html')"><iconify-icon icon="mdi:heart-outline"></iconify-icon><span class="nl">Dons et Paiements</span></li>
+      <li class="ni" onclick="go('/admin/projets.html')"><iconify-icon icon="mdi:clipboard-list-outline"></iconify-icon><span class="nl">Projets</span></li>
+      <li class="ni act"><iconify-icon icon="mdi:newspaper-variant-outline"></iconify-icon><span class="nl">Actualites</span></li>
+    </ul>
+  </div>
+  <div class="sb-sec">
+    <div class="sb-lbl">Communication</div>
+    <ul>
+      <li class="ni" onclick="go('/admin/newsletter.html')"><iconify-icon icon="mdi:email-newsletter"></iconify-icon><span class="nl">Newsletter</span></li>
+      <li class="ni" onclick="go('/admin/messages.html')"><iconify-icon icon="mdi:message-text-outline"></iconify-icon><span class="nl">Messages</span></li>
+      <li class="ni" onclick="go('/admin/cartographie.html')"><iconify-icon icon="mdi:map-outline"></iconify-icon><span class="nl">Cartographie</span></li>
+    </ul>
+  </div>
+  <div class="sb-sec">
+    <div class="sb-lbl">Systeme</div>
+    <ul>
+      <li class="ni" onclick="go('/admin/bailleurs.html')"><iconify-icon icon="mdi:domain"></iconify-icon><span class="nl">Portail bailleurs</span></li>
+      <li class="ni" onclick="go('/admin/parametres.html')"><iconify-icon icon="mdi:cog-outline"></iconify-icon><span class="nl">Parametres</span></li>
+    </ul>
+  </div>
+  <div class="sb-foot">
+    <div class="sb-user">
+      <div class="sb-av" id="sbAv">AD</div>
+      <div class="sb-ui"><strong id="sbName">Admin</strong><span id="sbRole">Super Admin</span></div>
+    </div>
+  </div>
+</aside>
+
+<!-- MAIN -->
+<div class="mw" id="mw">
+  <header class="ah">
+    <button class="ht" onclick="toggleSb()"><iconify-icon icon="mdi:menu"></iconify-icon></button>
+    <nav class="hbc"><a href="/admin/dashboard.html">FODDEB</a><iconify-icon icon="mdi:chevron-right"></iconify-icon><strong>Actualites</strong></nav>
+    <div class="hr">
+      <button class="hbtn"><iconify-icon icon="mdi:bell-outline"></iconify-icon></button>
+      <div class="hu"><div class="hav" id="hdrAv">AD</div><div class="hui"><strong id="hdrName">Admin</strong><span id="hdrRole">Super Admin</span></div></div>
+    </div>
+  </header>
+
+  <main class="pc">
+    <div class="ph ai">
+      <div><h1 class="pt">Actualites</h1><p class="ps">Redigez, planifiez et publiez les articles du site FODDEB</p></div>
+      <div class="pa">
+        <button class="btn btn-o" onclick="go('/pages/actualites.html')"><iconify-icon icon="mdi:eye-outline"></iconify-icon>Voir le site</button>
+        <button class="btn btn-p" onclick="openM('newArtM')"><iconify-icon icon="mdi:plus"></iconify-icon>Nouvel article</button>
+      </div>
+    </div>
+
+    <!-- Stats -->
+    <div class="sg ai">
+      <div class="sc"><strong id="sTotal"><iconify-icon icon="mdi:loading" class="spin" style="font-size:20px"></iconify-icon></strong><span>Articles total</span></div>
+      <div class="sc"><strong id="sPubl">—</strong><span>Publies</span></div>
+      <div class="sc"><strong id="sDraft">—</strong><span>Brouillons</span></div>
+      <div class="sc"><strong id="sSched">—</strong><span>Planifies</span></div>
+    </div>
+
+    <!-- Tabs + search -->
+    <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin-bottom:20px" class="ai">
+      <div class="tabs">
+        <div class="tab act" onclick="setTab('all',this)">Tous<span class="tc" id="tc-all">0</span></div>
+        <div class="tab" onclick="setTab('publie',this)">Publies<span class="tc" id="tc-publie">0</span></div>
+        <div class="tab" onclick="setTab('brouillon',this)">Brouillons<span class="tc" id="tc-brouillon">0</span></div>
+        <div class="tab" onclick="setTab('planifie',this)">Planifies<span class="tc" id="tc-planifie">0</span></div>
+      </div>
+      <div style="margin-left:auto">
+        <input type="search" id="searchA" placeholder="Rechercher un article..." oninput="applyFilters()" style="padding:8px 12px;border:1px solid var(--brd);border-radius:var(--rs);font-size:13.5px;outline:none;width:240px;font-family:var(--fb);background:var(--surf)"/>
+      </div>
+    </div>
+
+    <!-- MAIN GRID -->
+    <div class="main-grid">
+      <div>
+        <!-- Loading state -->
+        <div id="loadingState" class="articles-grid">
+          <div class="skel" style="height:270px"></div>
+          <div class="skel" style="height:270px"></div>
+          <div class="skel" style="height:270px"></div>
+        </div>
+        <!-- Articles grid -->
+        <div class="articles-grid" id="articlesGrid" style="display:none"></div>
+        <!-- Error state -->
+        <div id="errorState" style="display:none;text-align:center;padding:40px;color:var(--gr4)">
+          <iconify-icon icon="mdi:alert-circle-outline" style="font-size:40px;display:block;margin-bottom:12px;color:var(--red)"></iconify-icon>
+          <h3 style="font-size:15px;font-weight:600;color:var(--gr6);margin-bottom:8px">Erreur de chargement</h3>
+          <p id="errorMsg" style="font-size:13px;margin-bottom:16px"></p>
+          <button class="btn btn-o btn-sm" onclick="loadArticles()"><iconify-icon icon="mdi:refresh"></iconify-icon>Reessayer</button>
+        </div>
+        <!-- Empty state -->
+        <div id="emptyState" style="display:none;text-align:center;padding:60px 20px;color:var(--gr4)">
+          <iconify-icon icon="mdi:newspaper-variant-outline" style="font-size:48px;display:block;margin-bottom:12px;opacity:.4"></iconify-icon>
+          <h3 style="font-size:15px;font-weight:600;color:var(--gr6);margin-bottom:6px">Aucun article trouve</h3>
+          <p style="font-size:13px">Ajustez vos filtres ou creez un nouvel article</p>
+        </div>
+      </div>
+
+      <!-- Side Panel -->
+      <div class="side-panel">
+        <!-- Redaction rapide -->
+        <div class="panel-card">
+          <div class="panel-hd"><iconify-icon icon="mdi:lightning-bolt-outline"></iconify-icon>Redaction rapide</div>
+          <div class="panel-bd">
+            <div class="fg"><label class="fl">Titre <span class="req">*</span></label><input type="text" id="qTitle" class="fi" placeholder="Titre de l'article"/></div>
+            <div class="fg"><label class="fl">Categorie</label>
+              <select id="qCat" class="fsel">
+                <option>Actualite</option><option>Projet</option><option>Evenement</option><option>Communique</option><option>Rapport</option>
+              </select>
+            </div>
+            <div class="fg"><label class="fl">Resume</label><textarea id="qExcerpt" class="fta" style="min-height:70px" placeholder="Resume (2-3 lignes)..."></textarea></div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+              <button class="btn btn-o btn-sm" style="justify-content:center" onclick="saveArt('brouillon')"><iconify-icon icon="mdi:content-save-outline"></iconify-icon>Brouillon</button>
+              <button class="btn btn-p btn-sm" style="justify-content:center" onclick="saveArt('publie')"><iconify-icon icon="mdi:publish"></iconify-icon>Publier</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Recents -->
+        <div class="panel-card">
+          <div class="panel-hd"><iconify-icon icon="mdi:history"></iconify-icon>Recemment modifies</div>
+          <div class="panel-bd" id="recentList">
+            <div style="color:var(--gr4);font-size:13px;text-align:center;padding:16px">Chargement...</div>
+          </div>
+        </div>
+
+        <!-- Categories -->
+        <div class="panel-card">
+          <div class="panel-hd"><iconify-icon icon="mdi:tag-multiple-outline"></iconify-icon>Par categorie</div>
+          <div class="panel-bd" id="catStats" style="display:flex;flex-direction:column;gap:8px">
+            <div style="color:var(--gr4);font-size:13px;text-align:center;padding:8px">Chargement...</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<!-- MODAL — Nouvel article complet -->
+<div class="mo" id="newArtM" role="dialog" aria-modal="true">
+  <div class="modal" style="max-width:680px">
+    <div class="mh"><h3 class="mt" id="newArtTitle">Nouvel article</h3><button class="mc" onclick="closeM('newArtM')">&#x2715;</button></div>
+    <div class="mb">
+      <input type="hidden" id="editId"/>
+      <div class="fg"><label class="fl">Titre <span class="req">*</span></label><input type="text" id="mTitle" class="fi" placeholder="Titre de l'article"/></div>
+      <div class="mfr">
+        <div class="fg"><label class="fl">Categorie</label>
+          <select id="mCat" class="fsel">
+            <option>Actualite</option><option>Projet</option><option>Evenement</option><option>Communique</option><option>Rapport</option>
+          </select>
+        </div>
+        <div class="fg"><label class="fl">Statut</label>
+          <select id="mStatus" class="fsel">
+            <option value="brouillon">Brouillon</option><option value="publie">Publie</option><option value="planifie">Planifie</option>
+          </select>
+        </div>
+      </div>
+      <div class="fg"><label class="fl">Resume (extrait)</label><textarea id="mExcerpt" class="fta" style="min-height:60px" placeholder="Resume affiche sur la page d'accueil..."></textarea></div>
+      <div class="fg">
+        <label class="fl">Contenu complet</label>
+        <div class="editor-wrap">
+          <div class="editor-tb">
+            <button class="eb" onclick="ef('bold')" title="Gras"><iconify-icon icon="mdi:format-bold"></iconify-icon></button>
+            <button class="eb" onclick="ef('italic')" title="Italique"><iconify-icon icon="mdi:format-italic"></iconify-icon></button>
+            <button class="eb" onclick="ef('underline')" title="Souligne"><iconify-icon icon="mdi:format-underline"></iconify-icon></button>
+            <button class="eb" onclick="ef('insertUnorderedList')" title="Liste"><iconify-icon icon="mdi:format-list-bulleted"></iconify-icon></button>
+            <button class="eb" onclick="ef('formatBlock','H2')" title="Titre"><iconify-icon icon="mdi:format-header-2"></iconify-icon></button>
+            <button class="eb" onclick="ef('formatBlock','P')" title="Paragraphe"><iconify-icon icon="mdi:format-paragraph"></iconify-icon></button>
+          </div>
+          <div id="mContent" class="editor-area" contenteditable="true" spellcheck="true" role="textbox" aria-label="Contenu de l'article"></div>
+        </div>
+      </div>
+      <div class="mfr">
+        <div class="fg"><label class="fl">Auteur</label><input type="text" id="mAuthor" class="fi" placeholder="Nom de l'auteur" value="Equipe FODDEB"/></div>
+        <div class="fg"><label class="fl">Date de publication</label><input type="date" id="mDate" class="fi"/></div>
+      </div>
+      <div class="fg"><label class="fl">Tags (séparés par des virgules)</label><input type="text" id="mTags" class="fi" placeholder="droits enfant, protection, benin"/></div>
+
+      <!-- IMAGE DE COUVERTURE -->
+      <div class="fg">
+        <label class="fl">Image de couverture <span style="font-weight:400;color:var(--gr4)">(JPG/PNG/WebP, max 3 Mo)</span></label>
+        <div id="imgPreviewWrap" style="display:none;margin-bottom:8px">
+          <img id="imgPreview" src="" alt="Aperçu" style="max-height:160px;border-radius:var(--rs);border:1px solid var(--brd);object-fit:cover"/>
+          <button onclick="clearImage()" style="display:block;margin-top:6px;font-size:12px;color:var(--red);cursor:pointer;background:none;border:none">
+            <iconify-icon icon="mdi:close-circle-outline" width="14"></iconify-icon> Supprimer l'image
+          </button>
+        </div>
+        <input type="hidden" id="mImage" value=""/>
+        <button type="button" class="btn btn-o btn-sm" onclick="pickImageCouverture()" id="imgPickBtn">
+          <iconify-icon icon="mdi:image-plus-outline"></iconify-icon>Choisir une image
+        </button>
+        <div id="imgUploadProgress" style="display:none;font-size:13px;color:var(--gr4);margin-top:6px">
+          <iconify-icon icon="mdi:loading" style="animation:spin 1s linear infinite"></iconify-icon> Upload en cours…
+        </div>
+      </div>
+
+      <!-- PIÈCES JOINTES (facultatives) -->
+      <div class="fg">
+        <label class="fl">Pièces jointes <span style="font-weight:400;color:var(--gr4)">(PDF/Word, max 5 Mo chacune — facultatif)</span></label>
+        <div id="piecesList" style="margin-bottom:8px"></div>
+        <button type="button" class="btn btn-o btn-sm" onclick="pickPiece()">
+          <iconify-icon icon="mdi:paperclip"></iconify-icon>Ajouter une pièce
+        </button>
+        <input type="hidden" id="mPieces" value="[]"/>
+      </div>
+    </div>
+    <div class="mf">
+      <button class="btn btn-o btn-sm" onclick="closeM('newArtM')">Annuler</button>
+      <button class="btn btn-o btn-sm" id="saveDraftBtn" onclick="saveFullArt('brouillon')"><iconify-icon icon="mdi:content-save-outline"></iconify-icon>Brouillon</button>
+      <button class="btn btn-p btn-sm" id="savePublishBtn" onclick="saveFullArt('publie')"><iconify-icon icon="mdi:publish"></iconify-icon>Publier</button>
+    </div>
+  </div>
+</div>
+
+<script src="/assets/js/config.js"></script>
+<script src="/assets/js/utils.js"></script>
+<script src="/assets/js/services/api.js"></script>
+<script src="/assets/js/services/auth.js"></script>
+<script>
+'use strict';
+
+/* ═══ CONFIG CATEGORIES ═══ */
+const CAT_COLORS = {
+  'Actualite':'#1B5E20','Projet':'#1565C0','Evenement':'#F57F17','Communique':'#6A1B9A','Rapport':'#00695C'
+};
+const CAT_ICONS = {
+  'Actualite':'mdi:newspaper-variant-outline','Projet':'mdi:clipboard-list-outline',
+  'Evenement':'mdi:calendar-star-outline','Communique':'mdi:bullhorn-outline','Rapport':'mdi:chart-bar'
+};
+const ST_CFG = {
+  publie:   { label:'Publie',   cls:'bg-s' },
+  brouillon:{ label:'Brouillon',cls:'bg-n' },
+  planifie: { label:'Planifie', cls:'bg-w' },
+};
+
+const go  = url => location.href = url;
+const fmtD = d => { try { return new Date(d).toLocaleDateString('fr-FR',{day:'numeric',month:'long',year:'numeric'}); } catch { return d||'—'; } };
+
+/* ═══ ETAT ═══ */
+let ALL_ARTS = [];
+let curTab   = 'all';
+
+/* ═══ GUARD SESSION ═══ */
+function getUser() { try { return JSON.parse(sessionStorage.getItem('foddeb_user')); } catch { return null; } }
+function requireAdmin() {
+  const u = getUser();
+  if (!u) { window.location.href = '/auth/login.html'; return null; }
+  if (u.role !== 'admin' && u.role !== 'manager') { window.location.href = '/auth/login.html'; return null; }
+  return u;
+}
+
+function loadUserInfo() {
+  const u = getUser() || {};
+  const prenom = u.Prenom || u.prenom || 'Admin';
+  const nom    = u.Nom    || u.nom    || '';
+  const role   = u.role   || 'admin';
+  const init   = ((prenom[0]||'') + (nom[0]||'')).toUpperCase() || 'AD';
+  const rlbl   = {admin:'Super Admin',manager:'Gestionnaire',member:'Membre',donor:'Donateur'}[role]||role;
+  ['sbAv','hdrAv'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent=init;});
+  ['sbName','hdrName'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent=prenom+' '+nom;});
+  ['sbRole','hdrRole'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent=rlbl;});
+}
+
+/* ═══ CHARGEMENT API GAS ═══ */
+async function loadArticles() {
+  showState('loading');
+  try {
+    const res = await FODDEB_API.news.list(1, 100);
+    ALL_ARTS = (res.data || []).map(a => ({
+      ID:      a.ID     || a.id     || '',
+      Titre:   a.Titre  || a.titre  || '—',
+      Categorie: a.Categorie || a.categorie || 'Actualite',
+      Excerpt: a.Excerpt || a.excerpt || '',
+      Contenu: a.Contenu || a.contenu || '',
+      Auteur:  a.Auteur  || a.auteur  || 'Equipe FODDEB',
+      DatePublication: a.DatePublication || a.date || '',
+      Statut:  a.Statut  || a.statut  || 'brouillon',
+      Tags:    a.Tags    || a.tags    || '',
+    }));
+    updateStats();
+    applyFilters();
+  } catch(e) {
+    showState('error');
+    document.getElementById('errorMsg').textContent = e.message || 'Impossible de contacter le serveur.';
+    console.error('loadArticles:', e);
+  }
+}
+
+function showState(state) {
+  document.getElementById('loadingState').style.display  = state==='loading' ? 'grid' : 'none';
+  document.getElementById('articlesGrid').style.display  = state==='articles' ? 'grid' : 'none';
+  document.getElementById('errorState').style.display    = state==='error'   ? 'block' : 'none';
+  document.getElementById('emptyState').style.display    = state==='empty'   ? 'block' : 'none';
+}
+
+/* ═══ STATS ═══ */
+function updateStats() {
+  document.getElementById('sTotal').textContent  = ALL_ARTS.length;
+  document.getElementById('sPubl').textContent   = ALL_ARTS.filter(a=>a.Statut==='publie').length;
+  document.getElementById('sDraft').textContent  = ALL_ARTS.filter(a=>a.Statut==='brouillon').length;
+  document.getElementById('sSched').textContent  = ALL_ARTS.filter(a=>a.Statut==='planifie').length;
+  document.getElementById('tc-all').textContent      = ALL_ARTS.length;
+  document.getElementById('tc-publie').textContent   = ALL_ARTS.filter(a=>a.Statut==='publie').length;
+  document.getElementById('tc-brouillon').textContent= ALL_ARTS.filter(a=>a.Statut==='brouillon').length;
+  document.getElementById('tc-planifie').textContent = ALL_ARTS.filter(a=>a.Statut==='planifie').length;
+}
+
+/* ═══ FILTRES ═══ */
+function applyFilters() {
+  const q = (document.getElementById('searchA')?.value || '').toLowerCase();
+  const filtered = ALL_ARTS.filter(a => {
+    const mt = curTab==='all' || a.Statut===curTab;
+    const mq = !q || a.Titre.toLowerCase().includes(q) || a.Categorie.toLowerCase().includes(q) || (a.Tags||'').toLowerCase().includes(q);
+    return mt && mq;
+  }).sort((a,b) => new Date(b.DatePublication) - new Date(a.DatePublication));
+
+  if (!filtered.length) { showState(ALL_ARTS.length ? 'empty' : 'empty'); return; }
+  showState('articles');
+  renderGrid(filtered);
+  renderRecents();
+  renderCatStats();
+}
+
+function setTab(t, btn) {
+  curTab = t;
+  document.querySelectorAll('.tabs .tab').forEach(b=>b.classList.remove('act'));
+  btn.classList.add('act');
+  applyFilters();
+}
+
+/* ═══ RENDU GRILLE ═══ */
+function renderGrid(articles) {
+  const st = ST_CFG;
+  document.getElementById('articlesGrid').innerHTML = articles.map((a,i) => {
+    const color = CAT_COLORS[a.Categorie] || '#1B5E20';
+    const icon  = CAT_ICONS[a.Categorie]  || 'mdi:newspaper-variant-outline';
+    const sCfg  = st[a.Statut] || { label:a.Statut, cls:'bg-n' };
+    return `
+    <div class="art-card ai" style="animation-delay:${i*.05}s">
+      <div class="art-img" style="background:${color}">
+        <div class="art-img-overlay"></div>
+        <iconify-icon icon="${icon}" class="art-icon-big"></iconify-icon>
+        <div class="art-status" style="z-index:1">
+          <span class="badge ${sCfg.cls}"><span class="bd"></span>${sCfg.label}</span>
+        </div>
+      </div>
+      <div class="art-body">
+        <div class="art-cat">${a.Categorie}</div>
+        <div class="art-title">${a.Titre}</div>
+        <div class="art-excerpt">${a.Excerpt || 'Aucun resume.'}</div>
+        <div class="art-footer">
+          <span class="art-date"><iconify-icon icon="mdi:calendar-outline"></iconify-icon>${fmtD(a.DatePublication)}</span>
+          <div class="art-actions">
+            ${a.Statut==='brouillon'?`<button class="bi" onclick="publishArt('${a.ID}')" title="Publier" style="color:var(--g7)"><iconify-icon icon="mdi:publish"></iconify-icon></button>`:''}
+            <button class="bi" onclick="editArt('${a.ID}')" title="Modifier"><iconify-icon icon="mdi:pencil-outline"></iconify-icon></button>
+            <button class="bi" onclick="deleteArt('${a.ID}','${a.Titre.replace(/'/g,"\\'")}')}" title="Supprimer" style="color:var(--red)"><iconify-icon icon="mdi:delete-outline"></iconify-icon></button>
+          </div>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function renderRecents() {
+  const recents = ALL_ARTS.slice(0, 4);
+  document.getElementById('recentList').innerHTML = recents.length
+    ? recents.map(a => {
+        const color = CAT_COLORS[a.Categorie] || '#1B5E20';
+        const icon  = CAT_ICONS[a.Categorie]  || 'mdi:newspaper-variant-outline';
+        return `
+        <div style="display:flex;gap:10px;align-items:flex-start;padding:10px;border:1px solid var(--brd);border-radius:var(--rs);cursor:pointer;transition:var(--tr);margin-bottom:8px" onclick="editArt('${a.ID}')">
+          <div style="width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;background:${color}22;color:${color};flex-shrink:0">
+            <iconify-icon icon="${icon}" style="font-size:16px"></iconify-icon>
+          </div>
+          <div><strong style="display:block;font-size:13px;font-weight:600;color:var(--dark);line-height:1.3">${a.Titre.length>45?a.Titre.slice(0,45)+'...':a.Titre}</strong><span style="font-size:11px;color:var(--gr4)">${fmtD(a.DatePublication)}</span></div>
+        </div>`;
+      }).join('')
+    : '<p style="color:var(--gr4);font-size:13px;text-align:center;padding:8px">Aucun article</p>';
+}
+
+function renderCatStats() {
+  const cats = {};
+  ALL_ARTS.forEach(a => cats[a.Categorie] = (cats[a.Categorie]||0)+1);
+  document.getElementById('catStats').innerHTML = Object.entries(cats).map(([cat,count]) => `
+    <div style="display:flex;justify-content:space-between;align-items:center;font-size:13px">
+      <span style="display:flex;align-items:center;gap:6px;color:var(--gr6)">
+        <iconify-icon icon="${CAT_ICONS[cat]||'mdi:tag-outline'}" style="color:${CAT_COLORS[cat]||'var(--g7)'}"></iconify-icon>${cat}
+      </span>
+      <span style="font-weight:700;background:var(--gr1);padding:2px 9px;border-radius:99px;font-size:12px">${count}</span>
+    </div>`).join('') || '<p style="color:var(--gr4);font-size:13px;text-align:center">Aucune categorie</p>';
+}
+
+/* ═══ ACTIONS ═══ */
+async function publishArt(id) {
+  try {
+    const res = await FODDEB_API.news.publish(id);
+    if (!res.success) throw new Error(res.error);
+    const a = ALL_ARTS.find(x=>x.ID===id);
+    if (a) a.Statut = 'publie';
+    updateStats(); applyFilters();
+    toast('Article publie sur le site.');
+  } catch(e) { toast('Erreur : ' + e.message, 'err'); }
+}
+
+async function deleteArt(id, titre) {
+  if (!confirm(`Supprimer l'article "${titre}" ?`)) return;
+  try {
+    const res = await FODDEB_API.news.delete(id);
+    if (!res.success) throw new Error(res.error);
+    ALL_ARTS = ALL_ARTS.filter(x=>x.ID!==id);
+    updateStats(); applyFilters();
+    toast('Article supprime.');
+  } catch(e) { toast('Erreur : ' + e.message, 'err'); }
+}
+
+function editArt(id) {
+  const a = ALL_ARTS.find(x=>x.ID===id);
+  if (!a) return;
+  document.getElementById('newArtTitle').textContent = 'Modifier l\'article';
+  document.getElementById('editId').value  = a.ID;
+  document.getElementById('mTitle').value  = a.Titre;
+  document.getElementById('mCat').value    = a.Categorie;
+  document.getElementById('mStatus').value = a.Statut;
+  document.getElementById('mExcerpt').value= a.Excerpt;
+  document.getElementById('mContent').innerHTML = a.Contenu || '';
+  document.getElementById('mAuthor').value = a.Auteur;
+  document.getElementById('mDate').value   = a.DatePublication || '';
+  document.getElementById('mTags').value   = a.Tags || '';
+  openM('newArtM');
+}
+
+/* ═══ CREATION / MISE A JOUR ═══ */
+async function saveArt(status) {
+  const titre = document.getElementById('qTitle').value.trim();
+  if (!titre) { toast('Titre requis.', 'err'); return; }
+  try {
+    const res = await FODDEB_API.news.create({
+      Titre:    titre,
+      Categorie:document.getElementById('qCat').value,
+      Excerpt:  document.getElementById('qExcerpt').value.trim(),
+      Statut:   status,
+      Auteur:   (getUser()?.Prenom || '') + ' ' + (getUser()?.Nom || ''),
+      DatePublication: new Date().toISOString().split('T')[0],
+    });
+    if (!res.success) throw new Error(res.error);
+    document.getElementById('qTitle').value   = '';
+    document.getElementById('qExcerpt').value = '';
+    toast(status==='publie' ? 'Article publie !' : 'Brouillon enregistre.');
+    await loadArticles();
+  } catch(e) { toast('Erreur : ' + e.message, 'err'); }
+}
+
+async function saveFullArt(status) {
+  const titre = document.getElementById('mTitle').value.trim();
+  if (!titre) { toast('Titre requis.', 'err'); return; }
+
+  const btn = status==='publie' ? document.getElementById('savePublishBtn') : document.getElementById('saveDraftBtn');
+  if (btn) { btn.disabled=true; btn.innerHTML = '<iconify-icon icon="mdi:loading" style="animation:spin 1s linear infinite"></iconify-icon> Envoi...'; }
+
+  const editId = document.getElementById('editId').value;
+  const payload = {
+    Titre:    titre,
+    Categorie:document.getElementById('mCat').value,
+    Statut:   status,
+    Excerpt:  document.getElementById('mExcerpt').value.trim(),
+    Contenu:  document.getElementById('mContent').innerHTML,
+    Auteur:   document.getElementById('mAuthor').value.trim(),
+    DatePublication: document.getElementById('mDate').value || new Date().toISOString().split('T')[0],
+    Tags:     document.getElementById('mTags').value.trim(),
+    Image:    document.getElementById('mImage')?.value.trim() || '',
+    Pieces:   document.getElementById('mPieces')?.value || '[]',
+  };
+
+  try {
+    let res;
+    if (editId) {
+      res = await FODDEB_API.news.update(editId, payload);
+    } else {
+      res = await FODDEB_API.news.create(payload);
+    }
+    if (!res.success) throw new Error(res.error);
+    closeM('newArtM');
+    // Créer ou mettre à jour le Google Doc pour ce contenu
+    if (res.id || (res.data && res.data.ID)) {
+      const artId = res.id || res.data.ID;
+      _currentArticleId = artId;
+      const contenuHtml = document.getElementById('mContent')?.innerHTML || '';
+      await ensureDoc(artId, payload.Titre, contenuHtml);
+    }
+    resetArtForm();
+    document.getElementById('newArtTitle').textContent = 'Nouvel article';
+    toast(status==='publie' ? 'Article publié sur le site.' : 'Brouillon enregistré.');
+    await loadArticles();
+  } catch(e) {
+    toast('Erreur : ' + e.message, 'err');
+  } finally {
+    if (btn) {
+      btn.disabled = false;
+      btn.innerHTML = status==='publie'
+        ? '<iconify-icon icon="mdi:publish"></iconify-icon>Publier'
+        : '<iconify-icon icon="mdi:content-save-outline"></iconify-icon>Brouillon';
+    }
+  }
+}
+
+function ef(cmd, val) { document.getElementById('mContent').focus(); document.execCommand(cmd, false, val||null); }
+
+/* ═══ MODAL ═══ */
+function openM(id) {
+  document.getElementById(id).classList.add('open');
+  document.body.style.overflow = 'hidden';
+  // Reset si nouveau
+  if (id==='newArtM' && !document.getElementById('editId').value) {
+    document.getElementById('mTitle').value = '';
+    document.getElementById('mExcerpt').value = '';
+    document.getElementById('mContent').innerHTML = '';
+    document.getElementById('mDate').value = new Date().toISOString().split('T')[0];
+    document.getElementById('mTags').value = '';
+    document.getElementById('newArtTitle').textContent = 'Nouvel article';
+  }
+}
+function closeM(id) { document.getElementById(id).classList.remove('open'); document.body.style.overflow = ''; }
+document.querySelectorAll('.mo').forEach(o => o.addEventListener('click', e => { if(e.target===o){o.classList.remove('open');document.body.style.overflow='';} }));
+document.addEventListener('keydown', e => { if(e.key==='Escape') document.querySelectorAll('.mo.open').forEach(o=>{o.classList.remove('open');document.body.style.overflow='';}); });
+
+/* ═══ TOAST ═══ */
+function toast(msg, type='ok') {
+  const c = document.getElementById('tc');
+  const t = document.createElement('div');
+  t.className = 'toast ' + type;
+  t.innerHTML = `<iconify-icon icon="${type==='err'?'mdi:alert-circle-outline':'mdi:check-circle-outline'}"></iconify-icon><span>${msg}</span>`;
+  c.appendChild(t);
+  setTimeout(() => { t.style.opacity='0'; t.style.transition='.3s'; setTimeout(()=>t.remove(),300); }, 3500);
+}
+
+/* ═══ SIDEBAR ═══ */
+let sbC=false, mobO=false;
+function toggleSb() {
+  const mob = window.innerWidth<=768;
+  if(mob){mobO=!mobO;document.getElementById('sb').classList.toggle('mob',mobO);document.getElementById('ov').classList.toggle('v',mobO);}
+  else{sbC=!sbC;document.getElementById('sb').classList.toggle('col',sbC);document.getElementById('mw').classList.toggle('col',sbC);}
+}
+function closeSb(){mobO=false;document.getElementById('sb').classList.remove('mob');document.getElementById('ov').classList.remove('v');}
+
+/* ═══ INIT ═══ */
+
+/* ═══ UPLOAD IMAGE DE COUVERTURE ═══ */
+let _currentArticleId = null;
+
+function pickImageCouverture() {
+  const input = document.createElement('input');
+  input.type = 'file'; input.accept = 'image/jpeg,image/png,image/webp';
+  input.onchange = async function() {
+    const file = input.files[0]; if (!file) return;
+    if (file.size > 3 * 1024 * 1024) { toast('Image trop volumineuse (max 3 Mo).', 'err'); return; }
+    const reader = new FileReader();
+    reader.onload = e => {
+      document.getElementById('imgPreview').src = e.target.result;
+      document.getElementById('imgPreviewWrap').style.display = 'block';
+    };
+    reader.readAsDataURL(file);
+    document.getElementById('imgUploadProgress').style.display = 'block';
+    document.getElementById('imgPickBtn').disabled = true;
+    try {
+      const b64 = await fileToBase64(file);
+      const ctxId = _currentArticleId || 'draft_' + Date.now();
+      const res = await FODDEB_API.admin.upload(b64, file.name, file.type, 'actualite', ctxId);
+      if (!res.success) throw new Error(res.error || 'Erreur');
+      document.getElementById('mImage').value = res.url;
+      toast('Image de couverture ajoutée.');
+    } catch (err) { toast('Erreur upload : ' + err.message, 'err'); document.getElementById('imgPreviewWrap').style.display = 'none'; }
+    finally { document.getElementById('imgUploadProgress').style.display = 'none'; document.getElementById('imgPickBtn').disabled = false; }
+  };
+  input.click();
+}
+function clearImage() { document.getElementById('mImage').value=''; document.getElementById('imgPreview').src=''; document.getElementById('imgPreviewWrap').style.display='none'; }
+
+/* ═══ UPLOAD PIÈCES JOINTES ═══ */
+let _pieces = [];
+function pickPiece() {
+  const input = document.createElement('input'); input.type = 'file'; input.accept = 'application/pdf,.doc,.docx';
+  input.onchange = async function() {
+    const file = input.files[0]; if (!file) return;
+    if (file.size > 5 * 1024 * 1024) { toast('Fichier trop volumineux (max 5 Mo).', 'err'); return; }
+    toast('Upload en cours…');
+    try {
+      const b64 = await fileToBase64(file);
+      const ctxId = _currentArticleId || 'draft_' + Date.now();
+      const res = await FODDEB_API.admin.upload(b64, file.name, file.type, 'actualite', ctxId);
+      if (!res.success) throw new Error(res.error || 'Erreur');
+      _pieces.push({ nom: file.name, url: res.url, type: file.type });
+      document.getElementById('mPieces').value = JSON.stringify(_pieces);
+      renderPiecesList(); toast('Pièce ajoutée : ' + file.name);
+    } catch (err) { toast('Erreur upload pièce : ' + err.message, 'err'); }
+  };
+  input.click();
+}
+function renderPiecesList() {
+  const el = document.getElementById('piecesList'); if (!el) return;
+  el.innerHTML = _pieces.map((p,i) => `<div style="display:flex;align-items:center;gap:8px;padding:6px 10px;background:var(--gr1);border-radius:var(--rs);margin-bottom:6px;font-size:13px"><iconify-icon icon="mdi:file-document-outline" style="color:var(--gr4)"></iconify-icon><a href="${p.url}" target="_blank" style="color:var(--g7);flex:1">${p.nom}</a><button onclick="removePiece(${i})" style="color:var(--red);background:none;border:none;cursor:pointer"><iconify-icon icon="mdi:close-circle-outline"></iconify-icon></button></div>`).join('');
+}
+function removePiece(i) { _pieces.splice(i,1); document.getElementById('mPieces').value=JSON.stringify(_pieces); renderPiecesList(); }
+
+function fileToBase64(file) {
+  return new Promise((res,rej) => { const r=new FileReader(); r.onload=()=>res(r.result.split(',')[1]); r.onerror=()=>rej(new Error('Lecture échouée')); r.readAsDataURL(file); });
+}
+function resetArtForm() {
+  _currentArticleId=null; _pieces=[]; clearImage();
+  const pl=document.getElementById('piecesList'); if(pl) pl.innerHTML='';
+  document.getElementById('mPieces').value='[]';
+  document.getElementById('editId').value='';
+}
+async function ensureDoc(articleId, titre, contenu) {
+  try { const res = await FODDEB_API.newsDocs.create(articleId, titre, contenu); if(res.success && res.docUrl) return res.docUrl; } catch(e) { console.warn('[ensureDoc]', e.message); }
+  return null;
+}
+
+document.addEventListener('DOMContentLoaded', async () => {
+  const user = requireAdmin();
+  if (!user) return;
+  loadUserInfo();
+  await loadArticles();
+});
+
+/* ═══ PHOTO PROFIL ADMIN ═══ */
+function renderAdminAvatar() {
+  const user  = (typeof getUser === 'function') ? getUser() : null;
+  const photo = user && (user.Photo || user.PhotoURL || '');
+  const prenom = user ? (user.Prenom || user.prenom || 'A') : 'A';
+  const nom    = user ? (user.Nom    || user.nom    || '') : '';
+  const init   = (((prenom||'')[0]||'') + ((nom||'')[0]||'')).toUpperCase() || '?';
+  const color  = '#1B5E20';
+
+  ['sbAv','hdrAv'].forEach(function(id) {
+    var el = document.getElementById(id);
+    if (!el) return;
+    if (photo) {
+      el.innerHTML = '';
+      el.style.background = 'transparent';
+      el.style.padding    = '0';
+      var img = document.createElement('img');
+      img.src    = photo;
+      img.style.cssText = 'width:100%;height:100%;border-radius:50%;object-fit:cover;display:block';
+      img.onerror = function() { el.textContent = init; el.style.background = color; img.remove(); };
+      el.appendChild(img);
+    } else {
+      el.innerHTML    = init;
+      el.style.background = color;
+    }
+  });
+}
+
+async function changeAdminPhoto() {
+  var input = document.createElement('input');
+  input.type   = 'file';
+  input.accept = 'image/jpeg,image/png,image/webp';
+  input.onchange = async function() {
+    var file = input.files[0];
+    if (!file) return;
+    if (file.size > 3 * 1024 * 1024) { toast('Image trop volumineuse (max 3 Mo).', 'err'); return; }
+    toast('Upload en cours…', 'info');
+    try {
+      var b64 = await new Promise(function(res, rej) {
+        var r = new FileReader();
+        r.onload  = function() { res(r.result.split(',')[1]); };
+        r.onerror = function() { rej(new Error('Lecture échouée')); };
+        r.readAsDataURL(file);
+      });
+      var user = (typeof getUser === 'function') ? getUser() : {};
+      var membreId = user.ID || user.id || '';
+      var res = await FODDEB_API.members.uploadProfilePhoto(b64, file.type, membreId, user.sessionToken || '');
+      if (res && res.success) {
+        var photoUrl = res.url || res.photoUrl || res.fileUrl || '';
+        // Mettre à jour la session locale
+        user.Photo = photoUrl;
+        sessionStorage.setItem('foddeb_user', JSON.stringify(user));
+        renderAdminAvatar();
+        toast('Photo mise à jour avec succès.');
+      } else {
+        toast('Erreur upload : ' + ((res && res.error) || 'inconnue'), 'err');
+      }
+    } catch(e) {
+      toast('Erreur : ' + e.message, 'err');
+    }
+  };
+  input.click();
+}
+
+if ('serviceWorker' in navigator) navigator.serviceWorker.register('/sw.js').catch(()=>{});
+</script>
+</body>
+</html>

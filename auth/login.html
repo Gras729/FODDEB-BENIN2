@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="robots" content="noindex, nofollow"/>
+  <title>Connexion — FODDEB</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js" defer></script>
+  <script src="https://www.google.com/recaptcha/api.js?render=6LdU3tksAAAAAOAIdgtC7xsQURksQ9mHAZ3MVLXF" async defer></script>
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    :root{
+      --g9:#0F2713;--g8:#1B5E20;--g7:#2E7D32;--g6:#388E3C;--g5:#4CAF50;--g4:#81C784;--g1:#C8E6C9;--g0:#E8F5E9;
+      --gold:#F9A825;--gold2:#F57F17;
+      --red:#C62828;--redf:#FFEBEE;
+      --dark:#0D1B0F;--gr8:#1C2520;--gr6:#4A5568;--gr4:#9AA5B1;--gr2:#E2E8F0;--gr1:#F7FAFC;--brd:#E8EEE9;
+      --surf:#FFFFFF;
+      --fh:'Syne',sans-serif;--fb:'DM Sans',system-ui,sans-serif;
+      --r:14px;--rs:8px;
+      --sh:0 4px 24px rgba(0,0,0,.08);--shm:0 12px 48px rgba(0,0,0,.16);
+      --tr:.25s cubic-bezier(.4,0,.2,1);
+    }
+    html{height:100%;}
+    body{font-family:var(--fb);min-height:100%;background:var(--g9);display:flex;align-items:center;justify-content:center;padding:20px;-webkit-font-smoothing:antialiased;position:relative;overflow-x:hidden;}
+    body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradient(45deg,rgba(249,168,37,.04) 0px,rgba(249,168,37,.04) 1px,transparent 1px,transparent 40px),repeating-linear-gradient(-45deg,rgba(76,175,80,.03) 0px,rgba(76,175,80,.03) 1px,transparent 1px,transparent 40px);pointer-events:none;}
+    .login-wrap{width:100%;max-width:440px;position:relative;z-index:1;}
+    .login-card{background:var(--surf);border-radius:20px;box-shadow:var(--shm);overflow:hidden;}
+    .card-header{background:linear-gradient(135deg,var(--g9) 0%,var(--g8) 100%);padding:36px 40px 32px;text-align:center;position:relative;overflow:hidden;}
+    .card-header::before{content:'';position:absolute;top:-40px;right:-40px;width:140px;height:140px;border-radius:50%;background:rgba(255,255,255,.04);}
+    .card-header::after{content:'';position:absolute;bottom:-30px;left:-30px;width:100px;height:100px;border-radius:50%;background:rgba(249,168,37,.06);}
+    .logo-wrap{position:relative;z-index:1;margin-bottom:18px;}
+    .logo-circle{width:64px;height:64px;border-radius:50%;background:rgba(255,255,255,.1);border:2px solid rgba(255,255,255,.15);display:flex;align-items:center;justify-content:center;margin:0 auto;overflow:hidden;}
+    .logo-circle img{width:100%;height:100%;object-fit:cover;display:block;}
+    .logo-txt{font-family:var(--fh);color:#fff;font-size:16px;font-weight:800;}
+    .card-header h1{position:relative;z-index:1;font-family:var(--fh);font-size:1.5rem;font-weight:700;color:#fff;margin-bottom:6px;}
+    .card-header p{position:relative;z-index:1;font-size:14px;color:rgba(255,255,255,.6);}
+    .card-body{padding:36px 40px;}
+    .step{display:none;}
+    .step.active{display:block;}
+    .fg{margin-bottom:18px;}
+    .fl{display:block;font-size:12.5px;font-weight:600;color:var(--gr8);margin-bottom:7px;letter-spacing:.02em;}
+    .input-wrap{position:relative;}
+    .input-icon{position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--gr4);font-size:20px;pointer-events:none;transition:color .2s;}
+    .fi{width:100%;padding:13px 14px 13px 44px;border:1.5px solid var(--brd);border-radius:var(--rs);font-family:var(--fb);font-size:15px;color:var(--gr8);background:var(--gr1);outline:none;transition:all .2s;}
+    .fi:focus{border-color:var(--g5);background:#fff;box-shadow:0 0 0 4px rgba(76,175,80,.1);}
+    .fi:focus ~ .input-icon{color:var(--g6);}
+    .fi.err{border-color:var(--red);background:var(--redf);}
+    .fi-toggle{position:absolute;right:14px;top:50%;transform:translateY(-50%);color:var(--gr4);font-size:20px;cursor:pointer;transition:color .2s;}
+    .fi-toggle:hover{color:var(--gr8);}
+    .fi-with-toggle{padding-right:44px;}
+    .ferr{display:flex;align-items:center;gap:5px;font-size:12px;color:var(--red);margin-top:6px;}
+    .btn-submit{width:100%;padding:14px;background:var(--g8);color:#fff;border:none;border-radius:var(--rs);font-family:var(--fh);font-size:15px;font-weight:700;cursor:pointer;transition:all .25s;display:flex;align-items:center;justify-content:center;gap:10px;letter-spacing:.02em;}
+    .btn-submit:hover:not(:disabled){background:var(--g7);transform:translateY(-1px);box-shadow:0 6px 20px rgba(27,94,32,.3);}
+    .btn-submit:disabled{opacity:.6;cursor:not-allowed;transform:none;box-shadow:none;}
+    .spinner{width:18px;height:18px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;display:inline-block;}
+    @keyframes spin{to{transform:rotate(360deg)}}
+    .otp-group{display:flex;gap:10px;justify-content:center;margin-bottom:20px;}
+    .otp-inp{width:52px;height:58px;border:1.5px solid var(--brd);border-radius:var(--rs);font-size:1.5rem;font-weight:700;font-family:var(--fh);text-align:center;color:var(--gr8);background:var(--gr1);outline:none;transition:all .2s;}
+    .otp-inp:focus{border-color:var(--g5);background:#fff;box-shadow:0 0 0 4px rgba(76,175,80,.1);}
+    .otp-inp.filled{border-color:var(--g5);background:var(--g0);color:var(--g8);}
+    .otp-inp.err{border-color:var(--red);background:var(--redf);}
+    .info-box{background:var(--g0);border:1px solid var(--g1);border-radius:var(--rs);padding:12px 14px;font-size:13px;color:var(--g8);display:flex;align-items:flex-start;gap:10px;margin-bottom:20px;line-height:1.5;}
+    .info-box iconify-icon{font-size:18px;flex-shrink:0;color:var(--g7);margin-top:1px;}
+    .warn-box{background:#FFFBEB;border:1px solid #FDE68A;border-radius:var(--rs);padding:12px 14px;font-size:13px;color:#92400E;display:flex;align-items:flex-start;gap:10px;margin-bottom:20px;line-height:1.5;}
+    .warn-box iconify-icon{font-size:18px;flex-shrink:0;color:var(--gold2);margin-top:1px;}
+    .error-box{background:var(--redf);border:1px solid #FFCDD2;border-radius:var(--rs);padding:12px 14px;font-size:13px;color:var(--red);display:flex;align-items:flex-start;gap:10px;margin-bottom:20px;line-height:1.5;}
+    .error-box iconify-icon{font-size:18px;flex-shrink:0;margin-top:1px;}
+    .divider{display:flex;align-items:center;gap:12px;margin:20px 0;color:var(--gr4);font-size:12px;}
+    .divider::before,.divider::after{content:'';flex:1;height:1px;background:var(--brd);}
+    .link{color:var(--g7);font-weight:600;cursor:pointer;font-size:13.5px;transition:color .2s;}
+    .link:hover{color:var(--g8);text-decoration:underline;}
+    .forgot-link{text-align:right;margin-top:-10px;margin-bottom:18px;}
+    .card-footer{padding:20px 40px 28px;text-align:center;border-top:1px solid var(--brd);}
+    .card-footer p{font-size:13px;color:var(--gr4);}
+    .card-footer a{color:var(--g7);font-weight:600;}
+    .back-link{display:inline-flex;align-items:center;gap:6px;color:rgba(255,255,255,.6);font-size:13px;cursor:pointer;transition:color .2s;margin-bottom:24px;text-decoration:none;}
+    .back-link:hover{color:#fff;}
+    .step-ind{display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:24px;}
+    .si-dot{width:8px;height:8px;border-radius:50%;background:var(--brd);transition:all .3s;}
+    .si-dot.active{background:var(--g5);width:24px;border-radius:4px;}
+    .si-dot.done{background:var(--g4);}
+    .success-wrap{text-align:center;padding:16px 0;}
+    .success-circle{width:80px;height:80px;border-radius:50%;background:var(--g0);border:3px solid var(--g1);display:flex;align-items:center;justify-content:center;margin:0 auto 20px;font-size:36px;color:var(--g7);animation:popIn .4s cubic-bezier(.34,1.56,.64,1);}
+    @keyframes popIn{from{transform:scale(.3);opacity:0}to{transform:scale(1);opacity:1}}
+    .success-wrap h2{font-family:var(--fh);font-size:1.3rem;font-weight:700;color:var(--gr8);margin-bottom:8px;}
+    .success-wrap p{font-size:14px;color:var(--gr6);}
+    .reset-sent{text-align:center;padding:8px 0;}
+    .security-row{display:flex;align-items:center;justify-content:center;gap:6px;font-size:11.5px;color:var(--gr4);margin-top:16px;}
+    .security-row iconify-icon{font-size:14px;color:var(--g6);}
+    @media(max-width:480px){
+      .card-header{padding:28px 24px 24px;}
+      .card-body{padding:28px 24px;}
+      .card-footer{padding:16px 24px 24px;}
+      .otp-inp{width:44px;height:52px;font-size:1.3rem;}
+    }
+  </style>
+</head>
+<body>
+
+<div class="login-wrap">
+
+  <a href="/" class="back-link">
+    <iconify-icon icon="mdi:arrow-left"></iconify-icon>
+    Retour au site FODDEB
+  </a>
+
+  <div class="login-card">
+
+    <div class="card-header">
+      <div class="logo-wrap">
+        <div class="logo-circle">
+          <img src="/assets/img/logo.png" alt="Logo FODDEB"
+               onerror="this.style.display='none';this.nextElementSibling.style.display='block'"/>
+          <span class="logo-txt" style="display:none">FOD</span>
+        </div>
+      </div>
+      <h1 id="cardTitle">Connexion</h1>
+      <p id="cardSubtitle">Acces a votre espace FODDEB</p>
+    </div>
+
+    <div class="card-body">
+
+      <div class="step-ind" id="stepInd">
+        <div class="si-dot active" id="dot1"></div>
+        <div class="si-dot" id="dot2"></div>
+      </div>
+
+      <div class="error-box" id="globalErr" style="display:none">
+        <iconify-icon icon="mdi:alert-circle-outline"></iconify-icon>
+        <span id="globalErrMsg"></span>
+      </div>
+
+      <!-- STEP 1 : IDENTIFIANTS -->
+      <div class="step active" id="step1">
+        <div class="fg">
+          <label class="fl" for="loginId">Email ou identifiant</label>
+          <div class="input-wrap">
+            <input type="email" id="loginId" class="fi" placeholder="vous@exemple.com" autocomplete="email" autofocus/>
+            <iconify-icon icon="mdi:email-outline" class="input-icon"></iconify-icon>
+          </div>
+          <span class="ferr" id="loginId-err" role="alert"></span>
+        </div>
+        <div class="fg">
+          <label class="fl" for="loginPwd">Mot de passe</label>
+          <div class="input-wrap">
+            <input type="password" id="loginPwd" class="fi fi-with-toggle" placeholder="Votre mot de passe" autocomplete="current-password"/>
+            <iconify-icon icon="mdi:lock-outline" class="input-icon"></iconify-icon>
+            <iconify-icon icon="mdi:eye-outline" class="fi-toggle" id="togglePwd" onclick="togglePass()"></iconify-icon>
+          </div>
+          <span class="ferr" id="loginPwd-err" role="alert"></span>
+        </div>
+        <div class="forgot-link">
+          <span class="link" onclick="goStep('reset')">Mot de passe oublie ?</span>
+        </div>
+        <button class="btn-submit" id="btnLogin" onclick="doLogin()">
+          <iconify-icon icon="mdi:login-variant"></iconify-icon>
+          Se connecter
+        </button>
+        <div class="security-row">
+          <iconify-icon icon="mdi:shield-check-outline"></iconify-icon>
+          Connexion securisee · reCAPTCHA v3
+        </div>
+      </div>
+
+      <!-- STEP 2 : OTP -->
+      <div class="step" id="step2">
+        <div class="info-box">
+          <iconify-icon icon="mdi:email-fast-outline"></iconify-icon>
+          <span>Un code a 6 chiffres a ete envoye a <strong id="otpEmail">votre email</strong>. Valable <strong>5 minutes</strong>.</span>
+        </div>
+        <div class="otp-group" id="otpGroup" role="group" aria-label="Code OTP">
+          <input type="text" class="otp-inp" maxlength="1" inputmode="numeric" pattern="[0-9]" autocomplete="one-time-code" aria-label="Chiffre 1"/>
+          <input type="text" class="otp-inp" maxlength="1" inputmode="numeric" pattern="[0-9]" aria-label="Chiffre 2"/>
+          <input type="text" class="otp-inp" maxlength="1" inputmode="numeric" pattern="[0-9]" aria-label="Chiffre 3"/>
+          <input type="text" class="otp-inp" maxlength="1" inputmode="numeric" pattern="[0-9]" aria-label="Chiffre 4"/>
+          <input type="text" class="otp-inp" maxlength="1" inputmode="numeric" pattern="[0-9]" aria-label="Chiffre 5"/>
+          <input type="text" class="otp-inp" maxlength="1" inputmode="numeric" pattern="[0-9]" aria-label="Chiffre 6"/>
+        </div>
+        <button class="btn-submit" id="btnOtp" onclick="doVerifyOTP()">
+          <iconify-icon icon="mdi:check-circle-outline"></iconify-icon>
+          Verifier le code
+        </button>
+        <div class="divider">ou</div>
+        <div style="text-align:center">
+          <span class="link" id="resendLink" onclick="resendOTP()">Renvoyer le code</span>
+          <span id="resendCountdown" style="font-size:13px;color:var(--gr4);display:none"> (disponible dans <span id="countdown">60</span>s)</span>
+        </div>
+        <div style="margin-top:16px;text-align:center">
+          <span class="link" onclick="goStep('login')" style="color:var(--gr4)">
+            <iconify-icon icon="mdi:arrow-left" style="font-size:14px;vertical-align:middle"></iconify-icon>
+            Retour a la connexion
+          </span>
+        </div>
+      </div>
+
+      <!-- STEP RESET PASSWORD -->
+      <div class="step" id="stepReset">
+        <div class="warn-box">
+          <iconify-icon icon="mdi:information-outline"></iconify-icon>
+          <span>Saisissez votre email. Un lien de reinitialisation vous sera envoye si votre compte existe.</span>
+        </div>
+        <div class="fg">
+          <label class="fl" for="resetEmail">Adresse email</label>
+          <div class="input-wrap">
+            <input type="email" id="resetEmail" class="fi" placeholder="vous@exemple.com" autocomplete="email"/>
+            <iconify-icon icon="mdi:email-outline" class="input-icon"></iconify-icon>
+          </div>
+          <span class="ferr" id="resetEmail-err" role="alert"></span>
+        </div>
+        <button class="btn-submit" id="btnReset" onclick="doReset()">
+          <iconify-icon icon="mdi:send-outline"></iconify-icon>
+          Envoyer le lien
+        </button>
+        <div style="margin-top:16px;text-align:center">
+          <span class="link" onclick="goStep('login')" style="color:var(--gr4)">
+            <iconify-icon icon="mdi:arrow-left" style="font-size:14px;vertical-align:middle"></iconify-icon>
+            Retour a la connexion
+          </span>
+        </div>
+      </div>
+
+      <!-- STEP RESET SENT -->
+      <div class="step" id="stepResetSent">
+        <div class="reset-sent">
+          <div class="success-circle"><iconify-icon icon="mdi:email-check-outline"></iconify-icon></div>
+          <h2>Email envoye !</h2>
+          <p style="margin-bottom:20px">Verifiez votre boite mail et suivez le lien pour reinitialiser votre mot de passe.</p>
+          <button class="btn-submit" onclick="goStep('login')">
+            <iconify-icon icon="mdi:login-variant"></iconify-icon>
+            Retour a la connexion
+          </button>
+        </div>
+      </div>
+
+      <!-- STEP SUCCESS -->
+      <div class="step" id="stepSuccess">
+        <div class="success-wrap">
+          <div class="success-circle"><iconify-icon icon="mdi:check-bold"></iconify-icon></div>
+          <h2>Connexion reussie !</h2>
+          <p id="successMsg">Redirection en cours...</p>
+          <div style="margin-top:20px">
+            <div style="height:4px;background:var(--brd);border-radius:99px;overflow:hidden">
+              <div id="redirectBar" style="height:100%;background:var(--g5);width:0%;border-radius:99px;transition:width 1.5s linear"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="card-footer">
+      <p>Pas encore membre ? <a href="/auth/register.html">Adherer au FODDEB</a></p>
+    </div>
+
+  </div>
+</div>
+
+<script src="/assets/js/services/api.js"></script>
+<script>
+'use strict';
+
+/* ═══ ETAT ═══ */
+let currentStep   = 'login';
+let pendingUserId = '';
+let pendingEmail  = '';
+let countdownTimer = null;
+
+/* ═══ REDIRECTION SI DEJA CONNECTE ═══ */
+(function checkSession() {
+  try {
+    const user = JSON.parse(sessionStorage.getItem('foddeb_user'));
+    if (!user) return;
+    const dest = (user.role === 'admin' || user.role === 'manager')
+      ? '/admin/dashboard.html'
+      : '/dashboard/member.html';
+    window.location.href = dest;
+  } catch(e) {}
+})();
+
+/* ═══ NAVIGATION ENTRE ETAPES ═══ */
+const STEPS = {
+  login:     { id:'step1',         title:'Connexion',                   subtitle:'Acces a votre espace FODDEB', dots:[true,false] },
+  otp:       { id:'step2',         title:'Verification en deux etapes', subtitle:'Confirmez votre identite',    dots:[false,true]  },
+  reset:     { id:'stepReset',     title:'Reinitialiser',               subtitle:'Mot de passe oublie',         dots:null },
+  resetSent: { id:'stepResetSent', title:'Email envoye',                subtitle:'Verifiez votre boite mail',   dots:null },
+  success:   { id:'stepSuccess',   title:'Bienvenue',                   subtitle:'Connexion reussie',           dots:null },
+};
+
+function goStep(name) {
+  currentStep = name;
+  const cfg = STEPS[name];
+  if (!cfg) return;
+  document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
+  document.getElementById(cfg.id).classList.add('active');
+  document.getElementById('cardTitle').textContent    = cfg.title;
+  document.getElementById('cardSubtitle').textContent = cfg.subtitle;
+  const stepInd = document.getElementById('stepInd');
+  if (cfg.dots === null) {
+    stepInd.style.display = 'none';
+  } else {
+    stepInd.style.display = 'flex';
+    document.getElementById('dot1').className = 'si-dot' + (cfg.dots[0] ? ' active' : ' done');
+    document.getElementById('dot2').className = 'si-dot' + (cfg.dots[1] ? ' active' : '');
+  }
+  document.getElementById('globalErr').style.display = 'none';
+  setTimeout(() => {
+    if (name === 'login') document.getElementById('loginId').focus();
+    if (name === 'otp')   document.querySelectorAll('.otp-inp')[0].focus();
+    if (name === 'reset') document.getElementById('resetEmail').focus();
+  }, 80);
+}
+
+/* ═══ HASH SHA-256 ═══ */
+async function hashSHA256(str) {
+  const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
+  return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,'0')).join('');
+}
+
+/* ═══ TOGGLE PASSWORD ═══ */
+let pwdVisible = false;
+function togglePass() {
+  pwdVisible = !pwdVisible;
+  const inp = document.getElementById('loginPwd');
+  const ico = document.getElementById('togglePwd');
+  inp.type = pwdVisible ? 'text' : 'password';
+  ico.setAttribute('icon', pwdVisible ? 'mdi:eye-off-outline' : 'mdi:eye-outline');
+}
+
+/* ═══ RECAPTCHA ═══ */
+async function getRecaptchaToken(action) {
+  try {
+    if (typeof grecaptcha === 'undefined') return '';
+    return await new Promise(res =>
+      grecaptcha.ready(() =>
+        grecaptcha.execute('6LdU3tksAAAAAOAIdgtC7xsQURksQ9mHAZ3MVLXF', { action }).then(res)
+      )
+    );
+  } catch(e) { return ''; }
+}
+
+/* ═══ VALIDATION ═══ */
+function setErr(id, msg) {
+  const el = document.getElementById(id + '-err');
+  if (el) el.innerHTML = msg ? `<iconify-icon icon="mdi:alert-circle-outline" style="font-size:12px"></iconify-icon> ${msg}` : '';
+  const inp = document.getElementById(id);
+  if (inp) inp.classList.toggle('err', !!msg);
+}
+function clearErr(id) { setErr(id, ''); }
+
+function showGlobalErr(msg) {
+  const el = document.getElementById('globalErr');
+  document.getElementById('globalErrMsg').textContent = msg;
+  el.style.display = 'flex';
+}
+
+/* ═══ STEP 1 — LOGIN ═══
+ * Auth.gs authLogin() gère tout en une seule opération :
+ * 1. Vérifier identifiants
+ * 2. Générer l'OTP
+ * 3. Stocker l'OTP hashé en Sheets
+ * 4. Envoyer l'email OTP
+ * On ne rappelle PAS sendOTP ici — sinon deux codes différents sont envoyés.
+ */
+async function doLogin() {
+  clearErr('loginId'); clearErr('loginPwd');
+  document.getElementById('globalErr').style.display = 'none';
+
+  const identifier = document.getElementById('loginId').value.trim();
+  const password   = document.getElementById('loginPwd').value;
+
+  let ok = true;
+  if (!identifier) { setErr('loginId', 'Email requis.'); ok = false; }
+  else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(identifier)) { setErr('loginId', 'Format email invalide.'); ok = false; }
+  if (!password) { setErr('loginPwd', 'Mot de passe requis.'); ok = false; }
+  if (!ok) return;
+
+  const btn = document.getElementById('btnLogin');
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner"></span> Verification...';
+
+  try {
+    const passwordHash   = await hashSHA256(password);
+    const recaptchaToken = await getRecaptchaToken('login');
+
+    // authLogin envoie déjà l'OTP — on ne rappelle pas sendOTP après
+    const res = await FODDEB_API.auth.login(identifier, passwordHash, recaptchaToken);
+    if (!res.success) throw new Error(res.error || 'Identifiants incorrects.');
+
+    // Auth.gs renvoie res.user avec clés minuscules (id, email, prenom, nom, role)
+    const u = res.user || {};
+    pendingUserId = u.ID    || u.id    || res.userId || '';
+    pendingEmail  = u.Email || u.email || res.email  || identifier;
+
+    if (!pendingUserId) throw new Error('Identifiant utilisateur introuvable dans la réponse serveur.');
+
+    // Auth.gs fournit déjà maskedEmail — on l'utilise directement
+    document.getElementById('otpEmail').textContent = res.maskedEmail || maskEmail(pendingEmail);
+
+    goStep('otp');
+    startCountdown();
+
+  } catch(e) {
+    showGlobalErr(e.message || 'Erreur de connexion. Verifiez vos identifiants.');
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = '<iconify-icon icon="mdi:login-variant"></iconify-icon> Se connecter';
+  }
+}
+
+/* ═══ STEP 2 — OTP ═══ */
+function getOTPValue() {
+  return Array.from(document.querySelectorAll('.otp-inp')).map(i => i.value).join('');
+}
+
+function setupOTPInputs() {
+  const inputs = document.querySelectorAll('.otp-inp');
+  inputs.forEach((inp, idx) => {
+    inp.addEventListener('input', () => {
+      inp.value = inp.value.replace(/\D/g,'').slice(-1);
+      inp.classList.toggle('filled', inp.value !== '');
+      if (inp.value && idx < inputs.length - 1) inputs[idx+1].focus();
+      if (getOTPValue().length === 6) doVerifyOTP();
+    });
+    inp.addEventListener('keydown', e => {
+      if (e.key==='Backspace' && !inp.value && idx>0) {
+        inputs[idx-1].value = '';
+        inputs[idx-1].classList.remove('filled');
+        inputs[idx-1].focus();
+      }
+      if (e.key==='ArrowLeft'  && idx>0)               inputs[idx-1].focus();
+      if (e.key==='ArrowRight' && idx<inputs.length-1) inputs[idx+1].focus();
+    });
+    inp.addEventListener('paste', e => {
+      e.preventDefault();
+      const pasted = (e.clipboardData||window.clipboardData).getData('text').replace(/\D/g,'').slice(0,6);
+      [...pasted].forEach((c,i) => {
+        if (inputs[i]) { inputs[i].value=c; inputs[i].classList.add('filled'); }
+      });
+      if (pasted.length === 6) doVerifyOTP();
+      else if (inputs[pasted.length]) inputs[pasted.length].focus();
+    });
+  });
+}
+
+async function doVerifyOTP() {
+  const otp = getOTPValue();
+  if (otp.length < 6) {
+    document.querySelectorAll('.otp-inp').forEach(i => i.classList.add('err'));
+    return;
+  }
+  document.querySelectorAll('.otp-inp').forEach(i => i.classList.remove('err'));
+
+  const btn = document.getElementById('btnOtp');
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner"></span> Verification...';
+
+  try {
+    const res = await FODDEB_API.auth.verifyOTP(pendingUserId, otp);
+
+    if (!res.success || !res.valid) {
+      document.querySelectorAll('.otp-inp').forEach(i=>{i.classList.add('err');i.value='';});
+      document.querySelectorAll('.otp-inp')[0].focus();
+      throw new Error(res.error || 'Code incorrect ou expire.');
+    }
+
+    // Auth.gs renvoie clés minuscules (id, prenom, nom, email, role, org, dept)
+    // On normalise avec alias majuscule ET minuscule pour compatibilité
+    // member.html, admin/dashboard.html et les autres pages
+    const u = res.user || {};
+    sessionStorage.setItem('foddeb_user', JSON.stringify({
+      ID:           u.ID           || u.id           || pendingUserId,
+      id:           u.ID           || u.id           || pendingUserId,
+      Email:        u.Email        || u.email        || pendingEmail,
+      email:        u.Email        || u.email        || pendingEmail,
+      Prenom:       u.Prenom       || u.prenom       || '',
+      Nom:          u.Nom          || u.nom          || '',
+      Organisation: u.Organisation || u.org          || '',
+      Departement:  u.Departement  || u.dept         || '',
+      Telephone:    u.Telephone    || u.tel          || '',
+      DateAdhesion: u.DateAdhesion || u.dateAdhesion || '',
+      Role:         u.Role         || u.role         || 'member',
+      role:         u.Role         || u.role         || 'member',
+      Statut:       u.Statut       || u.statut       || 'active',
+      token:        res.token      || '',
+      loginAt:      new Date().toISOString(),
+    }));
+
+    if (countdownTimer) clearInterval(countdownTimer);
+
+    // Redirection selon le role
+    const role = u.Role || u.role || 'member';
+    const dest = (role === 'admin' || role === 'manager')
+      ? '/admin/dashboard.html'
+      : '/dashboard/member.html';
+
+    goStep('success');
+    const prenom = u.Prenom || u.prenom || 'Bienvenue';
+    const nom    = u.Nom    || u.nom    || '';
+    document.getElementById('successMsg').textContent =
+      `Bonjour ${(prenom + ' ' + nom).trim()}, redirection vers votre espace...`;
+
+    setTimeout(() => { document.getElementById('redirectBar').style.width = '100%'; }, 50);
+    setTimeout(() => { window.location.href = dest; }, 1600);
+
+  } catch(e) {
+    showGlobalErr(e.message);
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = '<iconify-icon icon="mdi:check-circle-outline"></iconify-icon> Verifier le code';
+  }
+}
+
+/* ═══ RENVOYER OTP ═══
+ * Seul endroit légitime où sendOTP est appelé explicitement
+ */
+async function resendOTP() {
+  document.getElementById('resendLink').style.display      = 'none';
+  document.getElementById('resendCountdown').style.display = 'inline';
+  try {
+    await FODDEB_API.auth.sendOTP(pendingUserId, pendingEmail);
+    document.querySelectorAll('.otp-inp').forEach(i=>{i.value='';i.classList.remove('filled','err');});
+    document.querySelectorAll('.otp-inp')[0].focus();
+    startCountdown();
+  } catch(e) {
+    document.getElementById('resendLink').style.display      = 'inline';
+    document.getElementById('resendCountdown').style.display = 'none';
+    showGlobalErr('Impossible de renvoyer le code. Reessayez.');
+  }
+}
+
+function startCountdown() {
+  if (countdownTimer) clearInterval(countdownTimer);
+  let sec = 60;
+  document.getElementById('resendLink').style.display      = 'none';
+  document.getElementById('resendCountdown').style.display = 'inline';
+  document.getElementById('countdown').textContent = sec;
+  countdownTimer = setInterval(() => {
+    sec--;
+    document.getElementById('countdown').textContent = sec;
+    if (sec <= 0) {
+      clearInterval(countdownTimer);
+      document.getElementById('resendLink').style.display      = 'inline';
+      document.getElementById('resendCountdown').style.display = 'none';
+    }
+  }, 1000);
+}
+
+/* ═══ RESET PASSWORD ═══ */
+async function doReset() {
+  clearErr('resetEmail');
+  const email = document.getElementById('resetEmail').value.trim();
+  if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    setErr('resetEmail', 'Adresse email invalide.');
+    return;
+  }
+  const btn = document.getElementById('btnReset');
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner"></span> Envoi...';
+  try {
+    await FODDEB_API.auth.resetPassword(email);
+    goStep('resetSent');
+  } catch(e) {
+    goStep('resetSent'); // Sécurité : ne pas révéler si l'email existe
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = '<iconify-icon icon="mdi:send-outline"></iconify-icon> Envoyer le lien';
+  }
+}
+
+/* ═══ UTILITAIRES ═══ */
+function maskEmail(email) {
+  const [local, domain] = email.split('@');
+  if (!domain) return email;
+  const visible = local.slice(0,2);
+  const masked  = '*'.repeat(Math.max(local.length-2, 3));
+  return `${visible}${masked}@${domain}`;
+}
+
+/* ═══ TOUCHE ENTREE ═══ */
+document.addEventListener('keydown', e => {
+  if (e.key !== 'Enter') return;
+  if (currentStep === 'login') doLogin();
+  if (currentStep === 'reset') doReset();
+});
+
+/* ═══ INIT ═══ */
+document.addEventListener('DOMContentLoaded', () => {
+  setupOTPInputs();
+  document.getElementById('loginId').focus();
+});
+
+if ('serviceWorker' in navigator) navigator.serviceWorker.register('/sw.js').catch(()=>{});
+</script>
+</body>
+</html>

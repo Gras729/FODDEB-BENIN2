@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="robots" content="noindex, nofollow"/>
+  <title>Accès administration — FODDEB</title>
+  <link rel="manifest" href="/manifest.json"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap" rel="stylesheet"/>
+  <script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js" defer></script>
+  <!-- config.js injecte dynamiquement le script reCAPTCHA via FODDEB_CONFIG.RECAPTCHA_SITE_KEY -->
+  <script src="/assets/js/config.js"></script>
+
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    :root{
+      --g9:#0F2713;--g8:#1B5E20;--g7:#2E7D32;--g5:#4CAF50;--g4:#81C784;--g1:#C8E6C9;--g0:#E8F5E9;
+      --gold:#F9A825;--gold2:#FFD54F;
+      --red:#C62828;--redf:#FFEBEE;
+      --white:#FFFFFF;
+      --gr8:#1C2520;--gr6:#4A5568;--gr2:#E2E8F0;--gr1:#F7FAFC;
+      --fh:'Syne',sans-serif;--fb:'DM Sans',system-ui,sans-serif;
+      --r:14px;--rs:8px;
+    }
+    html,body{height:100%;}
+    body{font-family:var(--fb);background:var(--g9);color:var(--gr8);display:flex;min-height:100vh;-webkit-font-smoothing:antialiased;}
+
+    /* ===== PANNEAU GAUCHE ===== */
+    .left{
+      flex:1;display:flex;flex-direction:column;justify-content:space-between;
+      padding:48px;position:relative;overflow:hidden;min-height:100vh;
+    }
+    .left::before{
+      content:'';position:absolute;inset:0;
+      background:
+        repeating-linear-gradient(45deg,rgba(249,168,37,.06) 0,rgba(249,168,37,.06) 1px,transparent 1px,transparent 40px),
+        repeating-linear-gradient(-45deg,rgba(76,175,80,.05) 0,rgba(76,175,80,.05) 1px,transparent 1px,transparent 40px),
+        radial-gradient(ellipse at 30% 70%,rgba(46,125,50,.25) 0%,transparent 60%),
+        radial-gradient(ellipse at 80% 20%,rgba(249,168,37,.12) 0%,transparent 50%);
+      pointer-events:none;
+    }
+    .accent-bar{position:absolute;top:0;right:0;width:4px;height:100%;background:linear-gradient(180deg,var(--gold) 0%,var(--g5) 50%,transparent 100%);opacity:.4;}
+    .left-top{position:relative;z-index:1;}
+    .logo{display:flex;align-items:center;gap:14px;margin-bottom:80px;}
+    .logo-icon{width:48px;height:48px;border-radius:14px;background:var(--g7);border:1px solid rgba(255,255,255,.15);display:flex;align-items:center;justify-content:center;font-family:var(--fh);color:#fff;font-size:13px;font-weight:800;letter-spacing:.04em;}
+    .logo-text strong{display:block;color:#fff;font-size:18px;font-weight:700;letter-spacing:.04em;}
+    .logo-text span{font-size:12px;color:rgba(255,255,255,.45);}
+    .left-mid{position:relative;z-index:1;}
+    .tagline{font-family:var(--fh);font-size:clamp(1.8rem,3vw,2.6rem);font-weight:800;color:#fff;line-height:1.1;margin-bottom:20px;}
+    .tagline em{color:var(--gold);font-style:normal;}
+    .desc{font-size:14px;color:rgba(255,255,255,.55);line-height:1.7;max-width:320px;margin-bottom:40px;}
+
+    /* Badge accès restreint */
+    .restricted-badge{
+      display:inline-flex;align-items:center;gap:8px;
+      background:rgba(198,40,40,.18);border:1px solid rgba(198,40,40,.4);
+      border-radius:99px;padding:8px 16px;
+      font-size:12px;font-weight:700;color:#EF9A9A;letter-spacing:.06em;
+    }
+
+    .left-bot{position:relative;z-index:1;}
+    .quote{border-left:3px solid var(--gold);padding-left:20px;font-style:italic;font-size:13px;color:rgba(255,255,255,.45);line-height:1.6;}
+
+    /* ===== PANNEAU DROIT ===== */
+    .right{width:460px;min-height:100vh;background:var(--white);display:flex;flex-direction:column;justify-content:center;padding:48px 52px;position:relative;}
+
+    /* Étape indicator */
+    .step-bar{display:flex;gap:8px;align-items:center;margin-bottom:28px;}
+    .sdot{width:8px;height:8px;border-radius:50%;background:var(--gr2);transition:all .3s;}
+    .sdot.on{background:var(--g7);width:24px;border-radius:4px;}
+    .sdot.done{background:var(--g5);}
+    .slbl{font-size:11px;color:var(--gr6);font-weight:700;letter-spacing:.08em;text-transform:uppercase;margin-left:4px;}
+
+    .card-title{font-family:var(--fh);font-size:1.7rem;font-weight:700;color:var(--g9);margin-bottom:8px;line-height:1.2;}
+    .card-sub{font-size:14px;color:var(--gr6);line-height:1.6;margin-bottom:32px;}
+
+    /* Form */
+    .fg{margin-bottom:20px;}
+    .lbl{display:flex;justify-content:space-between;align-items:center;font-size:12.5px;font-weight:700;color:var(--gr8);margin-bottom:8px;letter-spacing:.01em;}
+    .lbl a{font-size:12px;color:var(--g7);font-weight:500;text-decoration:none;}
+    .lbl a:hover{text-decoration:underline;}
+    .iw{position:relative;}
+    .ii{position:absolute;left:13px;top:50%;transform:translateY(-50%);color:var(--gr2);font-size:18px;pointer-events:none;transition:color .2s;}
+    .fi{width:100%;padding:13px 44px;border:1.5px solid var(--gr2);border-radius:var(--rs);font-family:var(--fb);font-size:14.5px;color:var(--gr8);background:var(--gr1);outline:none;transition:all .2s;}
+    .fi::placeholder{color:#B0BEC5;}
+    .fi:focus{border-color:var(--g5);background:#fff;box-shadow:0 0 0 4px rgba(76,175,80,.12);}
+    .fi:focus~.ii,.iw:focus-within .ii{color:var(--g7);}
+    .fi.err{border-color:var(--red);background:var(--redf);}
+    .itog{position:absolute;right:13px;top:50%;transform:translateY(-50%);background:none;border:none;color:var(--gr2);cursor:pointer;font-size:18px;padding:4px;transition:color .2s;}
+    .itog:hover{color:var(--gr6);}
+    .ferr{font-size:11.5px;color:var(--red);margin-top:6px;display:flex;align-items:center;gap:4px;}
+
+    /* Notice sécurité */
+    .sec-note{display:flex;align-items:flex-start;gap:10px;background:var(--g0);border:1px solid var(--g1);border-radius:var(--rs);padding:13px 14px;font-size:12.5px;color:#1B5E20;margin-bottom:20px;line-height:1.5;}
+    .sec-note iconify-icon{font-size:16px;flex-shrink:0;margin-top:1px;color:var(--g7);}
+
+    /* Bouton */
+    .btn-sub{width:100%;padding:14px;background:var(--g8);color:#fff;border:none;border-radius:var(--rs);font-family:var(--fh);font-size:15px;font-weight:700;letter-spacing:.02em;cursor:pointer;transition:all .25s;display:flex;align-items:center;justify-content:center;gap:10px;}
+    .btn-sub:hover{background:var(--g7);transform:translateY(-1px);box-shadow:0 6px 20px rgba(27,94,32,.3);}
+    .btn-sub:active{transform:none;}
+    .btn-sub:disabled{opacity:.6;cursor:not-allowed;transform:none;box-shadow:none;}
+    .spin{width:17px;height:17px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:rot .7s linear infinite;}
+    @keyframes rot{to{transform:rotate(360deg)}}
+
+    /* OTP step */
+    .otp-wrap{display:flex;gap:10px;justify-content:center;margin-bottom:8px;}
+    .otp-digit{width:52px;height:60px;border:2px solid var(--gr2);border-radius:var(--rs);font-family:var(--fh);font-size:1.6rem;font-weight:700;text-align:center;color:var(--g9);background:var(--gr1);outline:none;transition:all .2s;caret-color:transparent;}
+    .otp-digit:focus{border-color:var(--g5);background:#fff;box-shadow:0 0 0 3px rgba(76,175,80,.15);}
+    .otp-digit.filled{border-color:var(--g5);background:var(--g0);color:var(--g8);}
+    .otp-hint{text-align:center;font-size:12.5px;color:var(--gr6);margin-bottom:24px;}
+    .otp-hint strong{color:var(--g8);}
+    .resend-link{background:none;border:none;font-family:var(--fb);font-size:13px;color:var(--g7);font-weight:600;cursor:pointer;padding:0;}
+    .resend-link:disabled{color:#B0BEC5;cursor:default;}
+
+    /* Lockout */
+    .lockout{display:none;align-items:flex-start;gap:10px;background:var(--redf);border:1px solid #FFCDD2;border-radius:var(--rs);padding:14px;font-size:13px;color:var(--red);margin-bottom:20px;}
+    .lockout.on{display:flex;}
+
+    /* Attempts */
+    .att-bar{display:flex;gap:4px;margin-top:6px;}
+    .att-dot{width:8px;height:8px;border-radius:50%;background:var(--gr2);transition:background .3s;}
+    .att-dot.used{background:var(--red);}
+
+    /* Animations */
+    @keyframes sIn{from{opacity:0;transform:translateX(24px)}to{opacity:1;transform:none}}
+    @keyframes sOut{from{opacity:1;transform:none}to{opacity:0;transform:translateX(-24px)}}
+    @keyframes shk{0%,100%{transform:none}20%{transform:translateX(-6px)}40%{transform:translateX(6px)}60%{transform:translateX(-4px)}80%{transform:translateX(4px)}}
+    .si{animation:sIn .35s cubic-bezier(.4,0,.2,1) both;}
+    .so{animation:sOut .2s ease both;}
+    .shk{animation:shk .4s ease;}
+
+    .divider{display:flex;align-items:center;gap:12px;margin:22px 0;}
+    .divider hr{flex:1;border:none;border-top:1px solid var(--gr2);}
+    .divider span{font-size:11px;color:#B0BEC5;}
+    .foot{text-align:center;margin-top:20px;font-size:13px;color:var(--gr6);}
+    .foot a{color:var(--g7);font-weight:600;text-decoration:none;}
+    .foot a:hover{text-decoration:underline;}
+    .grecaptcha-badge{visibility:hidden;}
+
+    @media(max-width:900px){.left{display:none;}.right{width:100%;padding:40px 28px;}}
+    @media(max-width:480px){.right{padding:32px 20px;}.otp-digit{width:44px;height:54px;font-size:1.4rem;}}
+  </style>
+</head>
+<body>
+
+<!-- GAUCHE -->
+<div class="left">
+  <div class="accent-bar" aria-hidden="true"></div>
+  <div class="left-top">
+    <div class="logo">
+      <div class="logo-icon">FOD</div>
+      <div class="logo-text">
+        <strong>FODDEB</strong>
+        <span>Droits de l'Enfant au Bénin</span>
+      </div>
+    </div>
+    <div class="left-mid">
+      <h1 class="tagline">Espace<br/><em>Administration</em></h1>
+      <p class="desc">Gérez les membres, projets, dons et communications du réseau FODDEB depuis votre tableau de bord sécurisé.</p>
+      <div class="restricted-badge">
+        <iconify-icon icon="mdi:shield-lock-outline"></iconify-icon>
+        ACCÈS RESTREINT — ADMINISTRATEURS
+      </div>
+    </div>
+  </div>
+  <div class="left-bot">
+    <blockquote class="quote">
+      « Solidarité, Justice, Épanouissement des Enfants »<br/>
+      <strong style="color:rgba(255,255,255,.35);font-style:normal;font-size:11px">— Devise du FODDEB</strong>
+    </blockquote>
+  </div>
+</div>
+
+<!-- DROITE -->
+<main class="right" role="main">
+
+  <!-- ÉTAPE 1 : Identifiants -->
+  <div id="step1" class="si">
+    <div class="step-bar">
+      <div class="sdot on"></div>
+      <div class="sdot"></div>
+      <span class="slbl">Étape 1 / 2</span>
+    </div>
+    <h2 class="card-title">Connexion admin</h2>
+    <p class="card-sub">Identifiez-vous pour recevoir un code de vérification sur votre email.</p>
+
+    <div class="lockout" id="lockoutBox" role="alert">
+      <iconify-icon icon="mdi:lock-outline"></iconify-icon>
+      <div>
+        <strong>Compte temporairement verrouillé</strong><br/>
+        Réessayez dans <span id="lockTimer">15:00</span>.
+      </div>
+    </div>
+
+    <form id="f1" novalidate autocomplete="on">
+      <div class="fg">
+        <label class="lbl" for="identifier">Identifiant ou email</label>
+        <div class="iw">
+          <iconify-icon icon="mdi:account-outline" class="ii"></iconify-icon>
+          <input type="text" id="identifier" class="fi" placeholder="Votre identifiant admin" autocomplete="username" required aria-required="true" aria-describedby="e-id"/>
+        </div>
+        <span class="ferr" id="e-id" role="alert"></span>
+      </div>
+
+      <div class="fg">
+        <label class="lbl" for="password">
+          Mot de passe
+          <a href="/auth/reset-password.html">Oublié ?</a>
+        </label>
+        <div class="iw">
+          <iconify-icon icon="mdi:lock-outline" class="ii"></iconify-icon>
+          <input type="password" id="password" class="fi" placeholder="Votre mot de passe" autocomplete="current-password" required aria-required="true" aria-describedby="e-pwd"/>
+          <button type="button" class="itog" id="togPwd" aria-label="Afficher le mot de passe">
+            <iconify-icon icon="mdi:eye-outline" id="eyeIco"></iconify-icon>
+          </button>
+        </div>
+        <span class="ferr" id="e-pwd" role="alert"></span>
+        <div class="att-bar" id="attBar" style="display:none" aria-label="Tentatives restantes">
+          <div class="att-dot" id="a1"></div><div class="att-dot" id="a2"></div>
+          <div class="att-dot" id="a3"></div><div class="att-dot" id="a4"></div>
+          <div class="att-dot" id="a5"></div>
+        </div>
+      </div>
+
+      <div class="sec-note">
+        <iconify-icon icon="mdi:shield-check-outline"></iconify-icon>
+        <span>Un code OTP à 6 chiffres sera envoyé sur votre email admin. Accès réservé aux rôles <strong>Admin</strong> et <strong>Gestionnaire</strong>.</span>
+      </div>
+
+      <button type="submit" class="btn-sub" id="btn1">
+        <iconify-icon icon="mdi:arrow-right-circle-outline"></iconify-icon>
+        Continuer
+      </button>
+      <p style="font-size:11px;color:#B0BEC5;text-align:center;margin-top:12px">
+        Protégé par reCAPTCHA v3 —
+        <a href="https://policies.google.com/privacy" target="_blank" rel="noopener" style="color:#B0BEC5">Confidentialité</a>
+      </p>
+    </form>
+
+    <div class="divider"><hr/><span>ou</span><hr/></div>
+    <p class="foot"><a href="/">Retour au site public</a></p>
+  </div>
+
+  <!-- ÉTAPE 2 : OTP -->
+  <div id="step2" style="display:none">
+    <div class="step-bar">
+      <div class="sdot done"></div>
+      <div class="sdot on"></div>
+      <span class="slbl">Étape 2 / 2</span>
+    </div>
+    <h2 class="card-title">Code de vérification</h2>
+    <p class="card-sub" id="otpSub">Entrez le code à 6 chiffres envoyé sur votre adresse email.</p>
+
+    <div class="otp-wrap" id="otpWrap" role="group" aria-label="Code OTP à 6 chiffres">
+      <input class="otp-digit" maxlength="1" inputmode="numeric" pattern="[0-9]" aria-label="Chiffre 1" data-i="0"/>
+      <input class="otp-digit" maxlength="1" inputmode="numeric" pattern="[0-9]" aria-label="Chiffre 2" data-i="1"/>
+      <input class="otp-digit" maxlength="1" inputmode="numeric" pattern="[0-9]" aria-label="Chiffre 3" data-i="2"/>
+      <input class="otp-digit" maxlength="1" inputmode="numeric" pattern="[0-9]" aria-label="Chiffre 4" data-i="3"/>
+      <input class="otp-digit" maxlength="1" inputmode="numeric" pattern="[0-9]" aria-label="Chiffre 5" data-i="4"/>
+      <input class="otp-digit" maxlength="1" inputmode="numeric" pattern="[0-9]" aria-label="Chiffre 6" data-i="5"/>
+    </div>
+
+    <p class="otp-hint">Code valide <strong>5 minutes</strong>. Vérifiez vos spams.</p>
+    <span class="ferr" id="e-otp" role="alert" style="justify-content:center;margin-bottom:12px"></span>
+
+    <button type="button" class="btn-sub" id="btn2" disabled>
+      <iconify-icon icon="mdi:shield-check-outline"></iconify-icon>
+      Valider l'accès
+    </button>
+
+    <p style="text-align:center;margin-top:16px;font-size:13px;color:var(--gr6)">
+      Pas reçu ?
+      <button class="resend-link" id="resendBtn" disabled>Renvoyer <span id="resendTimer"></span></button>
+    </p>
+    <p style="text-align:center;margin-top:10px">
+      <button class="resend-link" onclick="backToStep1()">
+        <iconify-icon icon="mdi:arrow-left" style="vertical-align:middle;font-size:13px"></iconify-icon>
+        Modifier les identifiants
+      </button>
+    </p>
+  </div>
+
+</main>
+
+<script src="/assets/js/utils.js"></script>
+<script src="/assets/js/services/api.js"></script>
+<script src="/assets/js/services/auth.js"></script>
+<script>
+'use strict';
+
+/* ─── CONSTANTES ─── */
+const MAX_ATT   = 5;
+const LOCK_MS   = 15 * 60 * 1000;
+const RESEND_CD = 60; // secondes avant renvoyer
+
+/* ─── ÉTAT ─── */
+let attempts   = parseInt(localStorage.getItem('foddeb_adm_attempts') || '0');
+let locked     = false;
+let otpUserId  = '';
+let otpEmail   = '';
+let resendInt  = null;
+
+/* ─── UTILITAIRES ─── */
+function setErr(fid, eid, msg) {
+  document.getElementById(fid).classList.add('err');
+  const e = document.getElementById(eid);
+  e.innerHTML = `<iconify-icon icon="mdi:alert-circle-outline" style="font-size:13px"></iconify-icon> ${msg}`;
+  document.getElementById(fid).setAttribute('aria-invalid','true');
+}
+function clrErr(fid, eid) {
+  document.getElementById(fid).classList.remove('err');
+  document.getElementById(eid).textContent = '';
+  document.getElementById(fid).removeAttribute('aria-invalid');
+}
+function shakeEl(id) {
+  const el = document.getElementById(id);
+  el.classList.add('shk');
+  setTimeout(() => el.classList.remove('shk'), 400);
+}
+
+/* ─── TOGGLE MOT DE PASSE ─── */
+document.getElementById('togPwd').addEventListener('click', () => {
+  const inp = document.getElementById('password');
+  const ico = document.getElementById('eyeIco');
+  const show = inp.type === 'password';
+  inp.type = show ? 'text' : 'password';
+  ico.setAttribute('icon', show ? 'mdi:eye-off-outline' : 'mdi:eye-outline');
+  document.getElementById('togPwd').setAttribute('aria-label', show ? 'Masquer le mot de passe' : 'Afficher le mot de passe');
+});
+
+/* ─── LOCKOUT ─── */
+function checkLock() {
+  const until = parseInt(localStorage.getItem('foddeb_adm_lock') || '0');
+  if (Date.now() < until) { locked = true; startLockTimer(until); return true; }
+  return false;
+}
+
+function startLockTimer(until) {
+  document.getElementById('lockoutBox').classList.add('on');
+  document.getElementById('btn1').disabled = true;
+  const tick = () => {
+    const rem = Math.max(0, until - Date.now());
+    const m = Math.floor(rem / 60000);
+    const s = Math.floor((rem % 60000) / 1000);
+    document.getElementById('lockTimer').textContent = `${m}:${String(s).padStart(2,'0')}`;
+    if (rem > 0) { setTimeout(tick, 1000); }
+    else {
+      locked = false;
+      document.getElementById('lockoutBox').classList.remove('on');
+      document.getElementById('btn1').disabled = false;
+      localStorage.removeItem('foddeb_adm_lock');
+      localStorage.setItem('foddeb_adm_attempts','0');
+      attempts = 0;
+      updAtt();
+    }
+  };
+  tick();
+}
+
+function updAtt() {
+  if (attempts > 0) document.getElementById('attBar').style.display = 'flex';
+  for (let i = 1; i <= 5; i++) {
+    document.getElementById('a'+i).classList.toggle('used', i <= attempts);
+  }
+}
+
+/* ─── HASH SHA-256 ─── */
+async function sha256(str) {
+  const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
+  return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,'0')).join('');
+}
+
+/* ─── RECAPTCHA ─── */
+async function getCaptcha(action) {
+  if (typeof grecaptcha === 'undefined') return '';
+  return new Promise(res => grecaptcha.ready(() =>
+    grecaptcha.execute(window.FODDEB_CONFIG.RECAPTCHA_SITE_KEY, { action }).then(res)
+  ));
+}
+
+/* ═══════════════════════════════════════════
+   ÉTAPE 1 — Login
+═══════════════════════════════════════════ */
+document.getElementById('f1').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  if (locked) return;
+
+  const btn  = document.getElementById('btn1');
+  const id   = document.getElementById('identifier').value.trim();
+  const pwd  = document.getElementById('password').value;
+
+  clrErr('identifier','e-id');
+  clrErr('password','e-pwd');
+
+  let ok = true;
+  if (!id)  { setErr('identifier','e-id','Ce champ est requis.');  ok = false; }
+  if (!pwd) { setErr('password',  'e-pwd','Ce champ est requis.'); ok = false; }
+  if (!ok)  { shakeEl('f1'); return; }
+
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spin"></span> Vérification…';
+
+  try {
+    const [recaptchaToken, passwordHash] = await Promise.all([
+      getCaptcha('admin_login'),
+      sha256(pwd),
+    ]);
+
+    const res = await FODDEB_API.auth.login(id, passwordHash, recaptchaToken);
+
+    if (!res.success) throw new Error(res.error || 'Identifiants incorrects');
+
+    /* Vérification rôle admin/manager côté front (double vérification GAS) */
+    const role = res.user?.role || '';
+    if (role !== 'admin' && role !== 'manager') {
+      throw new Error('Accès réservé aux administrateurs et gestionnaires.');
+    }
+
+    /* Réinitialiser les tentatives */
+    localStorage.setItem('foddeb_adm_attempts','0');
+    attempts = 0;
+    updAtt();
+
+    /* Stocker userId et email masqué pour étape OTP */
+    otpUserId = res.user.id;
+    otpEmail  = res.maskedEmail || res.user?.email || '';
+
+    /* Envoyer l'OTP */
+    await FODDEB_API.auth.sendOTP(otpUserId, res.user.email);
+
+    /* Passer à l'étape 2 */
+    goStep2();
+
+  } catch (err) {
+    attempts++;
+    localStorage.setItem('foddeb_adm_attempts', String(attempts));
+    updAtt();
+
+    if (attempts >= MAX_ATT) {
+      const until = Date.now() + LOCK_MS;
+      localStorage.setItem('foddeb_adm_lock', String(until));
+      locked = true;
+      startLockTimer(until);
+    } else {
+      const rem = MAX_ATT - attempts;
+      setErr('password','e-pwd', `${err.message}. ${rem} tentative(s) restante(s).`);
+      shakeEl('f1');
+    }
+
+    btn.disabled = false;
+    btn.innerHTML = '<iconify-icon icon="mdi:arrow-right-circle-outline"></iconify-icon> Continuer';
+  }
+});
+
+/* ─── Transition vers étape 2 ─── */
+function goStep2() {
+  const s1 = document.getElementById('step1');
+  const s2 = document.getElementById('step2');
+
+  s1.classList.add('so');
+  setTimeout(() => {
+    s1.style.display = 'none';
+    s1.classList.remove('so');
+    document.getElementById('otpSub').textContent = `Code envoyé sur ${otpEmail || 'votre email admin'}.`;
+    s2.style.display = 'block';
+    s2.classList.add('si');
+    // Focus premier champ OTP
+    document.querySelector('.otp-digit').focus();
+    // Démarrer timer de renvoi
+    startResendTimer();
+  }, 200);
+}
+
+function backToStep1() {
+  const s1 = document.getElementById('step1');
+  const s2 = document.getElementById('step2');
+  s2.style.display = 'none';
+  s1.style.display = 'block';
+  s1.classList.add('si');
+  clearInterval(resendInt);
+}
+
+/* ═══════════════════════════════════════════
+   ÉTAPE 2 — OTP
+═══════════════════════════════════════════ */
+const digits = document.querySelectorAll('.otp-digit');
+
+digits.forEach((inp, i) => {
+  inp.addEventListener('input', (e) => {
+    const val = e.target.value.replace(/\D/g,'');
+    inp.value = val ? val[val.length-1] : '';
+    inp.classList.toggle('filled', !!inp.value);
+
+    /* Auto-focus suivant */
+    if (inp.value && i < digits.length - 1) digits[i+1].focus();
+    checkOtpFull();
+  });
+
+  inp.addEventListener('keydown', (e) => {
+    if (e.key === 'Backspace' && !inp.value && i > 0) {
+      digits[i-1].focus();
+      digits[i-1].value = '';
+      digits[i-1].classList.remove('filled');
+      checkOtpFull();
+    }
+    /* Coller le code complet */
+    if ((e.ctrlKey || e.metaKey) && e.key === 'v') return;
+  });
+
+  /* Sélectionner tout au focus */
+  inp.addEventListener('focus', () => inp.select());
+});
+
+/* Gestion du collage */
+digits[0].addEventListener('paste', (e) => {
+  e.preventDefault();
+  const pasted = (e.clipboardData || window.clipboardData).getData('text').replace(/\D/g,'');
+  [...pasted.slice(0,6)].forEach((ch, i) => {
+    if (digits[i]) {
+      digits[i].value = ch;
+      digits[i].classList.add('filled');
+    }
+  });
+  const next = Math.min(pasted.length, 5);
+  digits[next].focus();
+  checkOtpFull();
+});
+
+function getOtpValue() {
+  return [...digits].map(d => d.value).join('');
+}
+
+function checkOtpFull() {
+  const full = getOtpValue().length === 6;
+  document.getElementById('btn2').disabled = !full;
+  document.getElementById('e-otp').textContent = '';
+}
+
+/* ─── Validation OTP ─── */
+document.getElementById('btn2').addEventListener('click', async () => {
+  const otp = getOtpValue();
+  if (otp.length !== 6) return;
+
+  const btn = document.getElementById('btn2');
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spin"></span> Validation…';
+
+  try {
+    const res = await FODDEB_API.auth.verifyOTP(otpUserId, otp);
+
+    if (!res.success) throw new Error(res.error || 'Code invalide ou expiré.');
+
+    /* Écriture session via FODDEB_AUTH */
+    FODDEB_AUTH.setSession(res.user, res.token);
+
+    /* Redirection dashboard */
+    window.location.href = '/admin/dashboard.html';
+
+  } catch (err) {
+    const errEl = document.getElementById('e-otp');
+    errEl.innerHTML = `<iconify-icon icon="mdi:alert-circle-outline" style="font-size:13px"></iconify-icon> ${err.message}`;
+    /* Reset champs OTP */
+    digits.forEach(d => { d.value = ''; d.classList.remove('filled'); });
+    digits[0].focus();
+    btn.disabled = true;
+    btn.innerHTML = '<iconify-icon icon="mdi:shield-check-outline"></iconify-icon> Valider l\'accès';
+  }
+});
+
+/* ─── Timer renvoi OTP ─── */
+function startResendTimer() {
+  let sec = RESEND_CD;
+  const btn = document.getElementById('resendBtn');
+  const tl  = document.getElementById('resendTimer');
+  btn.disabled = true;
+  tl.textContent = `(${sec}s)`;
+  clearInterval(resendInt);
+  resendInt = setInterval(() => {
+    sec--;
+    if (sec <= 0) {
+      clearInterval(resendInt);
+      btn.disabled = false;
+      tl.textContent = '';
+    } else {
+      tl.textContent = `(${sec}s)`;
+    }
+  }, 1000);
+}
+
+document.getElementById('resendBtn').addEventListener('click', async () => {
+  document.getElementById('resendBtn').disabled = true;
+  try {
+    await FODDEB_API.auth.sendOTP(otpUserId, '');
+    startResendTimer();
+    document.getElementById('e-otp').textContent = '';
+    // Feedback visuel
+    const hint = document.querySelector('.otp-hint');
+    const orig = hint.innerHTML;
+    hint.innerHTML = '<strong style="color:var(--g7)">Code renvoyé !</strong> Vérifiez votre boîte mail.';
+    setTimeout(() => hint.innerHTML = orig, 3000);
+  } catch (err) {
+    document.getElementById('e-otp').textContent = 'Erreur lors du renvoi. Réessayez.';
+    document.getElementById('resendBtn').disabled = false;
+  }
+});
+
+/* ─── Nettoyage input ─── */
+['identifier','password'].forEach(id => {
+  document.getElementById(id).addEventListener('input', () => clrErr(id, 'e-'+id.slice(0,3)));
+});
+
+/* ─── Init ─── */
+(function init() {
+  // Si déjà connecté en admin, rediriger
+  if (FODDEB_AUTH.isAdmin()) {
+    window.location.href = '/admin/dashboard.html';
+    return;
+  }
+  checkLock();
+  updAtt();
+  if ('serviceWorker' in navigator) navigator.serviceWorker.register('/sw.js').catch(()=>{});
+})();
+</script>
+</body>
+</html>

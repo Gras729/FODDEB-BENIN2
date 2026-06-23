@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title id="pageTitle">Article — FODDEB</title>
+  <meta name="description" id="pageDesc" content="Actualité FODDEB"/>
+  <meta property="og:title" id="ogTitle" content="Article — FODDEB"/>
+  <meta property="og:image" id="ogImage" content=""/>
+  <link rel="manifest" href="/manifest.json"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js" defer></script>
+  <script src="/assets/js/config.js"></script>
+  <script src="/assets/js/utils.js"></script>
+  <script src="/assets/js/services/api.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --g9: #1B3A1F; --g8: #1B5E20; --g7: #2E7D32; --g6: #388E3C; --g5: #4CAF50; --g4: #81C784; --g1: #C8E6C9; --g0: #E8F5E9;
+      --gold: #F9A825; --gold2: #F57F17; --goldf: #FFFDE7;
+      --red: #C62828; --blue: #1565C0; --pur: #6A1B9A; --teal: #00695C; --org: #E65100;
+      --cream: #FAFAF7; --white: #FFFFFF;
+      --dark: #0D1B0F; --gr8: #1C2520; --gr6: #4A5568; --gr4: #A0ADB8; --gr2: #E2E8F0; --gr1: #F1F5F2; --brd: #E8EEE9;
+      --fh: 'Playfair Display', Georgia, serif; --fb: 'DM Sans', system-ui, sans-serif;
+      --r: 12px; --rs: 8px;
+      --sh: 0 4px 24px rgba(0,0,0,.08); --shm: 0 8px 40px rgba(0,0,0,.14);
+      --tr: .3s cubic-bezier(.4, 0, .2, 1);
+    }
+    html { scroll-behavior: smooth; }
+    body { font-family: var(--fb); background: var(--cream); color: var(--gr8); -webkit-font-smoothing: antialiased; }
+    a { color: inherit; text-decoration: none; } ul { list-style: none; }
+    .container { width: 100%; max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+
+    /* ===== TOPBAR ===== */
+    .topbar { background: var(--g9); color: rgba(255,255,255,.75); font-size: 13px; padding: 8px 0; }
+    .topbar .container { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 6px; }
+    .topbar a { color: rgba(255,255,255,.75); transition: color .2s; } .topbar a:hover { color: #fff; }
+    .topbar-info { display: flex; align-items: center; gap: 20px; flex-wrap: wrap; }
+    .topbar-info span { display: flex; align-items: center; gap: 6px; }
+    .topbar-social { display: flex; gap: 14px; }
+
+    /* ===== NAVBAR ===== */
+    .navbar { background: var(--white); border-bottom: 1px solid var(--brd); position: sticky; top: 0; z-index: 1000; box-shadow: 0 2px 12px rgba(0,0,0,.06); }
+    .navbar .container { display: flex; align-items: center; justify-content: space-between; height: 72px; }
+    .nav-brand { display: flex; align-items: center; gap: 14px; }
+    .nav-logo { width: 48px; height: 48px; border-radius: 50%; background: var(--g8); display: flex; align-items: center; justify-content: center; flex-shrink: 0; overflow: hidden; }
+    .nav-logo img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .nav-logo-txt { font-family: var(--fh); color: #fff; font-size: 14px; font-weight: 800; }
+    .nav-name strong { display: block; font-size: 18px; font-weight: 700; color: var(--g8); }
+    .nav-name span { font-size: 11px; color: var(--gr6); }
+    .nav-links { display: flex; align-items: center; gap: 4px; }
+    .nav-link { font-size: 14px; font-weight: 500; color: var(--gr6); padding: 8px 14px; border-radius: var(--rs); transition: var(--tr); }
+    .nav-link:hover, .nav-link.active { color: var(--g8); background: var(--g0); }
+    .nav-link.active { font-weight: 600; }
+    .nav-cta { display: flex; gap: 10px; }
+    .btn { display: inline-flex; align-items: center; gap: 8px; font-family: var(--fb); font-size: 14px; font-weight: 600; padding: 10px 20px; border-radius: var(--rs); border: 1.5px solid transparent; cursor: pointer; transition: var(--tr); white-space: nowrap; }
+    .btn-p { background: var(--g8); color: #fff; } .btn-p:hover { background: var(--g7); transform: translateY(-1px); }
+    .btn-gold { background: var(--gold); color: var(--dark); } .btn-gold:hover { background: var(--gold2); transform: translateY(-1px); }
+    .btn-sm { font-size: 13px; padding: 8px 16px; }
+    .btn-outline { background: transparent; color: var(--g8); border-color: var(--g1); } .btn-outline:hover { background: var(--g0); }
+    .hamburger { display: none; background: none; border: none; cursor: pointer; padding: 6px; flex-direction: column; gap: 5px; }
+    .hamburger span { display: block; width: 24px; height: 2px; background: var(--gr8); border-radius: 2px; }
+    .mobile-nav { display: none; position: fixed; inset: 0; background: var(--white); z-index: 2000; flex-direction: column; padding: 24px; overflow-y: auto; }
+    .mobile-nav.open { display: flex; }
+    .mobile-nav-hdr { display: flex; justify-content: space-between; align-items: center; margin-bottom: 32px; }
+    .mobile-close { background: none; border: none; cursor: pointer; font-size: 28px; color: var(--gr6); }
+    .mobile-links { display: flex; flex-direction: column; gap: 4px; }
+    .mobile-links a { font-size: 18px; font-weight: 500; color: var(--gr8); padding: 14px 16px; border-radius: var(--r); border-bottom: 1px solid var(--gr1); }
+    .mobile-links a:hover { color: var(--g8); background: var(--g0); }
+    .mobile-footer { margin-top: 32px; display: flex; flex-direction: column; gap: 12px; }
+
+    /* ===== HERO ===== */
+    .hero { background: linear-gradient(135deg, var(--g9) 0%, var(--g8) 60%, var(--g7) 100%); padding: 72px 0; position: relative; overflow: hidden; }
+    .hero::before { content: ''; position: absolute; inset: 0; background: repeating-linear-gradient(45deg, rgba(249,168,37,.05) 0px, rgba(249,168,37,.05) 1px, transparent 1px, transparent 40px), repeating-linear-gradient(-45deg, rgba(76,175,80,.04) 0px, rgba(76,175,80,.04) 1px, transparent 1px, transparent 40px); }
+    .hero-inner { position: relative; z-index: 1; display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: center; }
+    .hero-badge { display: inline-flex; align-items: center; gap: 6px; font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--gold); background: rgba(249,168,37,.12); border: 1px solid rgba(249,168,37,.25); border-radius: 99px; padding: 4px 14px; margin-bottom: 16px; }
+    .hero-title { font-family: var(--fh); font-size: clamp(2rem, 4vw, 3rem); font-weight: 800; color: #fff; line-height: 1.12; margin-bottom: 18px; }
+    .hero-title span { color: var(--gold); }
+    .hero-desc { font-size: 16px; color: rgba(255,255,255,.72); line-height: 1.7; margin-bottom: 28px; }
+    .hero-actions { display: flex; gap: 12px; flex-wrap: wrap; }
+    .hero-stats { display: flex; gap: 28px; flex-wrap: wrap; margin-top: 36px; padding-top: 28px; border-top: 1px solid rgba(255,255,255,.15); }
+    .hero-stat strong { display: block; font-family: var(--fh); font-size: 1.8rem; font-weight: 700; color: var(--gold); }
+    .hero-stat span { font-size: 12px; color: rgba(255,255,255,.55); }
+
+    /* Cartes actu dans le hero */
+    .hero-news-preview { display: flex; flex-direction: column; gap: 12px; }
+    .hnp-card { background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.12); border-radius: var(--r); padding: 16px 18px; color: #fff; backdrop-filter: blur(8px); display: flex; gap: 14px; align-items: flex-start; }
+    .hnp-icon { width: 36px; height: 36px; border-radius: 8px; background: rgba(249,168,37,.18); color: var(--gold); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .hnp-cat { font-size: 10px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--gold); margin-bottom: 4px; }
+    .hnp-title { font-size: 13px; font-weight: 500; line-height: 1.4; color: rgba(255,255,255,.9); }
+    .hnp-date { font-size: 11px; color: rgba(255,255,255,.4); margin-top: 4px; }
+
+    /* ===== BARRE DE FILTRES ===== */
+    .filters-bar { background: var(--white); border-bottom: 1px solid var(--brd); padding: 16px 0; position: sticky; top: 72px; z-index: 50; }
+    .filters-inner { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
+    .filter-search { position: relative; flex: 1; min-width: 220px; max-width: 300px; }
+    .filter-search iconify-icon { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--gr4); pointer-events: none; }
+    .filter-input { width: 100%; padding: 9px 12px 9px 38px; border: 1px solid var(--brd); border-radius: var(--rs); font-size: 14px; font-family: var(--fb); outline: none; background: var(--cream); transition: border-color .2s; }
+    .filter-input:focus { border-color: var(--g5); }
+    .filter-pills { display: flex; gap: 8px; flex-wrap: wrap; }
+    .pill { font-size: 13px; font-weight: 600; padding: 7px 16px; border-radius: 99px; border: 1.5px solid var(--brd); background: var(--white); color: var(--gr6); cursor: pointer; transition: var(--tr); }
+    .pill:hover { border-color: var(--g4); color: var(--g8); }
+    .pill.active { background: var(--g8); color: #fff; border-color: var(--g8); }
+    .filter-count { margin-left: auto; font-size: 13px; color: var(--gr4); white-space: nowrap; }
+
+    /* ===== SECTION PRINCIPALE ===== */
+    .section { padding: 64px 0; }
+
+    /* ===== SKELETON LOADING ===== */
+    .skel { background: linear-gradient(90deg, var(--gr2) 25%, #e8ece9 50%, var(--gr2) 75%); background-size: 200% 100%; animation: shimmer 1.5s infinite; border-radius: var(--r); }
+    @keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+    .skel-card { height: 380px; }
+    .news-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 24px; }
+
+    /* ===== CARTE ARTICLE ===== */
+    .article-card { background: var(--white); border-radius: 16px; overflow: hidden; box-shadow: var(--sh); transition: var(--tr); border: 1px solid var(--brd); cursor: pointer; display: flex; flex-direction: column; }
+    .article-card:hover { box-shadow: var(--shm); transform: translateY(-4px); border-color: var(--g1); }
+    .article-img { height: 200px; position: relative; overflow: hidden; background: var(--g9); display: flex; align-items: center; justify-content: center; }
+    .article-img img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: transform .5s ease; }
+    .article-card:hover .article-img img { transform: scale(1.05); }
+    .article-img-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,.55) 0%, rgba(0,0,0,.1) 50%, transparent 100%); }
+    .article-cat-badge { position: absolute; top: 14px; left: 14px; z-index: 2; font-size: 10.5px; font-weight: 700; letter-spacing: .07em; text-transform: uppercase; color: #fff; background: var(--g8); border-radius: 99px; padding: 4px 12px; }
+    .article-img-icon { position: relative; z-index: 1; color: rgba(255,255,255,.3); }
+    .article-body { padding: 20px; flex: 1; display: flex; flex-direction: column; gap: 10px; }
+    .article-meta { display: flex; align-items: center; gap: 12px; font-size: 12px; color: var(--gr4); }
+    .article-meta span { display: flex; align-items: center; gap: 4px; }
+    .article-title { font-family: var(--fh); font-size: 1.08rem; font-weight: 700; color: var(--dark); line-height: 1.35; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+    .article-excerpt { font-size: 13.5px; color: var(--gr6); line-height: 1.65; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; flex: 1; }
+    .article-footer { display: flex; align-items: center; justify-content: space-between; padding-top: 12px; border-top: 1px solid var(--gr1); margin-top: auto; }
+    .article-author { display: flex; align-items: center; gap: 7px; }
+    .article-author-av { width: 28px; height: 28px; border-radius: 50%; background: var(--g8); display: flex; align-items: center; justify-content: center; color: #fff; font-size: 11px; font-weight: 700; }
+    .article-author-name { font-size: 12.5px; font-weight: 500; color: var(--gr6); }
+    .article-read-btn { font-size: 12.5px; font-weight: 600; color: var(--g8); display: flex; align-items: center; gap: 4px; transition: gap .2s; }
+    .article-card:hover .article-read-btn { gap: 8px; }
+
+    /* ===== TAGS ===== */
+    .tags-row { display: flex; gap: 6px; flex-wrap: wrap; }
+    .tag { font-size: 11.5px; padding: 3px 10px; border-radius: 99px; background: var(--g0); color: var(--g7); font-weight: 500; }
+
+    /* ===== ARTICLE VEDETTE (1ère carte plus grande) ===== */
+    .article-card.featured { grid-column: 1 / -1; }
+    @media(min-width: 768px) {
+      .article-card.featured { display: grid; grid-template-columns: 1.4fr 1fr; }
+      .article-card.featured .article-img { height: auto; min-height: 300px; }
+      .article-card.featured .article-title { font-size: 1.35rem; -webkit-line-clamp: 3; }
+      .article-card.featured .article-excerpt { -webkit-line-clamp: 5; }
+    }
+
+    /* ===== ÉTAT VIDE ===== */
+    .empty-state { text-align: center; padding: 80px 24px; }
+    .empty-state-icon { width: 72px; height: 72px; border-radius: 50%; background: var(--g0); display: flex; align-items: center; justify-content: center; margin: 0 auto 24px; }
+    .empty-state h3 { font-family: var(--fh); font-size: 1.4rem; color: var(--dark); margin-bottom: 10px; }
+    .empty-state p { font-size: 15px; color: var(--gr6); line-height: 1.6; max-width: 400px; margin: 0 auto 28px; }
+
+    /* ===== PAGINATION ===== */
+    .pagination { display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 56px; flex-wrap: wrap; }
+    .page-btn { width: 40px; height: 40px; border-radius: var(--rs); border: 1.5px solid var(--brd); background: var(--white); color: var(--gr6); font-size: 14px; font-weight: 500; cursor: pointer; transition: var(--tr); display: flex; align-items: center; justify-content: center; font-family: var(--fb); }
+    .page-btn:hover { border-color: var(--g4); color: var(--g8); }
+    .page-btn.active { background: var(--g8); color: #fff; border-color: var(--g8); }
+    .page-btn:disabled { opacity: .4; cursor: not-allowed; }
+    .page-btn.wide { width: auto; padding: 0 14px; }
+
+    /* ===== MODAL LECTEUR ===== */
+    .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.65); z-index: 3000; align-items: flex-start; justify-content: center; padding: 24px; overflow-y: auto; backdrop-filter: blur(4px); }
+    .modal-overlay.open { display: flex; }
+    .modal-box { background: var(--white); border-radius: 20px; width: 100%; max-width: 720px; overflow: hidden; box-shadow: 0 24px 80px rgba(0,0,0,.3); margin: auto; position: relative; }
+    .modal-img { height: 280px; background: var(--g9); position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center; }
+    .modal-img img { width: 100%; height: 100%; object-fit: cover; }
+    .modal-img-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,.6) 0%, transparent 60%); }
+    .modal-img-meta { position: absolute; bottom: 20px; left: 24px; right: 60px; z-index: 2; }
+    .modal-img-cat { font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--gold); margin-bottom: 6px; }
+    .modal-img-title { font-family: var(--fh); font-size: clamp(1.1rem, 3vw, 1.5rem); font-weight: 700; color: #fff; line-height: 1.25; }
+    .modal-close { position: absolute; top: 16px; right: 16px; z-index: 10; width: 36px; height: 36px; border-radius: 50%; background: rgba(0,0,0,.45); border: none; color: #fff; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: background .2s; }
+    .modal-close:hover { background: rgba(0,0,0,.7); }
+    .modal-content { padding: 28px 32px 36px; }
+    .modal-article-meta { display: flex; align-items: center; gap: 16px; font-size: 13px; color: var(--gr4); margin-bottom: 20px; flex-wrap: wrap; }
+    .modal-article-meta span { display: flex; align-items: center; gap: 5px; }
+    .modal-body { font-size: 15.5px; color: var(--gr8); line-height: 1.8; }
+    .modal-body p { margin-bottom: 16px; }
+    .modal-body h2, .modal-body h3 { font-family: var(--fh); color: var(--dark); margin: 24px 0 12px; }
+    .modal-body strong { color: var(--dark); }
+    .modal-tags { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 24px; padding-top: 20px; border-top: 1px solid var(--gr1); }
+
+    /* ===== NEWSLETTER MINI ===== */
+    .nl-strip { background: var(--g9); padding: 56px 0; }
+    .nl-inner { display: flex; gap: 48px; align-items: center; flex-wrap: wrap; }
+    .nl-text h2 { font-family: var(--fh); font-size: 1.6rem; font-weight: 700; color: #fff; margin-bottom: 8px; }
+    .nl-text p { font-size: 14.5px; color: rgba(255,255,255,.65); line-height: 1.6; }
+    .nl-form { display: flex; gap: 10px; flex: 1; min-width: 280px; max-width: 440px; }
+    .nl-input { flex: 1; padding: 12px 16px; border-radius: var(--rs); border: 1.5px solid rgba(255,255,255,.15); background: rgba(255,255,255,.08); color: #fff; font-family: var(--fb); font-size: 14px; outline: none; transition: border-color .2s; }
+    .nl-input::placeholder { color: rgba(255,255,255,.4); }
+    .nl-input:focus { border-color: var(--gold); }
+
+    /* ===== FOOTER ===== */
+    .footer { background: var(--g9); color: rgba(255,255,255,.6); padding: 56px 0 32px; }
+    .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 40px; margin-bottom: 40px; }
+    .footer-logo { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
+    .footer-logo-i { width: 40px; height: 40px; border-radius: 50%; background: rgba(255,255,255,.1); display: flex; align-items: center; justify-content: center; font-family: var(--fh); color: #fff; font-weight: 800; font-size: 12px; overflow: hidden; }
+    .footer-logo-i img { width: 100%; height: 100%; object-fit: cover; }
+    .footer-logo-t strong { display: block; color: #fff; font-size: 15px; font-weight: 700; }
+    .footer-desc { font-size: 13.5px; line-height: 1.7; margin-bottom: 18px; }
+    .footer-col h4 { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .1em; color: #fff; margin-bottom: 16px; }
+    .footer-col ul li { margin-bottom: 9px; }
+    .footer-col ul li a { font-size: 13.5px; color: rgba(255,255,255,.6); transition: color .2s; }
+    .footer-col ul li a:hover { color: #fff; }
+    .footer-bottom { border-top: 1px solid rgba(255,255,255,.1); padding-top: 20px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; font-size: 13px; }
+    .footer-bottom-links { display: flex; gap: 18px; }
+    .footer-bottom-links a { color: rgba(255,255,255,.5); } .footer-bottom-links a:hover { color: #fff; }
+
+    /* ===== RESPONSIVE ===== */
+    @media(max-width: 1024px) { .footer-grid { grid-template-columns: 1fr 1fr; } }
+    @media(max-width: 768px) {
+      .nav-links, .nav-cta { display: none; } .hamburger { display: flex; }
+      .hero-inner { grid-template-columns: 1fr; } .hero-news-preview { display: none; }
+      .filters-inner { gap: 8px; }
+      .nl-inner { flex-direction: column; gap: 24px; } .nl-form { max-width: 100%; width: 100%; }
+      .footer-grid { grid-template-columns: 1fr; gap: 28px; }
+      .modal-content { padding: 20px 20px 28px; }
+    }
+    @media(max-width: 480px) {
+      .hero { padding: 48px 0; }
+      .section { padding: 48px 0; }
+      .news-grid { grid-template-columns: 1fr; }
+      .article-card.featured { display: flex; flex-direction: column; }
+    }
+
+    /* ===== ANIMATIONS ===== */
+    .fade-in { opacity: 0; transform: translateY(20px); transition: opacity .5s ease, transform .5s ease; }
+    .fade-in.visible { opacity: 1; transform: none; }
+  </style>
+  <style>
+    /* ── PAGE ARTICLE / PROJET DETAIL ── */
+    .article-page { max-width: 820px; margin: 0 auto; padding: 48px 24px 80px; }
+    .article-hero { border-radius: 16px; overflow: hidden; margin-bottom: 36px; position: relative; }
+    .article-hero img { width: 100%; height: 380px; object-fit: cover; display: block; }
+    .article-hero-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,.55) 0%, transparent 60%); }
+    .article-hero-meta { position: absolute; bottom: 24px; left: 28px; right: 28px; color: #fff; }
+    .article-tag { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 700; padding: 4px 12px; border-radius: 99px; background: var(--g7); color: #fff; margin-bottom: 12px; }
+    .article-h1 { font-family: var(--fh); font-size: clamp(1.5rem, 4vw, 2.2rem); font-weight: 800; line-height: 1.2; color: #fff; margin-bottom: 10px; }
+    .article-byline { font-size: 13px; color: rgba(255,255,255,.75); display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+    .article-byline iconify-icon { opacity: .7; }
+    .doc-content { font-size: 16px; line-height: 1.85; color: var(--gr8); }
+    .doc-content h1, .doc-content h2, .doc-content h3 { font-family: var(--fh); color: var(--dark); margin: 32px 0 14px; line-height: 1.3; }
+    .doc-content h1 { font-size: 1.7rem; }
+    .doc-content h2 { font-size: 1.35rem; border-bottom: 2px solid var(--g1); padding-bottom: 8px; }
+    .doc-content h3 { font-size: 1.1rem; color: var(--g8); }
+    .doc-content p  { margin-bottom: 16px; }
+    .doc-content li { margin: 6px 0 6px 20px; list-style: disc; }
+    .doc-content br { display: block; margin: 8px 0; }
+    .doc-content strong { font-weight: 700; color: var(--dark); }
+    .doc-content em     { font-style: italic; }
+    .doc-loading { display: flex; align-items: center; gap: 10px; color: var(--gr4); font-size: 14px; padding: 32px 0; }
+    .doc-loading iconify-icon { font-size: 24px; animation: spin 1s linear infinite; }
+    .doc-error { background: var(--redf); color: var(--red); padding: 16px 20px; border-radius: var(--rs); font-size: 14px; margin: 20px 0; }
+    .breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--gr4); margin-bottom: 32px; flex-wrap: wrap; }
+    .breadcrumb a { color: var(--g7); }
+    .breadcrumb a:hover { text-decoration: underline; }
+    .share-bar { display: flex; align-items: center; gap: 12px; padding: 20px 0; border-top: 1px solid var(--brd); margin-top: 40px; flex-wrap: wrap; }
+    .share-bar span { font-size: 13px; font-weight: 600; color: var(--gr6); }
+    .share-btn { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 600; padding: 8px 14px; border-radius: var(--rs); cursor: pointer; border: 1.5px solid var(--brd); color: var(--gr8); background: var(--surf); transition: var(--tr); }
+    .share-btn:hover { border-color: var(--g4); color: var(--g8); }
+    .no-content { padding: 32px; text-align: center; color: var(--gr4); font-size: 14px; background: var(--gr1); border-radius: var(--r); }
+    @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }</style>
+</head>
+<body>
+<div class="topbar">
+  <div class="container">
+    <div class="topbar-info">
+      <span><iconify-icon icon="mdi:phone" width="13"></iconify-icon><a href="tel:+22901976964826">+229 01 97 69 64 26</a></span>
+      <span><iconify-icon icon="mdi:email-outline" width="13"></iconify-icon><a href="mailto:foddeb15@gmail.com">foddeb15@gmail.com</a></span>
+    </div>
+    <div class="topbar-social">
+      <a href="#" aria-label="Facebook"><iconify-icon icon="mdi:facebook" width="15"></iconify-icon></a>
+      <a href="#" aria-label="Twitter"><iconify-icon icon="mdi:twitter" width="15"></iconify-icon></a>
+      <a href="#" aria-label="LinkedIn"><iconify-icon icon="mdi:linkedin" width="15"></iconify-icon></a>
+    </div>
+  </div>
+</div>
+
+<!-- ===== NAVBAR ===== -->
+<nav class="navbar">
+  <div class="container">
+    <a href="/" class="nav-brand">
+      <div class="nav-logo">
+        <img src="/assets/img/logo.png" alt="Logo FODDEB" onerror="this.style.display='none';this.nextElementSibling.style.display='block'"/>
+        <span class="nav-logo-txt" style="display:none">FOD</span>
+      </div>
+      <div class="nav-name"><strong>FODDEB</strong><span>Droits de l'Enfant au Bénin</span></div>
+    </a>
+    <div class="nav-links">
+      <a href="/" class="nav-link">Accueil</a>
+      <a href="/pages/organes.html" class="nav-link">Nos organes</a>
+      <a href="/pages/projets.html" class="nav-link">Projets</a>
+      <a href="/pages/actualites.html" class="nav-link">Actualités</a>
+      <a href="/pages/contact.html" class="nav-link">Contact</a>
+    </div>
+    <div class="nav-cta">
+      <a href="/#don" class="btn btn-gold btn-sm">Faire un don</a>
+      <a href="/auth/login.html" class="btn btn-p btn-sm">Espace membre</a>
+    </div>
+    <button class="hamburger" id="hamburger" aria-label="Ouvrir le menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- MENU MOBILE -->
+<nav class="mobile-nav" id="mobileNav" aria-hidden="true">
+  <div class="mobile-nav-hdr">
+    <a href="/" class="nav-brand">
+      <div class="nav-logo"><span class="nav-logo-txt">FOD</span></div>
+      <div class="nav-name"><strong>FODDEB</strong></div>
+    </a>
+    <button class="mobile-close" id="mobileClose" aria-label="Fermer">&#x2715;</button>
+  </div>
+  <div class="mobile-links">
+    <a href="/">Accueil</a>
+    <a href="/pages/organes.html">Nos organes</a>
+    <a href="/pages/projets.html">Projets</a>
+    <a href="/pages/actualites.html">Actualités</a>
+    <a href="/pages/contact.html">Contact</a>
+  </div>
+  <div class="mobile-footer">
+    <a href="/#don" class="btn btn-gold">Faire un don</a>
+    <a href="/auth/login.html" class="btn btn-p">Espace membre</a>
+  </div>
+</nav>
+
+<main>
+  <div class="article-page">
+
+    <!-- Fil d'Ariane -->
+    <nav class="breadcrumb">
+      <a href="/"><iconify-icon icon="mdi:home-outline" width="14"></iconify-icon>Accueil</a>
+      <iconify-icon icon="mdi:chevron-right" width="14"></iconify-icon>
+      <a href="/pages/actualites.html">Actualités</a>
+      <iconify-icon icon="mdi:chevron-right" width="14"></iconify-icon>
+      <span id="bcTitle">Chargement…</span>
+    </nav>
+
+    <!-- Hero image + titre -->
+    <div class="article-hero" id="articleHero" style="display:none">
+      <img id="heroImg" src="" alt="" loading="lazy"/>
+      <div class="article-hero-overlay"></div>
+      <div class="article-hero-meta">
+        <div class="article-tag" id="heroTag">Actualité</div>
+        <h1 class="article-h1" id="heroTitle">—</h1>
+        <div class="article-byline">
+          <span><iconify-icon icon="mdi:account-outline" width="14"></iconify-icon><span id="heroAuteur">—</span></span>
+          <span><iconify-icon icon="mdi:calendar-outline" width="14"></iconify-icon><span id="heroDate">—</span></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Titre sans image -->
+    <div id="articleTitleFallback" style="margin-bottom:28px;display:none">
+      <div class="article-tag" id="titleTag">Actualité</div>
+      <h1 class="article-h1" id="titleH1" style="color:var(--dark);margin-top:10px;font-size:clamp(1.5rem,4vw,2rem)">—</h1>
+      <div class="article-byline" style="color:var(--gr6)">
+        <span><iconify-icon icon="mdi:account-outline" width="14"></iconify-icon><span id="titleAuteur">—</span></span>
+        <span><iconify-icon icon="mdi:calendar-outline" width="14"></iconify-icon><span id="titleDate">—</span></span>
+      </div>
+    </div>
+
+    <!-- Contenu depuis Google Docs -->
+    <div class="doc-loading" id="docLoading">
+      <iconify-icon icon="mdi:loading"></iconify-icon>
+      Chargement du contenu…
+    </div>
+    <div class="doc-content" id="docContent" style="display:none"></div>
+    <div class="doc-error" id="docError" style="display:none"></div>
+
+    <!-- Barre de partage -->
+    <div class="share-bar" id="shareBar" style="display:none">
+      <span>Partager :</span>
+      <button class="share-btn" onclick="share('facebook')"><iconify-icon icon="mdi:facebook" width="16"></iconify-icon>Facebook</button>
+      <button class="share-btn" onclick="share('twitter')"><iconify-icon icon="mdi:twitter" width="16"></iconify-icon>Twitter</button>
+      <button class="share-btn" onclick="share('whatsapp')"><iconify-icon icon="mdi:whatsapp" width="16"></iconify-icon>WhatsApp</button>
+      <button class="share-btn" onclick="copyLink()"><iconify-icon icon="mdi:link-variant" width="16"></iconify-icon>Copier le lien</button>
+    </div>
+
+    <!-- Retour -->
+    <div style="margin-top:32px">
+      <a href="/pages/actualites.html" style="display:inline-flex;align-items:center;gap:8px;font-size:14px;color:var(--g7);font-weight:600">
+        <iconify-icon icon="mdi:arrow-left" width="18"></iconify-icon>Retour aux actualités
+      </a>
+    </div>
+
+  </div>
+</main>
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-logo">
+          <div class="footer-logo-i">
+            <img src="/assets/img/logo.png" alt="Logo FODDEB" onerror="this.style.display='none';this.parentElement.textContent='FOD'"/>
+          </div>
+          <div class="footer-logo-t">
+            <strong>FODDEB</strong>
+            <span style="font-size:11px;color:rgba(255,255,255,.4)">Droits de l'Enfant au Bénin</span>
+          </div>
+        </div>
+        <p class="footer-desc">
+          Forum des Organisations de Défense des Droits de l'Enfant au Bénin —
+          coordonnant les actions de la société civile depuis 2015.
+        </p>
+      </div>
+      <div class="footer-col"><h4>Navigation</h4><ul>
+        <li><a href="/">Accueil</a></li>
+        <li><a href="/pages/organes.html">Nos organes</a></li>
+        <li><a href="/pages/projets.html">Projets</a></li>
+        <li><a href="/pages/actualites.html">Actualités</a></li>
+        <li><a href="/pages/contact.html">Contact</a></li>
+      </ul></div>
+      <div class="footer-col"><h4>Espace membre</h4><ul>
+        <li><a href="/auth/login.html">Se connecter</a></li>
+        <li><a href="/auth/register.html">Adhérer</a></li>
+        <li><a href="/dashboard/member.html">Mon espace</a></li>
+      </ul></div>
+      <div class="footer-col"><h4>Contact</h4><ul>
+        <li style="font-size:13.5px;color:rgba(255,255,255,.6);margin-bottom:9px">Agla Akplomey, Cotonou</li>
+        <li><a href="tel:+22901976964826">+229 01 97 69 64 26</a></li>
+        <li><a href="mailto:foddeb15@gmail.com">foddeb15@gmail.com</a></li>
+      </ul></div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2025 FODDEB — Tous droits réservés</p>
+      <div class="footer-bottom-links">
+        <a href="/mentions-legales.html">Mentions légales</a>
+        <a href="/confidentialite.html">Confidentialité</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<button class="back-to-top" id="backToTop" aria-label="Haut de page">
+  <iconify-icon icon="mdi:arrow-up" width="20"></iconify-icon>
+</button>
+
+<script>
+'use strict';
+
+/* ── Utilitaires ── */
+const fmtD = d => { try { return new Date(d).toLocaleDateString('fr-FR', {day:'numeric',month:'long',year:'numeric'}); } catch { return d||'—'; } };
+function setEl(id, val) { const el=document.getElementById(id); if(el) el.textContent=val; }
+
+/* ── Lire ?id= dans l'URL ── */
+const urlParams = new URLSearchParams(window.location.search);
+/* Convertit une URL Drive (view, file/d/, ?id=) en URL thumbnail affichable dans <img> */
+function driveImgUrl(url) {
+  if (!url) return '';
+  if (url.includes('thumbnail?id=') || url.includes('lh3.googleusercontent')) return url;
+  const m = url.match(/\/file\/d\/([^/?]+)/);
+  if (m) return 'https://drive.google.com/thumbnail?id=' + m[1] + '&sz=w800';
+  const m2 = url.match(/\/d\/([a-zA-Z0-9_-]+)/);
+  if (m2) return 'https://drive.google.com/thumbnail?id=' + m2[1] + '&sz=w800';
+  const m3 = url.match(/[?&]id=([^&]+)/);
+  return m3 ? 'https://drive.google.com/thumbnail?id=' + m3[1] + '&sz=w800' : url;
+}
+
+const ARTICLE_ID = urlParams.get('id') || '';
+
+/* ── Chargement article ── */
+async function loadArticle() {
+  if (!ARTICLE_ID) {
+    document.getElementById('docContent').innerHTML = '<p class="no-content">Aucun article sélectionné. <a href="/pages/actualites.html">Retour aux actualités →</a></p>';
+    document.getElementById('docLoading').style.display = 'none';
+    document.getElementById('docContent').style.display = 'block';
+    return;
+  }
+
+  try {
+    // 1. Métadonnées depuis Sheets via news_get
+    const meta = await FODDEB_API.news.get(ARTICLE_ID);
+    const a    = meta.article || meta.data || {};
+
+    // Mise à jour SEO
+    const titre = a.Titre || 'Article';
+    const image = a.Image || '';
+    document.title = titre + ' — FODDEB';
+    document.getElementById('pageTitle').textContent = titre + ' — FODDEB';
+    document.getElementById('pageDesc').setAttribute('content', a.Excerpt || '');
+    document.getElementById('ogTitle').setAttribute('content', titre);
+    if (image) document.getElementById('ogImage').setAttribute('content', image);
+
+    // Fil d'Ariane
+    setEl('bcTitle', titre);
+
+    // Hero
+    if (image) {
+      const heroImgEl = document.getElementById('heroImg');
+      heroImgEl.src = driveImgUrl(image);
+      heroImgEl.alt = titre;
+      heroImgEl.onerror = () => { document.getElementById('articleHero').style.display = 'none'; document.getElementById('articleTitleFallback').style.display = 'block'; };
+      setEl('heroTag',    a.Categorie || 'Actualité');
+      setEl('heroTitle',  titre);
+      setEl('heroAuteur', a.Auteur || 'FODDEB');
+      setEl('heroDate',   fmtD(a.DatePublication));
+      document.getElementById('articleHero').style.display = 'block';
+    } else {
+      setEl('titleTag',    a.Categorie || 'Actualité');
+      setEl('titleH1',     titre);
+      setEl('titleAuteur', a.Auteur || 'FODDEB');
+      setEl('titleDate',   fmtD(a.DatePublication));
+      document.getElementById('articleTitleFallback').style.display = 'block';
+    }
+
+    // 2. Contenu depuis Google Docs (si DocID existe)
+    if (a.DocID) {
+      const docRes = await FODDEB_API.newsDocs.read(ARTICLE_ID); // news_doc_read
+      const html   = docRes.html || '';
+      if (html) {
+        document.getElementById('docContent').innerHTML = html;
+      } else if (a.Contenu) {
+        // Fallback : Contenu Sheets (articles anciens sans Doc)
+        document.getElementById('docContent').innerHTML =
+          '<p>' + a.Contenu.replace(/\n\n/g,'</p><p>').replace(/\n/g,'<br>') + '</p>';
+      } else {
+        document.getElementById('docContent').innerHTML = '<p class="no-content">Contenu non disponible.</p>';
+      }
+    } else if (a.Contenu) {
+      // Pas encore de Doc → afficher le Contenu Sheets
+      document.getElementById('docContent').innerHTML =
+        '<p>' + a.Contenu.replace(/\n\n/g,'</p><p>').replace(/\n/g,'<br>') + '</p>';
+    } else {
+      document.getElementById('docContent').innerHTML = '<p class="no-content">Contenu en cours de rédaction.</p>';
+    }
+
+    document.getElementById('docLoading').style.display = 'none';
+    document.getElementById('docContent').style.display = 'block';
+    document.getElementById('shareBar').style.display   = 'flex';
+
+  } catch (err) {
+    document.getElementById('docLoading').style.display = 'none';
+    document.getElementById('docError').textContent     = 'Erreur de chargement : ' + err.message;
+    document.getElementById('docError').style.display   = 'block';
+    console.error('[article] loadArticle:', err);
+  }
+}
+
+/* ── Partage ── */
+function share(platform) {
+  const url   = encodeURIComponent(window.location.href);
+  const title = encodeURIComponent(document.title);
+  const urls  = {
+    facebook: 'https://facebook.com/sharer/sharer.php?u=' + url,
+    twitter:  'https://twitter.com/intent/tweet?url=' + url + '&text=' + title,
+    whatsapp: 'https://wa.me/?text=' + title + '%20' + url,
+  };
+  if (urls[platform]) window.open(urls[platform], '_blank', 'width=600,height=400');
+}
+function copyLink() {
+  navigator.clipboard.writeText(window.location.href).then(() => {
+    const btn = event.currentTarget;
+    btn.innerHTML = '<iconify-icon icon="mdi:check" width="16"></iconify-icon>Copié !';
+    setTimeout(() => { btn.innerHTML = '<iconify-icon icon="mdi:link-variant" width="16"></iconify-icon>Copier le lien'; }, 2000);
+  });
+}
+
+
+/* ── Back to top ── */
+const btt = document.getElementById('backToTop');
+if (btt) {
+  window.addEventListener('scroll', () => { btt.classList.toggle('visible', window.scrollY > 300); });
+  btt.addEventListener('click', () => { window.scrollTo({top:0,behavior:'smooth'}); });
+}
+
+/* ── Menu mobile (hamburger) ── */
+const hamburger   = document.getElementById('hamburger');
+const mobileNav   = document.getElementById('mobileNav');
+const mobileClose = document.getElementById('mobileClose');
+if (hamburger && mobileNav && mobileClose) {
+  hamburger.addEventListener('click', () => {
+    mobileNav.classList.add('open');
+    mobileNav.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+  });
+  const closeMobile = () => {
+    mobileNav.classList.remove('open');
+    mobileNav.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+  };
+  mobileClose.addEventListener('click', closeMobile);
+  mobileNav.querySelectorAll('a').forEach(a => a.addEventListener('click', closeMobile));
+}
+
+/* ── Init ── */
+document.addEventListener('DOMContentLoaded', loadArticle);
+if ('serviceWorker' in navigator) navigator.serviceWorker.register('/sw.js').catch(()=>{});
+</script>
+</body>
+</html>

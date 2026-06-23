@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="robots" content="noindex, nofollow"/>
+  <title>Portail Bailleurs — FODDEB Admin</title>
+  <link rel="manifest" href="/manifest.json"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@500;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js" defer></script>
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    :root{
+      --sw:260px;--swc:68px;--hh:64px;
+      --g9:#0F2713;--g8:#1B5E20;--g7:#2E7D32;--g6:#388E3C;--g5:#4CAF50;--g4:#81C784;--g1:#C8E6C9;--g0:#E8F5E9;
+      --gold:#F9A825;--goldf:#FFFDE7;
+      --red:#C62828;--redf:#FFEBEE;
+      --blue:#1565C0;--bluef:#E3F2FD;
+      --pur:#6A1B9A;--purf:#F3E5F5;
+      --bg:#F4F6F5;--surf:#FFFFFF;
+      --dark:#0D1B0F;--gr8:#1C2520;--gr6:#4A5568;--gr4:#9AA5B1;--gr2:#E2E8F0;--gr1:#F7FAFC;
+      --brd:#E8EEE9;
+      --fh:'Syne',sans-serif;--fb:'DM Sans',system-ui,sans-serif;
+      --r:12px;--rs:8px;
+      --sh:0 1px 4px rgba(0,0,0,.06),0 4px 16px rgba(0,0,0,.06);
+      --shm:0 4px 24px rgba(0,0,0,.10);
+      --tr:.25s cubic-bezier(.4,0,.2,1);
+    }
+    html,body{height:100%;}
+    body{font-family:var(--fb);background:var(--bg);color:var(--gr8);display:flex;-webkit-font-smoothing:antialiased;}
+    a{color:inherit;text-decoration:none;}
+    ul{list-style:none;}
+    button{font-family:var(--fb);cursor:pointer;border:none;background:none;}
+
+    .sidebar{width:var(--sw);min-height:100vh;background:var(--g9);display:flex;flex-direction:column;position:fixed;left:0;top:0;bottom:0;z-index:200;overflow:hidden;transition:width var(--tr);}
+    .sidebar.collapsed{width:var(--swc);}
+    .sb-logo{display:flex;align-items:center;gap:12px;padding:20px 18px;border-bottom:1px solid rgba(255,255,255,.08);min-height:var(--hh);flex-shrink:0;}
+    .sb-logo-text{overflow:hidden;white-space:nowrap;}
+    .sb-logo-text strong{display:block;color:#fff;font-size:15px;font-weight:700;}
+    .sb-logo-text span{font-size:11px;color:rgba(255,255,255,.45);}
+    .sb-sec{padding:12px 10px 4px;overflow:hidden;}
+    .sb-sec-lbl{font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.3);padding:0 8px;margin-bottom:4px;white-space:nowrap;}
+    .sidebar.collapsed .sb-sec-lbl{opacity:0;}
+    .nav-item{display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:var(--rs);color:rgba(255,255,255,.6);font-size:14px;font-weight:500;cursor:pointer;transition:var(--tr);white-space:nowrap;overflow:hidden;}
+    .nav-item iconify-icon{flex-shrink:0;font-size:20px;}
+    .nav-label{overflow:hidden;}
+    .nav-item:hover{background:rgba(255,255,255,.08);color:#fff;}
+    .nav-item.active{background:var(--g7);color:#fff;}
+    .nav-item.active iconify-icon{color:var(--g4);}
+    .sidebar.collapsed .nav-label{display:none;}
+    .sidebar.collapsed .nav-item{justify-content:center;padding:12px;}
+    .sb-foot{margin-top:auto;border-top:1px solid rgba(255,255,255,.08);padding:12px 10px;}
+    .sb-user{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:var(--rs);cursor:pointer;transition:var(--tr);}
+    .sb-user:hover{background:rgba(255,255,255,.08);}
+    .sb-av{width:36px;height:36px;border-radius:50%;background:var(--g6);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:14px;flex-shrink:0;overflow:hidden;}
+    .sb-ui{overflow:hidden;flex:1;}
+    .sb-ui strong{display:block;font-size:13px;color:#fff;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+    .sb-ui span{font-size:11px;color:rgba(255,255,255,.4);}
+    .sidebar.collapsed .sb-ui{display:none;}
+    .sidebar.collapsed .sb-user{justify-content:center;}
+
+    .main-wrap{margin-left:var(--sw);flex:1;min-height:100vh;display:flex;flex-direction:column;transition:margin-left var(--tr);}
+    .main-wrap.collapsed{margin-left:var(--swc);}
+
+    .admin-header{background:var(--surf);border-bottom:1px solid var(--brd);height:var(--hh);display:flex;align-items:center;padding:0 24px;gap:16px;position:sticky;top:0;z-index:100;}
+    .hdr-toggle{width:36px;height:36px;border-radius:var(--rs);display:flex;align-items:center;justify-content:center;color:var(--gr6);font-size:20px;transition:var(--tr);}
+    .hdr-toggle:hover{background:var(--gr1);}
+    .hdr-bc{display:flex;align-items:center;gap:8px;font-size:14px;color:var(--gr6);}
+    .hdr-bc strong{color:var(--gr8);font-weight:600;}
+    .hdr-right{margin-left:auto;display:flex;align-items:center;gap:10px;}
+    .hdr-btn{width:38px;height:38px;border-radius:var(--rs);display:flex;align-items:center;justify-content:center;color:var(--gr6);font-size:20px;transition:var(--tr);}
+    .hdr-btn:hover{background:var(--gr1);}
+    .hdr-user{display:flex;align-items:center;gap:10px;padding:6px 12px 6px 6px;border-radius:var(--r);cursor:pointer;transition:var(--tr);border:1px solid var(--brd);}
+    .hdr-user:hover{background:var(--gr1);}
+    .hdr-av{width:32px;height:32px;border-radius:50%;background:var(--g7);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:12px;overflow:hidden;}
+    .hdr-ui strong{display:block;font-size:13px;font-weight:600;}
+    .hdr-ui span{font-size:11px;color:var(--gr4);}
+
+    .user-dd{position:absolute;top:calc(var(--hh) + 4px);right:20px;width:220px;background:var(--surf);border:1px solid var(--brd);border-radius:var(--r);box-shadow:var(--shm);z-index:300;overflow:hidden;display:none;}
+    .user-dd.open{display:block;}
+    .dd-user{padding:16px;border-bottom:1px solid var(--brd);}
+    .dd-user strong{display:block;font-size:14px;font-weight:700;}
+    .dd-user span{font-size:12px;color:var(--gr4);}
+    .dd-item{display:flex;align-items:center;gap:10px;padding:11px 16px;font-size:14px;color:var(--gr8);cursor:pointer;transition:background var(--tr);}
+    .dd-item:hover{background:var(--gr1);}
+    .dd-item iconify-icon{font-size:18px;color:var(--gr4);}
+    .dd-item.danger{color:var(--red);}
+    .dd-item.danger iconify-icon{color:var(--red);}
+    .dd-divider{height:1px;background:var(--brd);margin:4px 0;}
+
+    .sb-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:190;}
+    .sb-overlay.visible{display:block;}
+
+    .pc{padding:28px 28px 48px;flex:1;}
+    .pg-hdr{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:28px;flex-wrap:wrap;gap:16px;}
+    .pg-title{font-family:var(--fh);font-size:1.6rem;font-weight:700;color:var(--dark);}
+    .pg-sub{font-size:14px;color:var(--gr6);margin-top:4px;}
+    .pg-actions{display:flex;gap:10px;align-items:center;flex-wrap:wrap;}
+
+    .btn{display:inline-flex;align-items:center;gap:8px;font-family:var(--fb);font-size:14px;font-weight:600;padding:10px 18px;border-radius:var(--rs);border:1.5px solid transparent;cursor:pointer;transition:var(--tr);white-space:nowrap;}
+    .btn-p{background:var(--g8);color:#fff;border-color:var(--g8);}
+    .btn-p:hover{background:var(--g7);}
+    .btn-o{background:#fff;color:var(--gr8);border-color:var(--brd);}
+    .btn-o:hover{border-color:var(--g4);color:var(--g8);}
+    .btn-r{background:var(--redf);color:var(--red);border-color:var(--redf);}
+    .btn-r:hover{background:var(--red);color:#fff;}
+    .btn-sm{font-size:13px;padding:7px 14px;}
+
+    /* STATS */
+    .stats-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:16px;margin-bottom:28px;}
+    .stat-card{background:var(--surf);border-radius:var(--r);padding:20px 22px;border:1px solid var(--brd);box-shadow:var(--sh);display:flex;align-items:center;gap:16px;}
+    .stat-icon{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;}
+    .ic-b{background:var(--bluef);color:var(--blue);}
+    .ic-g{background:var(--g0);color:var(--g7);}
+    .ic-o{background:var(--goldf);color:var(--gold);}
+    .ic-p{background:var(--purf);color:var(--pur);}
+    .stat-info{flex:1;}
+    .stat-val{font-family:var(--fh);font-size:1.6rem;font-weight:700;color:var(--dark);line-height:1;}
+    .stat-lbl{font-size:12px;color:var(--gr6);margin-top:3px;}
+
+    /* FILTERS */
+    .filters-bar{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:20px;}
+    .search-wrap{position:relative;flex:1;min-width:220px;max-width:360px;}
+    .search-wrap iconify-icon{position:absolute;left:11px;top:50%;transform:translateY(-50%);color:var(--gr4);font-size:18px;pointer-events:none;}
+    .search-inp{width:100%;padding:9px 12px 9px 38px;border:1.5px solid var(--brd);border-radius:var(--rs);font-size:14px;font-family:var(--fb);background:var(--surf);color:var(--gr8);transition:border-color var(--tr);}
+    .search-inp:focus{outline:none;border-color:var(--g5);}
+    .filter-sel{padding:9px 14px;border:1.5px solid var(--brd);border-radius:var(--rs);font-size:14px;font-family:var(--fb);background:var(--surf);color:var(--gr8);cursor:pointer;}
+    .filter-sel:focus{outline:none;border-color:var(--g5);}
+
+    /* TABLE */
+    .card{background:var(--surf);border-radius:var(--r);border:1px solid var(--brd);box-shadow:var(--sh);overflow:hidden;}
+    .tw{overflow-x:auto;}
+    table{width:100%;border-collapse:collapse;}
+    thead th{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--gr4);padding:12px 16px;text-align:left;border-bottom:1px solid var(--brd);white-space:nowrap;}
+    tbody tr{transition:background var(--tr);}
+    tbody tr:hover{background:var(--gr1);}
+    tbody td{font-size:13.5px;padding:13px 16px;border-bottom:1px solid var(--brd);color:var(--gr8);vertical-align:middle;}
+    tbody tr:last-child td{border-bottom:none;}
+    .empty-state{padding:64px 24px;text-align:center;color:var(--gr4);}
+    .empty-state iconify-icon{font-size:48px;margin-bottom:12px;display:block;}
+    .empty-state p{font-size:14px;}
+
+    /* BADGES */
+    .badge{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:700;padding:3px 10px;border-radius:99px;}
+    .bdot{width:6px;height:6px;border-radius:50%;background:currentColor;}
+    .b-actif{background:var(--g0);color:var(--g7);}
+    .b-cloture{background:var(--gr1);color:var(--gr6);}
+    .b-negocia{background:var(--goldf);color:#B45309;}
+    .b-suspen{background:var(--redf);color:var(--red);}
+
+    /* TYPE BADGE */
+    .type-tag{display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:600;padding:3px 10px;border-radius:99px;background:var(--bluef);color:var(--blue);}
+
+    /* PROGRESS */
+    .prog-wrap{display:flex;align-items:center;gap:8px;}
+    .prog-bar{flex:1;height:6px;background:var(--gr2);border-radius:99px;overflow:hidden;min-width:60px;}
+    .prog-fill{height:100%;background:var(--g7);border-radius:99px;transition:width .6s ease;}
+    .prog-pct{font-size:12px;font-weight:700;color:var(--g7);white-space:nowrap;}
+
+    /* ACTIONS */
+    .act-btn{width:30px;height:30px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:16px;color:var(--gr6);transition:var(--tr);}
+    .act-btn:hover{background:var(--gr1);}
+
+    /* MODAL */
+    .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:500;align-items:center;justify-content:center;padding:20px;}
+    .modal-overlay.open{display:flex;}
+    .modal{background:var(--surf);border-radius:var(--r);width:100%;max-width:680px;max-height:90vh;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 20px 60px rgba(0,0,0,.25);}
+    .modal-hdr{padding:20px 24px;border-bottom:1px solid var(--brd);display:flex;align-items:center;justify-content:space-between;flex-shrink:0;}
+    .modal-hdr h2{font-family:var(--fh);font-size:17px;font-weight:700;}
+    .modal-close{width:32px;height:32px;border-radius:var(--rs);display:flex;align-items:center;justify-content:center;color:var(--gr4);font-size:20px;transition:var(--tr);}
+    .modal-close:hover{background:var(--gr1);color:var(--gr8);}
+    .modal-body{padding:24px;overflow-y:auto;flex:1;}
+    .modal-foot{padding:16px 24px;border-top:1px solid var(--brd);display:flex;gap:10px;justify-content:flex-end;flex-shrink:0;flex-wrap:wrap;}
+
+    /* FORM */
+    .fg{margin-bottom:16px;}
+    .fg-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+    .fl{display:block;font-size:12.5px;font-weight:600;color:var(--gr6);margin-bottom:6px;}
+    .fi{width:100%;padding:9px 13px;border:1.5px solid var(--brd);border-radius:var(--rs);font-size:14px;font-family:var(--fb);background:var(--surf);color:var(--gr8);transition:border-color var(--tr);}
+    .fi:focus{outline:none;border-color:var(--g5);}
+    textarea.fi{resize:vertical;min-height:80px;}
+
+    #toast-container{position:fixed;top:20px;right:20px;z-index:9999;display:flex;flex-direction:column;gap:8px;}
+    .toast{padding:12px 16px;border-radius:10px;font-size:13.5px;display:flex;align-items:center;gap:8px;box-shadow:var(--shm);animation:tIn .3s ease;max-width:320px;color:#fff;}
+    .toast.ok{background:var(--g8);}
+    .toast.err{background:var(--red);}
+    .toast.warn{background:var(--gold);color:var(--dark);}
+    @keyframes tIn{from{opacity:0;transform:translateX(20px)}to{opacity:1;transform:none}}
+    @keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+
+    @media(max-width:768px){
+      .sidebar{transform:translateX(-100%);}
+      .sidebar.mob-open{transform:none;}
+      .main-wrap{margin-left:0!important;}
+      .pc{padding:16px;}
+      .stats-grid{grid-template-columns:1fr 1fr;}
+      .hdr-ui{display:none;}
+      .fg-row{grid-template-columns:1fr;}
+    }
+    @media(max-width:480px){.stats-grid{grid-template-columns:1fr;}}
+  </style>
+</head>
+<body>
+
+<div class="sb-overlay" id="sbOverlay" onclick="closeSb()"></div>
+<div id="toast-container"></div>
+
+<aside class="sidebar" id="sidebar">
+  <div class="sb-logo">
+    <img src="/assets/icons/logo-small.png" alt="FODDEB" style="width:36px;height:36px;border-radius:10px;object-fit:contain;background:#fff;padding:3px;flex-shrink:0">
+    <div class="sb-logo-text"><strong>FODDEB</strong><span>Administration</span></div>
+  </div>
+  <div class="sb-sec">
+    <div class="sb-sec-lbl">Principal</div>
+    <ul>
+      <li class="nav-item" onclick="go('/admin/dashboard.html')"><iconify-icon icon="mdi:view-dashboard-outline"></iconify-icon><span class="nav-label">Tableau de bord</span></li>
+      <li class="nav-item" onclick="go('/admin/membres.html')"><iconify-icon icon="mdi:account-group-outline"></iconify-icon><span class="nav-label">Membres</span></li>
+      <li class="nav-item" onclick="go('/admin/dons.html')"><iconify-icon icon="mdi:heart-outline"></iconify-icon><span class="nav-label">Dons &amp; Paiements</span></li>
+      <li class="nav-item" onclick="go('/admin/projets.html')"><iconify-icon icon="mdi:clipboard-list-outline"></iconify-icon><span class="nav-label">Projets</span></li>
+      <li class="nav-item" onclick="go('/admin/actualites.html')"><iconify-icon icon="mdi:newspaper-variant-outline"></iconify-icon><span class="nav-label">Actualités</span></li>
+    </ul>
+  </div>
+  <div class="sb-sec">
+    <div class="sb-sec-lbl">Communication</div>
+    <ul>
+      <li class="nav-item" onclick="go('/admin/newsletter.html')"><iconify-icon icon="mdi:email-newsletter"></iconify-icon><span class="nav-label">Newsletter</span></li>
+      <li class="nav-item" onclick="go('/admin/messages.html')"><iconify-icon icon="mdi:message-text-outline"></iconify-icon><span class="nav-label">Messages</span></li>
+      <li class="nav-item" onclick="go('/admin/cartographie.html')"><iconify-icon icon="mdi:map-outline"></iconify-icon><span class="nav-label">Cartographie</span></li>
+    </ul>
+  </div>
+  <div class="sb-sec">
+    <div class="sb-sec-lbl">Système</div>
+    <ul>
+      <li class="nav-item active"><iconify-icon icon="mdi:domain"></iconify-icon><span class="nav-label">Portail bailleurs</span></li>
+      <li class="nav-item" onclick="go('/admin/parametres.html')"><iconify-icon icon="mdi:cog-outline"></iconify-icon><span class="nav-label">Paramètres</span></li>
+    </ul>
+  </div>
+  <div class="sb-foot">
+    <div class="sb-user" onclick="toggleDd()">
+      <div class="sb-av" id="sbAv">AD</div>
+      <div class="sb-ui"><strong id="sbName">Chargement…</strong><span id="sbRole">—</span></div>
+      <iconify-icon icon="mdi:chevron-up" style="color:rgba(255,255,255,.4);font-size:16px"></iconify-icon>
+    </div>
+  </div>
+</aside>
+
+<div class="main-wrap" id="mainWrap">
+  <header class="admin-header">
+    <button class="hdr-toggle" onclick="toggleSb()"><iconify-icon icon="mdi:menu"></iconify-icon></button>
+    <nav class="hdr-bc">
+      <span>FODDEB</span>
+      <iconify-icon icon="mdi:chevron-right"></iconify-icon>
+      <strong>Portail Bailleurs</strong>
+    </nav>
+    <div class="hdr-right">
+      <button class="btn btn-p btn-sm" onclick="openForm()">
+        <iconify-icon icon="mdi:plus"></iconify-icon>Ajouter un bailleur
+      </button>
+      <button class="btn btn-o btn-sm" onclick="exportBailleurs()">
+        <iconify-icon icon="mdi:download-outline"></iconify-icon>Exporter CSV
+      </button>
+      <div class="hdr-user" onclick="toggleDd()">
+        <div class="hdr-av" id="hdrAv">AD</div>
+        <div class="hdr-ui"><strong id="hdrName">Chargement…</strong><span id="hdrRole">—</span></div>
+        <iconify-icon icon="mdi:chevron-down" style="font-size:16px;color:var(--gr4)"></iconify-icon>
+      </div>
+    </div>
+  </header>
+
+  <div class="user-dd" id="userDd">
+    <div class="dd-user"><strong id="ddName">—</strong><span id="ddEmail">—</span></div>
+    <div class="dd-item" onclick="go('/admin/parametres.html')"><iconify-icon icon="mdi:cog-outline"></iconify-icon> Paramètres</div>
+    <div class="dd-divider"></div>
+    <div class="dd-item danger" onclick="logout()"><iconify-icon icon="mdi:logout"></iconify-icon> Se déconnecter</div>
+  </div>
+
+  <div class="pc">
+    <div class="pg-hdr">
+      <div>
+        <h1 class="pg-title">Portail Bailleurs</h1>
+        <p class="pg-sub">Partenaires financiers, subventions et décaissements</p>
+      </div>
+    </div>
+
+    <!-- STATS -->
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-icon ic-b"><iconify-icon icon="mdi:domain"></iconify-icon></div>
+        <div class="stat-info"><div class="stat-val" id="statTotal">—</div><div class="stat-lbl">Bailleurs total</div></div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon ic-g"><iconify-icon icon="mdi:check-circle-outline"></iconify-icon></div>
+        <div class="stat-info"><div class="stat-val" id="statActif">—</div><div class="stat-lbl">Actifs</div></div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon ic-o"><iconify-icon icon="mdi:cash-multiple"></iconify-icon></div>
+        <div class="stat-info"><div class="stat-val" id="statMontant">—</div><div class="stat-lbl">Total engagé (FCFA)</div></div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon ic-p"><iconify-icon icon="mdi:chart-line"></iconify-icon></div>
+        <div class="stat-info"><div class="stat-val" id="statDecaisse">—</div><div class="stat-lbl">Décaissé (FCFA)</div></div>
+      </div>
+    </div>
+
+    <!-- FILTRES -->
+    <div class="filters-bar">
+      <div class="search-wrap">
+        <iconify-icon icon="mdi:magnify"></iconify-icon>
+        <input type="search" class="search-inp" id="searchInp" placeholder="Rechercher nom, pays, contact…" oninput="applyFilters()">
+      </div>
+      <select class="filter-sel" id="typeFilter" onchange="applyFilters()">
+        <option value="">Tous les types</option>
+        <option value="Institution">Institution</option>
+        <option value="ONG">ONG</option>
+        <option value="Gouvernement">Gouvernement</option>
+        <option value="Fondation">Fondation</option>
+        <option value="Bilatéral">Bilatéral</option>
+        <option value="Multilatéral">Multilatéral</option>
+        <option value="Privé">Privé</option>
+      </select>
+      <select class="filter-sel" id="statutFilter" onchange="applyFilters()">
+        <option value="">Tous les statuts</option>
+        <option value="actif">Actifs</option>
+        <option value="cloture">Clôturés</option>
+        <option value="negociation">En négociation</option>
+        <option value="suspendu">Suspendus</option>
+      </select>
+      <span id="filterCount" style="font-size:13px;color:var(--gr4);white-space:nowrap;margin-left:auto;">— bailleurs</span>
+    </div>
+
+    <!-- TABLE -->
+    <div class="card">
+      <div class="tw">
+        <table>
+          <thead>
+            <tr>
+              <th>Bailleur</th>
+              <th>Type</th>
+              <th>Pays</th>
+              <th>Montant engagé</th>
+              <th>Décaissé</th>
+              <th>Taux décaiss.</th>
+              <th>Statut</th>
+              <th>Fin convention</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="bailleursTbody">
+            <tr><td colspan="9" class="empty-state">
+              <iconify-icon icon="mdi:loading" style="animation:spin 1s linear infinite;font-size:32px;margin-bottom:8px;display:block;color:var(--gr4)"></iconify-icon>
+              <p>Chargement…</p>
+            </td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL BAILLEUR -->
+<div class="modal-overlay" id="bailleurModal" onclick="if(event.target===this)closeModal()">
+  <div class="modal">
+    <div class="modal-hdr">
+      <h2 id="modalTitle">Nouveau bailleur</h2>
+      <button class="modal-close" onclick="closeModal()"><iconify-icon icon="mdi:close"></iconify-icon></button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="editId">
+      <div class="fg-row">
+        <div class="fg"><label class="fl">Nom du bailleur *</label><input class="fi" id="bNom" placeholder="ex: UNICEF Bénin"></div>
+        <div class="fg"><label class="fl">Type *</label>
+          <select class="fi" id="bType">
+            <option value="Institution">Institution</option>
+            <option value="ONG">ONG</option>
+            <option value="Gouvernement">Gouvernement</option>
+            <option value="Fondation">Fondation</option>
+            <option value="Bilatéral">Bilatéral</option>
+            <option value="Multilatéral">Multilatéral</option>
+            <option value="Privé">Privé</option>
+          </select>
+        </div>
+      </div>
+      <div class="fg-row">
+        <div class="fg"><label class="fl">Pays</label><input class="fi" id="bPays" placeholder="ex: France"></div>
+        <div class="fg"><label class="fl">Contact</label><input class="fi" id="bContact" placeholder="Nom du contact"></div>
+      </div>
+      <div class="fg"><label class="fl">Email contact</label><input class="fi" id="bEmail" type="email" placeholder="contact@bailleur.org"></div>
+      <div class="fg-row">
+        <div class="fg"><label class="fl">Montant engagé (FCFA)</label><input class="fi" id="bMontant" type="number" min="0" placeholder="0"></div>
+        <div class="fg"><label class="fl">Montant décaissé (FCFA)</label><input class="fi" id="bDecaisse" type="number" min="0" placeholder="0"></div>
+      </div>
+      <div class="fg-row">
+        <div class="fg"><label class="fl">Date début</label><input class="fi" id="bDateDebut" type="date"></div>
+        <div class="fg"><label class="fl">Date fin</label><input class="fi" id="bDateFin" type="date"></div>
+      </div>
+      <div class="fg-row">
+        <div class="fg"><label class="fl">Projets financés</label><input class="fi" id="bProjets" placeholder="Projet A, Projet B"></div>
+        <div class="fg"><label class="fl">Statut</label>
+          <select class="fi" id="bStatut">
+            <option value="actif">Actif</option>
+            <option value="negociation">En négociation</option>
+            <option value="cloture">Clôturé</option>
+            <option value="suspendu">Suspendu</option>
+          </select>
+        </div>
+      </div>
+      <div class="fg"><label class="fl">Notes</label><textarea class="fi" id="bNotes" placeholder="Informations complémentaires…"></textarea></div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn btn-o btn-sm" onclick="closeModal()">Annuler</button>
+      <button class="btn btn-p btn-sm" onclick="saveBailleur()"><iconify-icon icon="mdi:content-save-outline"></iconify-icon>Enregistrer</button>
+    </div>
+  </div>
+</div>
+
+<script src="/assets/js/config.js"></script>
+<script src="/assets/js/utils.js"></script>
+<script src="/assets/js/services/api.js"></script>
+<script src="/assets/js/services/auth.js"></script>
+<script>
+'use strict';
+
+const go   = url => window.location.href = url;
+const fmtD = d  => { try { return new Date(d).toLocaleDateString('fr-FR', {day:'numeric',month:'short',year:'numeric'}); } catch { return d||'—'; } };
+const fmtF = n  => { const v = Number(n||0); return v >= 1000000 ? (v/1000000).toFixed(1)+' M' : v >= 1000 ? (v/1000).toFixed(0)+' K' : v.toLocaleString('fr-FR'); };
+const init2= (p,n)=> (((p||'')[0]||'') + ((n||'')[0]||'')).toUpperCase() || '?';
+
+function toast(msg, type='ok') {
+  const c = document.getElementById('toast-container');
+  const t = document.createElement('div');
+  t.className = 'toast ' + type;
+  t.innerHTML = `<iconify-icon icon="${type==='err'?'mdi:alert-circle-outline':'mdi:check-circle-outline'}"></iconify-icon><span>${msg}</span>`;
+  c.appendChild(t);
+  setTimeout(() => { t.style.opacity='0'; t.style.transition='.3s'; setTimeout(()=>t.remove(),300); }, 3500);
+}
+
+function getUser() { try { return JSON.parse(sessionStorage.getItem('foddeb_user')); } catch { return null; } }
+function requireAdmin() {
+  const u = getUser();
+  if (!u || (u.role !== 'admin' && u.role !== 'manager')) { window.location.href = '/auth/login.html'; return null; }
+  return u;
+}
+
+let sbCol=false, sbMob=false, ddOpen=false;
+function toggleSb() {
+  if (window.innerWidth <= 768) { sbMob=!sbMob; document.getElementById('sidebar').classList.toggle('mob-open',sbMob); document.getElementById('sbOverlay').classList.toggle('visible',sbMob); }
+  else { sbCol=!sbCol; document.getElementById('sidebar').classList.toggle('collapsed',sbCol); document.getElementById('mainWrap').classList.toggle('collapsed',sbCol); }
+}
+function closeSb() { sbMob=false; document.getElementById('sidebar').classList.remove('mob-open'); document.getElementById('sbOverlay').classList.remove('visible'); }
+function toggleDd() { ddOpen=!ddOpen; document.getElementById('userDd').classList.toggle('open',ddOpen); }
+function logout() { if(!confirm('Se déconnecter ?'))return; sessionStorage.clear(); window.location.href='/auth/login.html'; }
+document.addEventListener('click', e => { if(!e.target.closest('#userDd')&&!e.target.closest('.hdr-user')&&!e.target.closest('.sb-user')){ddOpen=false;document.getElementById('userDd').classList.remove('open');} });
+
+function renderAdminAvatar() {
+  const user=getUser(); const photo=user&&(user.Photo||user.PhotoURL||'');
+  const ini=init2(user?.Prenom||user?.prenom||'A', user?.Nom||user?.nom||'');
+  ['sbAv','hdrAv'].forEach(id => { const el=document.getElementById(id); if(!el)return; if(photo){el.innerHTML=`<img src="${photo}" style="width:100%;height:100%;object-fit:cover;border-radius:50%">`;}else{el.textContent=ini;} });
+}
+
+function loadUserInfo() {
+  const u=getUser()||{}; const p=u.Prenom||u.prenom||'Admin'; const n=u.Nom||u.nom||'';
+  const rl={admin:'Super Admin',manager:'Gestionnaire',member:'Membre'}[u.role]||u.role||'—';
+  ['sbName','hdrName'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent=p+' '+n;});
+  ['sbRole','hdrRole'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent=rl;});
+  const dN=document.getElementById('ddName');if(dN)dN.textContent=p+' '+n;
+  const dE=document.getElementById('ddEmail');if(dE)dE.textContent=u.Email||u.email||'';
+  renderAdminAvatar();
+}
+
+/* ═══════════════════════════════════════════════
+   DONNÉES — Feuille Bailleurs via GAS getAllRows
+   Schéma : ID|Nom|Type|Pays|Montant|Decaisse|Projets|Contact|Email|DateDebut|DateFin|Statut|Notes|CreatedAt
+═══════════════════════════════════════════════ */
+let ALL = [], FILTERED = [];
+
+const STATUT_MAP = {
+  actif:       '<span class="badge b-actif"><span class="bdot"></span>Actif</span>',
+  cloture:     '<span class="badge b-cloture"><span class="bdot"></span>Clôturé</span>',
+  negociation: '<span class="badge b-negocia"><span class="bdot"></span>Négociation</span>',
+  suspendu:    '<span class="badge b-suspen"><span class="bdot"></span>Suspendu</span>',
+};
+
+async function loadBailleurs() {
+  document.getElementById('bailleursTbody').innerHTML = `<tr><td colspan="9" class="empty-state">
+    <iconify-icon icon="mdi:loading" style="animation:spin 1s linear infinite;font-size:32px;margin-bottom:8px;display:block;color:var(--gr4)"></iconify-icon>
+    <p>Chargement…</p></td></tr>`;
+  try {
+    // GAS : action 'bailleurs_list' via getAllRows('Bailleurs') — route à ajouter si absente
+    const res = await FODDEB_API.admin.members.list('', 0); // fallback temporaire
+    // On utilise une requête directe pour bailleurs
+    const r2 = await fetch('/api/gas', {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain' },
+      body: JSON.stringify({ action: 'bailleurs_list' }),
+    });
+    const data = await r2.json();
+    ALL = (data.data || []).map(b => ({
+      ID:        b.ID        || b.id        || '',
+      Nom:       b.Nom       || b.nom       || '—',
+      Type:      b.Type      || b.type      || '—',
+      Pays:      b.Pays      || b.pays      || '—',
+      Montant:   Number(b.Montant  || b.montant  || 0),
+      Decaisse:  Number(b.Decaisse || b.decaisse || 0),
+      Projets:   b.Projets   || b.projets   || '',
+      Contact:   b.Contact   || b.contact   || '',
+      Email:     b.Email     || b.email     || '',
+      DateDebut: b.DateDebut || b.dateDebut || '',
+      DateFin:   b.DateFin   || b.dateFin   || '',
+      Statut:    (b.Statut   || b.statut    || 'actif').toLowerCase(),
+      Notes:     b.Notes     || b.notes     || '',
+      CreatedAt: b.CreatedAt || b.createdAt || '',
+    }));
+    updateStats(); applyFilters();
+  } catch (err) {
+    document.getElementById('bailleursTbody').innerHTML = `<tr><td colspan="9" class="empty-state">
+      <iconify-icon icon="mdi:alert-circle-outline" style="font-size:40px;margin-bottom:8px;display:block;color:var(--red)"></iconify-icon>
+      <p>Erreur : ${err.message}</p></td></tr>`;
+    toast('Erreur chargement : ' + err.message, 'err');
+  }
+}
+
+function updateStats() {
+  const actifs = ALL.filter(b => b.Statut === 'actif');
+  document.getElementById('statTotal').textContent   = ALL.length;
+  document.getElementById('statActif').textContent   = actifs.length;
+  document.getElementById('statMontant').textContent = fmtF(ALL.reduce((s,b)=>s+b.Montant,0));
+  document.getElementById('statDecaisse').textContent= fmtF(ALL.reduce((s,b)=>s+b.Decaisse,0));
+}
+
+function applyFilters() {
+  const q      = (document.getElementById('searchInp')?.value||'').toLowerCase().trim();
+  const type   = document.getElementById('typeFilter')?.value||'';
+  const statut = document.getElementById('statutFilter')?.value||'';
+  FILTERED = ALL.filter(b => {
+    const mq = !q || [b.Nom,b.Pays,b.Contact,b.Email,b.Projets].some(v=>(v||'').toLowerCase().includes(q));
+    const mt = !type   || b.Type===type;
+    const ms = !statut || b.Statut===statut;
+    return mq && mt && ms;
+  });
+  document.getElementById('filterCount').textContent = FILTERED.length + ' bailleur' + (FILTERED.length>1?'s':'');
+  renderTable();
+}
+
+function renderTable() {
+  const tbody = document.getElementById('bailleursTbody');
+  if (!FILTERED.length) {
+    tbody.innerHTML = `<tr><td colspan="9" class="empty-state">
+      <iconify-icon icon="mdi:domain-off" style="font-size:40px;margin-bottom:8px;display:block;color:var(--gr4)"></iconify-icon>
+      <p>Aucun bailleur trouvé.</p></td></tr>`;
+    return;
+  }
+  tbody.innerHTML = FILTERED.map((b, i) => {
+    const taux = b.Montant > 0 ? Math.min(100, Math.round(b.Decaisse / b.Montant * 100)) : 0;
+    return `<tr style="animation:fadeUp .2s ease ${i*.03}s both">
+      <td>
+        <div style="font-weight:600;font-size:13.5px">${b.Nom}</div>
+        ${b.Contact ? `<div style="font-size:12px;color:var(--gr4)">${b.Contact}</div>` : ''}
+      </td>
+      <td><span class="type-tag"><iconify-icon icon="mdi:domain" width="12"></iconify-icon>${b.Type}</span></td>
+      <td style="font-size:13px">${b.Pays}</td>
+      <td style="font-weight:600;font-size:13px">${fmtF(b.Montant)} <span style="font-size:11px;color:var(--gr4);font-weight:400">FCFA</span></td>
+      <td style="font-size:13px">${fmtF(b.Decaisse)} <span style="font-size:11px;color:var(--gr4)">FCFA</span></td>
+      <td>
+        <div class="prog-wrap">
+          <div class="prog-bar"><div class="prog-fill" style="width:${taux}%"></div></div>
+          <span class="prog-pct">${taux}%</span>
+        </div>
+      </td>
+      <td>${STATUT_MAP[b.Statut]||b.Statut}</td>
+      <td style="font-size:12.5px;color:var(--gr4)">${b.DateFin ? fmtD(b.DateFin) : '—'}</td>
+      <td>
+        <div style="display:flex;gap:4px">
+          <button class="act-btn" onclick="editBailleur('${b.ID}')" title="Modifier"><iconify-icon icon="mdi:pencil-outline"></iconify-icon></button>
+          ${b.Email ? `<button class="act-btn" onclick="window.open('mailto:${b.Email}')" title="Email"><iconify-icon icon="mdi:email-outline"></iconify-icon></button>` : ''}
+          <button class="act-btn" onclick="deleteBailleur('${b.ID}')" title="Supprimer" style="color:var(--red)"><iconify-icon icon="mdi:delete-outline"></iconify-icon></button>
+        </div>
+      </td>
+    </tr>`;
+  }).join('');
+}
+
+/* ── Formulaire ── */
+function openForm() {
+  document.getElementById('editId').value = '';
+  document.getElementById('modalTitle').textContent = 'Nouveau bailleur';
+  ['bNom','bPays','bContact','bEmail','bProjets','bNotes'].forEach(id => { const el=document.getElementById(id); if(el) el.value=''; });
+  ['bMontant','bDecaisse'].forEach(id => { const el=document.getElementById(id); if(el) el.value='0'; });
+  document.getElementById('bType').value   = 'Institution';
+  document.getElementById('bStatut').value = 'actif';
+  document.getElementById('bDateDebut').value = '';
+  document.getElementById('bDateFin').value   = '';
+  document.getElementById('bailleurModal').classList.add('open');
+}
+
+function editBailleur(id) {
+  const b = ALL.find(x => x.ID === id);
+  if (!b) return;
+  document.getElementById('editId').value     = b.ID;
+  document.getElementById('modalTitle').textContent = 'Modifier ' + b.Nom;
+  document.getElementById('bNom').value       = b.Nom;
+  document.getElementById('bType').value      = b.Type;
+  document.getElementById('bPays').value      = b.Pays;
+  document.getElementById('bContact').value   = b.Contact;
+  document.getElementById('bEmail').value     = b.Email;
+  document.getElementById('bMontant').value   = b.Montant;
+  document.getElementById('bDecaisse').value  = b.Decaisse;
+  document.getElementById('bProjets').value   = b.Projets;
+  document.getElementById('bStatut').value    = b.Statut;
+  document.getElementById('bDateDebut').value = b.DateDebut;
+  document.getElementById('bDateFin').value   = b.DateFin;
+  document.getElementById('bNotes').value     = b.Notes;
+  document.getElementById('bailleurModal').classList.add('open');
+}
+
+function closeModal() { document.getElementById('bailleurModal').classList.remove('open'); }
+
+async function saveBailleur() {
+  const nom = document.getElementById('bNom').value.trim();
+  if (!nom) { toast('Le nom du bailleur est requis.', 'warn'); return; }
+  const editId = document.getElementById('editId').value;
+  const payload = {
+    Nom:       nom,
+    Type:      document.getElementById('bType').value,
+    Pays:      document.getElementById('bPays').value.trim(),
+    Contact:   document.getElementById('bContact').value.trim(),
+    Email:     document.getElementById('bEmail').value.trim(),
+    Montant:   Number(document.getElementById('bMontant').value) || 0,
+    Decaisse:  Number(document.getElementById('bDecaisse').value) || 0,
+    Projets:   document.getElementById('bProjets').value.trim(),
+    Statut:    document.getElementById('bStatut').value,
+    DateDebut: document.getElementById('bDateDebut').value,
+    DateFin:   document.getElementById('bDateFin').value,
+    Notes:     document.getElementById('bNotes').value.trim(),
+  };
+  try {
+    const action = editId ? 'bailleurs_update' : 'bailleurs_create';
+    const body   = editId ? { action, id: editId, ...payload } : { action, ...payload };
+    const resp = await fetch('/api/gas', { method:'POST', headers:{'Content-Type':'text/plain'}, body: JSON.stringify(body) });
+    const data = await resp.json();
+    if (!data.success) throw new Error(data.error || 'Erreur inconnue');
+    closeModal();
+    toast(editId ? 'Bailleur mis à jour.' : 'Bailleur ajouté avec succès.');
+    await loadBailleurs();
+  } catch (err) {
+    toast('Erreur : ' + err.message, 'err');
+  }
+}
+
+async function deleteBailleur(id) {
+  const b = ALL.find(x => x.ID === id);
+  if (!b || !confirm(`Supprimer le bailleur "${b.Nom}" ?`)) return;
+  try {
+    const resp = await fetch('/api/gas', { method:'POST', headers:{'Content-Type':'text/plain'}, body: JSON.stringify({ action:'bailleurs_delete', id }) });
+    const data = await resp.json();
+    if (!data.success) throw new Error(data.error || 'Erreur');
+    toast('Bailleur supprimé.');
+    await loadBailleurs();
+  } catch (err) {
+    toast('Erreur suppression : ' + err.message, 'err');
+  }
+}
+
+function exportBailleurs() {
+  if (!FILTERED.length) { toast('Aucune donnée à exporter.', 'warn'); return; }
+  const h = ['Nom','Type','Pays','Contact','Email','Montant','Décaissé','Projets','Statut','Début','Fin','Notes'];
+  const rows = FILTERED.map(b => [b.Nom,b.Type,b.Pays,b.Contact,b.Email,b.Montant,b.Decaisse,b.Projets,b.Statut,b.DateDebut,b.DateFin,b.Notes]
+    .map(v=>`"${String(v||'').replace(/"/g,'""')}"`).join(','));
+  const csv = [h.join(','),...rows].join('\n');
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob(['\uFEFF'+csv],{type:'text/csv'}));
+  a.download = `bailleurs_foddeb_${new Date().toISOString().split('T')[0]}.csv`;
+  a.click();
+  toast('Export CSV téléchargé.');
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  const user = requireAdmin();
+  if (!user) return;
+  loadUserInfo();
+  loadBailleurs();
+});
+
+if ('serviceWorker' in navigator) navigator.serviceWorker.register('/sw.js').catch(()=>{});
+</script>
+</body>
+</html>

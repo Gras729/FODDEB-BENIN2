@@ -1,0 +1,885 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Contact — FODDEB</title>
+  <meta name="description" content="Contactez le FODDEB pour toute demande de partenariat, adhésion ou information sur nos activités au Bénin."/>
+  <link rel="manifest" href="/manifest.json"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js" defer></script>
+  <script src="https://www.google.com/recaptcha/api.js?render=6LdU3tksAAAAAOAIdgtC7xsQURksQ9mHAZ3MVLXF" async defer></script>
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    :root{
+      --g9:#1B3A1F;--g8:#1B5E20;--g7:#2E7D32;--g6:#388E3C;--g5:#4CAF50;--g4:#81C784;--g1:#C8E6C9;--g0:#E8F5E9;
+      --gold:#F9A825;--gold2:#F57F17;--goldf:#FFFDE7;
+      --red:#C62828;--redf:#FFEBEE;
+      --blue:#1565C0;--bluef:#E3F2FD;
+      --pur:#6A1B9A;--purf:#F3E5F5;
+      --cream:#FAFAF7;--white:#FFFFFF;
+      --dark:#0D1B0F;--gr8:#1C2520;--gr6:#4A5568;--gr4:#A0ADB8;--gr2:#E2E8F0;--gr1:#F1F5F2;--brd:#E8EEE9;
+      --fh:'Playfair Display',Georgia,serif;--fb:'DM Sans',system-ui,sans-serif;
+      --r:14px;--rs:8px;
+      --sh:0 4px 24px rgba(0,0,0,.08);--shm:0 8px 48px rgba(0,0,0,.14);
+      --tr:.3s cubic-bezier(.4,0,.2,1);
+    }
+    html{scroll-behavior:smooth;}
+    body{font-family:var(--fb);background:var(--cream);color:var(--gr8);-webkit-font-smoothing:antialiased;}
+    a{color:inherit;text-decoration:none;}
+    ul{list-style:none;}
+    button{font-family:var(--fb);cursor:pointer;border:none;background:none;}
+    .container{width:100%;max-width:1200px;margin:0 auto;padding:0 24px;}
+
+    /* TOPBAR */
+    .topbar{background:var(--g9);color:rgba(255,255,255,.72);font-size:13px;padding:8px 0;}
+    .topbar .container{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px;}
+    .topbar a{color:rgba(255,255,255,.72);transition:color .2s;}
+    .topbar a:hover{color:#fff;}
+    .topbar-info{display:flex;align-items:center;gap:20px;flex-wrap:wrap;}
+    .topbar-info span{display:flex;align-items:center;gap:6px;}
+    .topbar-social{display:flex;gap:14px;}
+
+    /* NAVBAR */
+    .navbar{background:var(--white);border-bottom:1px solid var(--brd);position:sticky;top:0;z-index:1000;box-shadow:0 2px 12px rgba(0,0,0,.06);}
+    .navbar .container{display:flex;align-items:center;justify-content:space-between;height:72px;}
+    .nav-brand{display:flex;align-items:center;gap:14px;}
+    .nav-logo{width:48px;height:48px;border-radius:50%;background:var(--g8);display:flex;align-items:center;justify-content:center;flex-shrink:0;overflow:hidden;}
+    .nav-logo img{width:100%;height:100%;object-fit:cover;display:block;}
+    .nav-logo-txt{font-family:var(--fh);color:#fff;font-size:14px;font-weight:800;}
+    .nav-name strong{display:block;font-size:18px;font-weight:700;color:var(--g8);}
+    .nav-name span{font-size:11px;color:var(--gr6);}
+    .nav-links{display:flex;align-items:center;gap:4px;}
+    .nav-link{font-size:14px;font-weight:500;color:var(--gr6);padding:8px 14px;border-radius:var(--rs);transition:var(--tr);}
+    .nav-link:hover,.nav-link.active{color:var(--g8);background:var(--g0);}
+    .nav-link.active{font-weight:600;}
+    .nav-cta{display:flex;gap:10px;}
+    .btn{display:inline-flex;align-items:center;gap:8px;font-family:var(--fb);font-size:14px;font-weight:600;padding:10px 20px;border-radius:var(--rs);border:1.5px solid transparent;cursor:pointer;transition:var(--tr);white-space:nowrap;}
+    .btn-p{background:var(--g8);color:#fff;}
+    .btn-p:hover{background:var(--g7);transform:translateY(-1px);}
+    .btn-gold{background:var(--gold);color:var(--dark);}
+    .btn-gold:hover{background:var(--gold2);transform:translateY(-1px);}
+    .btn-sm{font-size:13px;padding:8px 16px;}
+    .btn-dark{background:var(--dark);color:#fff;}
+    .btn-dark:hover{background:var(--g9);}
+    .hamburger{display:none;background:none;border:none;cursor:pointer;padding:6px;flex-direction:column;gap:5px;}
+    .hamburger span{display:block;width:24px;height:2px;background:var(--gr8);border-radius:2px;transition:var(--tr);}
+    .mobile-nav{display:none;position:fixed;inset:0;background:var(--white);z-index:2000;flex-direction:column;padding:24px;overflow-y:auto;}
+    .mobile-nav.open{display:flex;}
+    .mobile-nav-hdr{display:flex;justify-content:space-between;align-items:center;margin-bottom:32px;}
+    .mobile-close{background:none;border:none;cursor:pointer;font-size:28px;color:var(--gr6);}
+    .mobile-links{display:flex;flex-direction:column;gap:4px;}
+    .mobile-links a{font-size:18px;font-weight:500;color:var(--gr8);padding:14px 16px;border-radius:var(--r);border-bottom:1px solid var(--gr1);}
+    .mobile-links a:hover{color:var(--g8);background:var(--g0);}
+    .mobile-footer{margin-top:32px;display:flex;flex-direction:column;gap:12px;}
+
+    /* HERO */
+    .page-hero{background:linear-gradient(135deg,var(--g9) 0%,var(--g8) 55%,var(--g7) 100%);padding:72px 0 56px;position:relative;overflow:hidden;}
+    .page-hero::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(45deg,rgba(249,168,37,.05) 0px,rgba(249,168,37,.05) 1px,transparent 1px,transparent 40px),repeating-linear-gradient(-45deg,rgba(76,175,80,.04) 0px,rgba(76,175,80,.04) 1px,transparent 1px,transparent 40px);}
+    .hero-inner{position:relative;z-index:1;text-align:center;}
+    .hero-badge{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);background:rgba(249,168,37,.12);border:1px solid rgba(249,168,37,.25);border-radius:99px;padding:4px 14px;margin-bottom:18px;}
+    .hero-title{font-family:var(--fh);font-size:clamp(2.2rem,5vw,3.4rem);font-weight:800;color:#fff;line-height:1.12;margin-bottom:16px;}
+    .hero-title span{color:var(--gold);}
+    .hero-desc{font-size:17px;color:rgba(255,255,255,.7);max-width:540px;margin:0 auto;line-height:1.7;}
+
+    /* BREADCRUMB */
+    .breadcrumb{background:var(--white);border-bottom:1px solid var(--brd);padding:12px 0;}
+    .bc-inner{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--gr4);}
+    .bc-inner a{color:var(--g7);font-weight:500;}
+    .bc-inner a:hover{text-decoration:underline;}
+
+    /* CONTACT SECTION */
+    .contact-section{padding:72px 0 96px;}
+    .contact-grid{display:grid;grid-template-columns:1fr 1.6fr;gap:64px;align-items:start;}
+
+    /* INFO SIDE */
+    .info-title{font-family:var(--fh);font-size:1.8rem;font-weight:700;color:var(--g9);margin-bottom:14px;line-height:1.2;}
+    .info-lead{font-size:15.5px;color:var(--gr6);line-height:1.7;margin-bottom:36px;}
+    .contact-items{display:flex;flex-direction:column;gap:20px;margin-bottom:40px;}
+    .contact-item{display:flex;gap:16px;align-items:flex-start;}
+    .ci-icon{width:48px;height:48px;border-radius:12px;background:var(--g0);border:1px solid var(--g1);display:flex;align-items:center;justify-content:center;font-size:22px;color:var(--g7);flex-shrink:0;}
+    .ci-label{font-size:11.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--gr4);margin-bottom:5px;}
+    .ci-val{font-size:15px;font-weight:500;color:var(--gr8);line-height:1.5;}
+    .ci-val a{color:var(--g7);transition:color .2s;}
+    .ci-val a:hover{color:var(--g8);text-decoration:underline;}
+    .social-title{font-size:12.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--gr4);margin-bottom:14px;}
+    .social-links{display:flex;gap:10px;}
+    .social-link{width:42px;height:42px;border-radius:10px;background:var(--g0);border:1px solid var(--g1);display:flex;align-items:center;justify-content:center;font-size:20px;color:var(--g7);transition:var(--tr);}
+    .social-link:hover{background:var(--g8);color:#fff;border-color:var(--g8);transform:translateY(-2px);}
+    .map-placeholder{margin-top:36px;border-radius:14px;overflow:hidden;border:1px solid var(--brd);box-shadow:var(--sh);}
+    .map-body{height:200px;background:var(--g8);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;color:rgba(255,255,255,.5);font-size:14px;}
+    .map-body iconify-icon{font-size:40px;}
+    .map-footer{background:var(--white);padding:12px 16px;display:flex;align-items:center;gap:8px;font-size:13px;color:var(--gr6);}
+    .map-footer iconify-icon{font-size:16px;color:var(--g7);}
+
+    /* FORM */
+    .form-wrap{background:var(--white);border:1px solid var(--brd);border-radius:20px;padding:40px 44px;box-shadow:var(--sh);}
+    .form-header{margin-bottom:28px;}
+    .form-header h2{font-family:var(--fh);font-size:1.6rem;font-weight:700;color:var(--g9);margin-bottom:8px;}
+    .form-header p{font-size:14.5px;color:var(--gr6);line-height:1.6;}
+    .form-row{display:grid;grid-template-columns:1fr 1fr;gap:18px;}
+    .form-group{margin-bottom:20px;}
+    .fl{display:block;font-size:13px;font-weight:600;color:var(--gr8);margin-bottom:7px;}
+    .fl .req{color:var(--red);margin-left:3px;}
+    .iw{position:relative;}
+    .ii{position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--gr2);font-size:18px;pointer-events:none;transition:color .2s;}
+    .fi,.fsel{width:100%;padding:13px 14px 13px 44px;border:1.5px solid var(--gr2);border-radius:var(--rs);font-family:var(--fb);font-size:15px;color:var(--gr8);background:var(--gr1);outline:none;transition:all .2s;}
+    .fsel{padding-left:14px;appearance:none;cursor:pointer;}
+    .fta{width:100%;padding:13px 14px;border:1.5px solid var(--gr2);border-radius:var(--rs);font-family:var(--fb);font-size:15px;color:var(--gr8);background:var(--gr1);outline:none;transition:all .2s;resize:vertical;min-height:130px;}
+    .fi::placeholder,.fta::placeholder{color:#B0BEC5;}
+    .fi:focus,.fsel:focus,.fta:focus{border-color:var(--g5);background:var(--white);box-shadow:0 0 0 4px rgba(76,175,80,.12);}
+    .fi:focus~.ii,.iw:focus-within .ii{color:var(--g6);}
+    .fi.error,.fta.error{border-color:var(--red);background:var(--redf);}
+    .ferr{font-size:12px;color:var(--red);margin-top:5px;display:flex;align-items:center;gap:4px;}
+
+    /* SUJET CARDS */
+    .sujet-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;}
+    .sr{display:none;}
+    .sr+label{display:flex;flex-direction:column;align-items:center;gap:5px;padding:12px 8px;border:1.5px solid var(--gr2);border-radius:var(--rs);font-size:12px;font-weight:600;color:var(--gr6);cursor:pointer;transition:var(--tr);background:var(--gr1);text-align:center;line-height:1.3;}
+    .sr+label iconify-icon{font-size:22px;color:var(--gr4);transition:color .2s;}
+    .sr:checked+label{border-color:var(--g5);background:var(--g0);color:var(--g8);}
+    .sr:checked+label iconify-icon{color:var(--g7);}
+
+    /* FILE */
+    .file-zone{border:2px dashed var(--brd);border-radius:var(--rs);padding:20px;text-align:center;cursor:pointer;transition:var(--tr);}
+    .file-zone:hover{border-color:var(--g4);background:var(--g0);}
+    .file-zone.has-file{border-color:var(--g5);border-style:solid;background:var(--g0);}
+    .file-zone iconify-icon{font-size:32px;color:var(--gr4);display:block;margin:0 auto 8px;}
+    .file-zone p{font-size:13.5px;color:var(--gr6);}
+    .file-zone span{font-size:12px;color:var(--gr4);}
+
+    /* CHAR COUNT */
+    .char-row{display:flex;justify-content:flex-end;margin-top:5px;}
+    .char-count{font-size:12px;color:var(--gr4);}
+    .char-count.warn{color:var(--red);}
+
+    /* SECURITY */
+    .security-notice{display:flex;align-items:center;gap:8px;background:var(--g0);border:1px solid var(--g1);border-radius:var(--rs);padding:11px 14px;font-size:12.5px;color:var(--g8);margin-bottom:20px;}
+    .security-notice iconify-icon{font-size:16px;color:var(--g6);flex-shrink:0;}
+
+    /* SUBMIT */
+    .btn-submit{width:100%;padding:15px;background:var(--g8);color:#fff;border:none;border-radius:var(--rs);font-family:var(--fh);font-size:16px;font-weight:700;cursor:pointer;transition:all .25s;display:flex;align-items:center;justify-content:center;gap:10px;}
+    .btn-submit:hover:not(:disabled){background:var(--g7);transform:translateY(-1px);box-shadow:0 6px 20px rgba(27,94,32,.3);}
+    .btn-submit:disabled{opacity:.6;cursor:not-allowed;transform:none;box-shadow:none;}
+    .spinner{width:18px;height:18px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;display:inline-block;}
+    @keyframes spin{to{transform:rotate(360deg)}}
+
+    /* SUCCESS */
+    .form-success{display:none;text-align:center;padding:40px 20px;}
+    .form-success.visible{display:block;}
+    .success-circle{width:88px;height:88px;border-radius:50%;background:var(--g0);border:3px solid var(--g1);display:flex;align-items:center;justify-content:center;margin:0 auto 24px;font-size:42px;color:var(--g7);animation:popIn .45s cubic-bezier(.34,1.56,.64,1);}
+    @keyframes popIn{from{transform:scale(.3);opacity:0}to{transform:scale(1);opacity:1}}
+    .form-success h3{font-family:var(--fh);font-size:1.5rem;font-weight:700;color:var(--g9);margin-bottom:12px;}
+    .form-success p{font-size:15px;color:var(--gr6);line-height:1.7;max-width:380px;margin:0 auto 24px;}
+    .success-info{background:var(--g0);border:1px solid var(--g1);border-radius:var(--r);padding:16px 20px;text-align:left;max-width:380px;margin:0 auto;}
+    .si-item{display:flex;align-items:center;gap:8px;font-size:13.5px;color:var(--g8);margin-bottom:8px;}
+    .si-item:last-child{margin-bottom:0;}
+    .si-item iconify-icon{font-size:16px;color:var(--g6);flex-shrink:0;}
+
+    /* FAQ */
+    .faq-section{background:var(--gr1);padding:72px 0;}
+    .section-header{text-align:center;margin-bottom:48px;}
+    .section-label{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--g7);background:var(--g0);border:1px solid var(--g1);border-radius:99px;padding:4px 14px;margin-bottom:14px;}
+    .section-title{font-family:var(--fh);font-size:clamp(1.8rem,3.5vw,2.4rem);font-weight:700;color:var(--g9);margin-bottom:12px;line-height:1.2;}
+    .section-lead{font-size:16px;color:var(--gr6);max-width:540px;margin:0 auto;line-height:1.7;}
+    .faq-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+    .faq-item{background:var(--white);border:1px solid var(--brd);border-radius:var(--r);overflow:hidden;transition:var(--tr);}
+    .faq-item:hover{box-shadow:var(--sh);}
+    .faq-q{display:flex;align-items:center;justify-content:space-between;padding:18px 20px;cursor:pointer;gap:12px;}
+    .faq-q-text{font-size:14.5px;font-weight:600;color:var(--gr8);line-height:1.4;}
+    .faq-icon{width:28px;height:28px;border-radius:50%;background:var(--g0);display:flex;align-items:center;justify-content:center;color:var(--g7);font-size:18px;flex-shrink:0;transition:var(--tr);}
+    .faq-item.open .faq-icon{background:var(--g8);color:#fff;transform:rotate(45deg);}
+    .faq-ans{display:none;padding:0 20px 18px;font-size:14.5px;color:var(--gr6);line-height:1.7;}
+    .faq-item.open .faq-ans{display:block;}
+    .faq-item.open .faq-q{border-bottom:1px solid var(--brd);}
+
+    /* PARTENARIAT */
+    .partner-section{padding:72px 0;}
+    .partner-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:20px;}
+    .partner-card{background:var(--white);border:1px solid var(--brd);border-radius:var(--r);padding:28px 24px;text-align:center;transition:var(--tr);box-shadow:var(--sh);}
+    .partner-card:hover{box-shadow:var(--shm);transform:translateY(-3px);border-color:var(--g1);}
+    .partner-icon{width:64px;height:64px;border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:30px;margin:0 auto 16px;}
+    .partner-card h3{font-family:var(--fh);font-size:1.1rem;font-weight:700;color:var(--g9);margin-bottom:10px;}
+    .partner-card p{font-size:13.5px;color:var(--gr6);line-height:1.65;}
+
+    /* CTA */
+    .cta-strip{background:var(--gold);padding:56px 0;}
+    .cta-inner{display:flex;align-items:center;justify-content:space-between;gap:40px;flex-wrap:wrap;}
+    .cta-text h2{font-family:var(--fh);font-size:clamp(1.5rem,3vw,2rem);font-weight:700;color:var(--dark);margin-bottom:8px;}
+    .cta-text p{font-size:15px;color:rgba(0,0,0,.65);}
+
+    /* FOOTER */
+    .footer{background:var(--g9);color:rgba(255,255,255,.7);padding:56px 0 24px;}
+    .footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:40px;margin-bottom:40px;}
+    .footer-logo{display:flex;align-items:center;gap:12px;margin-bottom:16px;}
+    .footer-logo-i{width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,.1);display:flex;align-items:center;justify-content:center;font-family:var(--fh);color:#fff;font-weight:800;font-size:12px;overflow:hidden;}
+    .footer-logo-i img{width:100%;height:100%;object-fit:cover;}
+    .footer-logo-t strong{display:block;color:#fff;font-size:15px;font-weight:700;}
+    .footer-desc{font-size:13.5px;line-height:1.7;margin-bottom:18px;}
+    .footer-col h4{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:#fff;margin-bottom:16px;}
+    .footer-col ul li{margin-bottom:9px;}
+    .footer-col ul li a{font-size:13.5px;color:rgba(255,255,255,.6);transition:color .2s;}
+    .footer-col ul li a:hover{color:#fff;}
+    .footer-bottom{border-top:1px solid rgba(255,255,255,.1);padding-top:20px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;font-size:13px;}
+    .footer-bottom-links{display:flex;gap:18px;}
+    .footer-bottom-links a{color:rgba(255,255,255,.5);}
+    .footer-bottom-links a:hover{color:#fff;}
+
+    /* TOAST */
+    #tc{position:fixed;top:20px;right:20px;z-index:9999;display:flex;flex-direction:column;gap:8px;}
+    .toast{padding:13px 18px;border-radius:10px;font-size:14px;display:flex;align-items:center;gap:10px;box-shadow:var(--shm);animation:tIn .3s ease;max-width:340px;color:#fff;}
+    .toast.ok{background:var(--g8);}
+    .toast.err{background:var(--red);}
+    @keyframes tIn{from{opacity:0;transform:translateX(20px)}to{opacity:1;transform:none}}
+
+    /* FADE IN */
+    .fade-in{opacity:0;transform:translateY(20px);transition:opacity .6s ease,transform .6s ease;}
+    .fade-in.visible{opacity:1;transform:none;}
+
+    @media(max-width:1024px){.footer-grid{grid-template-columns:1fr 1fr;}.faq-grid{grid-template-columns:1fr;}}
+    @media(max-width:768px){
+      .nav-links,.nav-cta{display:none;}.hamburger{display:flex;}
+      .contact-grid{grid-template-columns:1fr;gap:40px;}
+      .form-wrap{padding:28px 22px;}
+      .form-row{grid-template-columns:1fr;}
+      .sujet-grid{grid-template-columns:repeat(2,1fr);}
+      .footer-grid{grid-template-columns:1fr;}
+      .cta-inner{flex-direction:column;align-items:flex-start;}
+      .partner-grid{grid-template-columns:1fr;}
+    }
+    @media(max-width:480px){
+      .container{padding:0 16px;}
+      .sujet-grid{grid-template-columns:1fr 1fr;}
+    }
+  </style>
+</head>
+<body>
+
+<div id="tc"></div>
+
+<!-- TOPBAR -->
+<div class="topbar">
+  <div class="container">
+    <div class="topbar-info">
+      <span><iconify-icon icon="mdi:phone" width="13"></iconify-icon><a href="tel:+22901976964826">+229 01 97 69 64 26</a></span>
+      <span><iconify-icon icon="mdi:phone" width="13"></iconify-icon><a href="tel:+22901940817108">01 94 08 17 10</a></span>
+      <span><iconify-icon icon="mdi:email-outline" width="13"></iconify-icon><a href="mailto:foddeb15@gmail.com">foddeb15@gmail.com</a></span>
+    </div>
+    <div class="topbar-social">
+      <a href="#" aria-label="Facebook"><iconify-icon icon="mdi:facebook" width="15"></iconify-icon></a>
+      <a href="#" aria-label="Twitter"><iconify-icon icon="mdi:twitter" width="15"></iconify-icon></a>
+      <a href="#" aria-label="LinkedIn"><iconify-icon icon="mdi:linkedin" width="15"></iconify-icon></a>
+      <a href="#" aria-label="YouTube"><iconify-icon icon="mdi:youtube" width="15"></iconify-icon></a>
+    </div>
+  </div>
+</div>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+  <div class="container">
+    <a href="/" class="nav-brand">
+      <div class="nav-logo">
+        <img src="/assets/img/logo.png" alt="Logo FODDEB" onerror="this.style.display='none';this.nextElementSibling.style.display='block'"/>
+        <span class="nav-logo-txt" style="display:none">FOD</span>
+      </div>
+      <div class="nav-name"><strong>FODDEB</strong><span>Droits de l'Enfant au Bénin</span></div>
+    </a>
+    <div class="nav-links">
+      <a href="/" class="nav-link">Accueil</a>
+      <a href="/pages/organes.html" class="nav-link">Nos organes</a>
+      <a href="/pages/projets.html" class="nav-link">Projets</a>
+      <a href="/pages/actualites.html" class="nav-link">Actualités</a>
+      <a href="/pages/contact.html" class="nav-link active">Contact</a>
+    </div>
+    <div class="nav-cta">
+      <a href="/#don" class="btn btn-gold btn-sm">Faire un don</a>
+      <a href="/auth/login.html" class="btn btn-p btn-sm">Espace membre</a>
+    </div>
+    <button class="hamburger" id="hamburger" aria-label="Ouvrir le menu"><span></span><span></span><span></span></button>
+  </div>
+</nav>
+
+<!-- MOBILE NAV -->
+<nav class="mobile-nav" id="mobileNav">
+  <div class="mobile-nav-hdr">
+    <a href="/" class="nav-brand"><div class="nav-logo"><span class="nav-logo-txt">FOD</span></div><div class="nav-name"><strong>FODDEB</strong></div></a>
+    <button class="mobile-close" id="mobileClose">&#x2715;</button>
+  </div>
+  <div class="mobile-links">
+    <a href="/">Accueil</a>
+    <a href="/pages/organes.html">Nos organes</a>
+    <a href="/pages/projets.html">Projets</a>
+    <a href="/pages/actualites.html">Actualités</a>
+    <a href="/pages/contact.html">Contact</a>
+  </div>
+  <div class="mobile-footer">
+    <a href="/#don" class="btn btn-gold">Faire un don</a>
+    <a href="/auth/login.html" class="btn btn-p">Espace membre</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="page-hero">
+  <div class="container">
+    <div class="hero-inner">
+      <div class="hero-badge"><iconify-icon icon="mdi:message-text-outline"></iconify-icon>Nous contacter</div>
+      <h1 class="hero-title">Parlons de votre <span>projet</span></h1>
+      <p class="hero-desc">Une question, une idée de partenariat ou envie de nous rejoindre ? Notre équipe vous répond sous 48 heures.</p>
+    </div>
+  </div>
+</section>
+
+<!-- BREADCRUMB -->
+<div class="breadcrumb">
+  <div class="container">
+    <div class="bc-inner">
+      <a href="/">Accueil</a>
+      <iconify-icon icon="mdi:chevron-right"></iconify-icon>
+      <span>Contact</span>
+    </div>
+  </div>
+</div>
+
+<!-- MAIN -->
+<section class="contact-section">
+  <div class="container">
+    <div class="contact-grid">
+
+      <!-- INFOS -->
+      <div class="fade-in">
+        <h2 class="info-title">Nos coordonnees</h2>
+        <p class="info-lead">Le secrétariat du FODDEB est disponible du lundi au vendredi de 8h a 17h et le samedi matin.</p>
+        <div class="contact-items">
+          <div class="contact-item">
+            <div class="ci-icon"><iconify-icon icon="mdi:map-marker-outline"></iconify-icon></div>
+            <div>
+              <div class="ci-label">Adresse du siège</div>
+              <div class="ci-val">Agla Akplomey, non loin de l'Ecole Sacré Coeur<br/>Carré N°3250, Cotonou, Bénin</div>
+            </div>
+          </div>
+          <div class="contact-item">
+            <div class="ci-icon"><iconify-icon icon="mdi:phone-outline"></iconify-icon></div>
+            <div>
+              <div class="ci-label">Téléphones</div>
+              <div class="ci-val">
+                <a href="tel:+22901976964826">+229 01 97 69 64 26</a><br/>
+                <a href="tel:+22901940817108">+229 01 94 08 17 10</a><br/>
+                <a href="tel:+22901532177998">+229 01 53 21 77 99</a>
+              </div>
+            </div>
+          </div>
+          <div class="contact-item">
+            <div class="ci-icon"><iconify-icon icon="mdi:email-outline"></iconify-icon></div>
+            <div>
+              <div class="ci-label">Email</div>
+              <div class="ci-val"><a href="mailto:foddeb15@gmail.com">foddeb15@gmail.com</a></div>
+            </div>
+          </div>
+          <div class="contact-item">
+            <div class="ci-icon"><iconify-icon icon="mdi:clock-time-four-outline"></iconify-icon></div>
+            <div>
+              <div class="ci-label">Horaires d'ouverture</div>
+              <div class="ci-val">
+                Lundi – Vendredi : 8h00 – 17h00<br/>
+                Samedi : 9h00 – 13h00<br/>
+                <span style="color:var(--gr4);font-size:13px">Dimanche et jours fériés : fermé</span>
+              </div>
+            </div>
+          </div>
+          <div class="contact-item">
+            <div class="ci-icon"><iconify-icon icon="mdi:reply-all-outline"></iconify-icon></div>
+            <div>
+              <div class="ci-label">Délai de reponse</div>
+              <div class="ci-val">Nous répondons à tous les messages <strong>sous 48 heures ouvrables</strong>.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="social-title">Suivez-nous sur les réseaux</div>
+        <div class="social-links">
+          <a href="#" class="social-link" aria-label="Facebook"><iconify-icon icon="mdi:facebook"></iconify-icon></a>
+          <a href="#" class="social-link" aria-label="Twitter"><iconify-icon icon="mdi:twitter"></iconify-icon></a>
+          <a href="#" class="social-link" aria-label="LinkedIn"><iconify-icon icon="mdi:linkedin"></iconify-icon></a>
+          <a href="#" class="social-link" aria-label="YouTube"><iconify-icon icon="mdi:youtube"></iconify-icon></a>
+          <a href="#" class="social-link" aria-label="WhatsApp"><iconify-icon icon="mdi:whatsapp"></iconify-icon></a>
+        </div>
+
+        <div class="map-placeholder">
+          <div class="map-body">
+            <iconify-icon icon="mdi:map-marker-radius-outline"></iconify-icon>
+            <span>Agla Akplomey, Cotonou</span>
+          </div>
+          <div class="map-footer">
+            <iconify-icon icon="mdi:navigation-outline"></iconify-icon>
+            <span>Carré N°3250 · Agla Akplomey · Cotonou, Benin</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- FORMULAIRE -->
+      <div class="fade-in" style="animation-delay:.1s">
+        <div class="form-wrap" id="formWrap">
+          <div class="form-header">
+            <h2>Envoyez-nous un message</h2>
+            <p>Remplissez le formulaire ci-dessous. Notre équipe vous contactera dans les meilleurs délais.</p>
+          </div>
+
+          <!-- Sujet -->
+          <div class="form-group">
+            <label class="fl">Objet de votre demande <span class="req">*</span></label>
+            <div class="sujet-grid" role="radiogroup">
+              <input type="radio" name="sujet" id="s1" value="partenariat" class="sr" checked/>
+              <label for="s1"><iconify-icon icon="mdi:handshake-outline"></iconify-icon>Partenariat</label>
+              <input type="radio" name="sujet" id="s2" value="adhesion" class="sr"/>
+              <label for="s2"><iconify-icon icon="mdi:account-plus-outline"></iconify-icon>Adhésion</label>
+              <input type="radio" name="sujet" id="s3" value="don" class="sr"/>
+              <label for="s3"><iconify-icon icon="mdi:heart-outline"></iconify-icon>Don et Financement</label>
+              <input type="radio" name="sujet" id="s4" value="projet" class="sr"/>
+              <label for="s4"><iconify-icon icon="mdi:clipboard-list-outline"></iconify-icon>Projet conjoint</label>
+              <input type="radio" name="sujet" id="s5" value="presse" class="sr"/>
+              <label for="s5"><iconify-icon icon="mdi:newspaper-variant-outline"></iconify-icon>Presse et Médias</label>
+              <input type="radio" name="sujet" id="s6" value="autre" class="sr"/>
+              <label for="s6"><iconify-icon icon="mdi:dots-horizontal-circle-outline"></iconify-icon>Autre demande</label>
+            </div>
+          </div>
+
+          <!-- Identite -->
+          <div class="form-row">
+            <div class="form-group">
+              <label class="fl" for="cPrenom">Prenom <span class="req">*</span></label>
+              <div class="iw"><input type="text" id="cPrenom" class="fi" placeholder="Votre prenom" autocomplete="given-name"/><iconify-icon icon="mdi:account-outline" class="ii"></iconify-icon></div>
+              <span class="ferr" id="cPrenom-err" role="alert"></span>
+            </div>
+            <div class="form-group">
+              <label class="fl" for="cNom">Nom <span class="req">*</span></label>
+              <div class="iw"><input type="text" id="cNom" class="fi" placeholder="Votre nom" autocomplete="family-name"/><iconify-icon icon="mdi:account-outline" class="ii"></iconify-icon></div>
+              <span class="ferr" id="cNom-err" role="alert"></span>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label class="fl" for="cEmail">Email <span class="req">*</span></label>
+              <div class="iw"><input type="email" id="cEmail" class="fi" placeholder="vous@exemple.com" autocomplete="email"/><iconify-icon icon="mdi:email-outline" class="ii"></iconify-icon></div>
+              <span class="ferr" id="cEmail-err" role="alert"></span>
+            </div>
+            <div class="form-group">
+              <label class="fl" for="cTel">Téléphone</label>
+              <div class="iw"><input type="tel" id="cTel" class="fi" placeholder="+229 01 XX XX XX XX" autocomplete="tel"/><iconify-icon icon="mdi:phone-outline" class="ii"></iconify-icon></div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="fl" for="cOrg">Organisation / Structure</label>
+            <div class="iw"><input type="text" id="cOrg" class="fi" placeholder="Nom de votre organisation (optionnel)" autocomplete="organization"/><iconify-icon icon="mdi:domain" class="ii"></iconify-icon></div>
+          </div>
+
+          <div class="form-group">
+            <label class="fl" for="cMessage">Message <span class="req">*</span></label>
+            <textarea id="cMessage" class="fta" placeholder="Decrivez votre demande en detail..."></textarea>
+            <div class="char-row"><span class="char-count" id="charCount">0 / 1000</span></div>
+            <span class="ferr" id="cMessage-err" role="alert"></span>
+          </div>
+
+          <!-- Piece jointe -->
+          <div class="form-group">
+            <label class="fl">Piece jointe (optionnel)</label>
+            <div class="file-zone" id="fileZone" onclick="document.getElementById('cFile').click()" role="button" tabindex="0">
+              <iconify-icon icon="mdi:paperclip"></iconify-icon>
+              <p>Cliquez pour ajouter un fichier</p>
+              <span id="fileLabel">PDF, Word, images — Max 5 Mo</span>
+            </div>
+            <input type="file" id="cFile" style="display:none" accept=".pdf,.doc,.docx,.jpg,.jpeg,.png" onchange="handleFile(this)"/>
+          </div>
+
+          <!-- Consentements -->
+          <div style="display:flex;flex-direction:column;gap:12px;margin-bottom:20px">
+            <label style="display:flex;align-items:flex-start;gap:10px;cursor:pointer">
+              <input type="checkbox" id="cConsent" style="accent-color:var(--g7);width:16px;height:16px;flex-shrink:0;margin-top:2px"/>
+              <span style="font-size:13px;color:var(--gr6);line-height:1.5">
+                J'accepte que le FODDEB traite mes données personnelles pour répondre à ma demande.
+                <a href="/confidentialite.html" style="color:var(--g7);font-weight:500" target="_blank">Politique de confidentialité</a>
+                <span class="req">*</span>
+              </span>
+            </label>
+            <label style="display:flex;align-items:flex-start;gap:10px;cursor:pointer">
+              <input type="checkbox" id="cNewsletter" style="accent-color:var(--g7);width:16px;height:16px;flex-shrink:0;margin-top:2px"/>
+              <span style="font-size:13px;color:var(--gr6);line-height:1.5">Je souhaite recevoir la newsletter mensuelle du FODDEB.</span>
+            </label>
+          </div>
+          <span class="ferr" id="cConsent-err" role="alert" style="display:block;margin-bottom:12px"></span>
+
+          <div class="security-notice">
+            <iconify-icon icon="mdi:shield-check-outline"></iconify-icon>
+            <span>Formulaire protege par Google reCAPTCHA v3 — données chiffrées SSL</span>
+          </div>
+
+          <button type="button" class="btn-submit" id="submitBtn" onclick="submitContact()">
+            <iconify-icon icon="mdi:send-outline"></iconify-icon>
+            Envoyer le message
+          </button>
+          <p style="font-size:11.5px;color:#B0BEC5;text-align:center;margin-top:14px">
+            Reponse garantie sous 48 heures ouvrables · foddeb15@gmail.com
+          </p>
+        </div>
+
+        <!-- SUCCESS -->
+        <div class="form-success" id="formSuccess" role="status" aria-live="polite">
+          <div class="success-circle"><iconify-icon icon="mdi:check-bold"></iconify-icon></div>
+          <h3>Message envoyé avec succes !</h3>
+          <p>Notre équipe a bien reçu votre message et vous répondra dans les <strong>48 heures ouvrables</strong>.</p>
+          <div class="success-info">
+            <div class="si-item"><iconify-icon icon="mdi:email-check-outline"></iconify-icon><span>Email de confirmation envoyé a <strong id="successEmail">—</strong></span></div>
+            <div class="si-item"><iconify-icon icon="mdi:clock-outline"></iconify-icon><span>Délai : 24 a 48 heures ouvrables</span></div>
+            <div class="si-item"><iconify-icon icon="mdi:phone-outline"></iconify-icon><span>Urgence : <a href="tel:+22901976964826" style="color:var(--g7)">+229 01 97 69 64 26</a></span></div>
+          </div>
+          <div style="margin-top:24px;display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
+            <a href="/" class="btn btn-p btn-sm"><iconify-icon icon="mdi:home-outline"></iconify-icon>Retour a l'accueil</a>
+            <button class="btn btn-gold btn-sm" onclick="resetForm()"><iconify-icon icon="mdi:refresh"></iconify-icon>Nouveau message</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- TYPES DE PARTENARIATS -->
+<section class="partner-section" style="background:var(--gr1)">
+  <div class="container">
+    <div class="section-header fade-in">
+      <div class="section-label">Collaborer avec nous</div>
+      <h2 class="section-title">Plusieurs façons de s'engager</h2>
+      <p class="section-lead">Le FODDEB accueille différents types de partenariats pour amplifier son impacté sur le terrain.</p>
+    </div>
+    <div class="partner-grid">
+      <div class="partner-card fade-in">
+        <div class="partner-icon" style="background:var(--g0)"><iconify-icon icon="mdi:handshake-outline" style="font-size:30px;color:var(--g7)"></iconify-icon></div>
+        <h3>Partenariat institutionnel</h3>
+        <p>ONG, agences de l'ONU, institutions étatiques — rejoignez notre réseau pour des actions coordonnees de protection de l'enfant.</p>
+      </div>
+      <div class="partner-card fade-in" style="animation-delay:.06s">
+        <div class="partner-icon" style="background:var(--goldf)"><iconify-icon icon="mdi:cash-multiple" style="font-size:30px;color:var(--gold2)"></iconify-icon></div>
+        <h3>Bailleur de fonds</h3>
+        <p>Financez nos projets terrain et bénéficiez d'un suivi rigoureux avec des rapports d'impact complets via notre portail bailleurs.</p>
+      </div>
+      <div class="partner-card fade-in" style="animation-delay:.12s">
+        <div class="partner-icon" style="background:var(--bluef)"><iconify-icon icon="mdi:account-star-outline" style="font-size:30px;color:var(--blue)"></iconify-icon></div>
+        <h3>Expert technique</h3>
+        <p>Mettez vos compétences au service de nos projets — formation, plaidoyer, communication, recherche ou conseil stratégique.</p>
+      </div>
+      <div class="partner-card fade-in" style="animation-delay:.18s">
+        <div class="partner-icon" style="background:var(--purf)"><iconify-icon icon="mdi:domain" style="font-size:30px;color:var(--pur)"></iconify-icon></div>
+        <h3>Entreprise engagee</h3>
+        <p>Inscrivez votre RSE dans un projet a fort impact social en finançant des actions concrètes pour les enfants du Bénin.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="faq-section">
+  <div class="container">
+    <div class="section-header fade-in">
+      <div class="section-label">FAQ</div>
+      <h2 class="section-title">Questions fréquentes</h2>
+      <p class="section-lead">Trouvez rapidement les réponses aux questions les plus courantes sur le FODDEB.</p>
+    </div>
+    <div class="faq-grid fade-in">
+      <div class="faq-item" onclick="toggleFaq(this)">
+        <div class="faq-q"><span class="faq-q-text">Comment adhérer au reseau FODDEB ?</span><div class="faq-icon"><iconify-icon icon="mdi:plus"></iconify-icon></div></div>
+        <div class="faq-ans">Rendez-vous sur notre page d'inscription en ligne et remplissez le formulaire d'adhésion avec les pièces requises. Votre dossier sera examiné sous 48 heures ouvrables et vous serez notifié par email.</div>
+      </div>
+      <div class="faq-item" onclick="toggleFaq(this)">
+        <div class="faq-q"><span class="faq-q-text">Quels sont les critères d'éligibilite pour être membre ?</span><div class="faq-icon"><iconify-icon icon="mdi:plus"></iconify-icon></div></div>
+        <div class="faq-ans">Votre organisation doit être régulierement constituée au Bénin et oeuvrer dans au moins un des domaines d'intervention du réseau : protection de l'enfant, éducation, santé, numérique, devéloppement local ou environnement.</div>
+      </div>
+      <div class="faq-item" onclick="toggleFaq(this)">
+        <div class="faq-q"><span class="faq-q-text">Comment financer un projet spécifique du FODDEB ?</span><div class="faq-icon"><iconify-icon icon="mdi:plus"></iconify-icon></div></div>
+        <div class="faq-ans">Vous pouvez effectuer un don via notre formulaire en ligne avec paiement securisé par FedaPay. Pour des financements importants ou cibles, contactez-nous directement par email a foddeb15@gmail.com pour discuter d'un partenariat sur mesure.</div>
+      </div>
+      <div class="faq-item" onclick="toggleFaq(this)">
+        <div class="faq-q"><span class="faq-q-text">Le FODDEB opere-t-il hors de Cotonou ?</span><div class="faq-icon"><iconify-icon icon="mdi:plus"></iconify-icon></div></div>
+        <div class="faq-ans">Oui, le FODDEB intervient dans les 12 départements du Bénin, avec une présence particulierement forte dans le nord (Atacora, Donga, Alibori, Borgou) et le sud (Atlantique, Oueme, Littoral).</div>
+      </div>
+      <div class="faq-item" onclick="toggleFaq(this)">
+        <div class="faq-q"><span class="faq-q-text">Comment accéder au portail bailleurs ?</span><div class="faq-icon"><iconify-icon icon="mdi:plus"></iconify-icon></div></div>
+        <div class="faq-ans">Le portail bailleurs est reservé aux partenaires financiers du FODDEB. Contactez notre secrétariat pour obtenir vos identifiants de connexion apres signature d'un accord de partenariat.</div>
+      </div>
+      <div class="faq-item" onclick="toggleFaq(this)">
+        <div class="faq-q"><span class="faq-q-text">Comment signaler une situation de violence envers un enfant ?</span><div class="faq-icon"><iconify-icon icon="mdi:plus"></iconify-icon></div></div>
+        <div class="faq-ans">Pour une urgence, appelez directement au <a href="tel:+22901976964826" style="color:var(--g7)">+229 01 97 69 64 26</a>. Vous pouvez aussi contacter les autorites competentes (MISP, MASM) ou l'UNICEF Benin. Notre reséau dispose de travailleurs sociaux sur le terrain dans plusieurs departements.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<div class="cta-strip">
+  <div class="container">
+    <div class="cta-inner">
+      <div class="cta-text">
+        <h2>Rejoignez le mouvement</h2>
+        <p>Plus de 200 organisations agissent ensemble pour les droits de l'enfant. Et vous ?</p>
+      </div>
+      <div style="display:flex;gap:12px;flex-wrap:wrap">
+        <a href="/auth/register.html" class="btn btn-dark"><iconify-icon icon="mdi:account-plus-outline"></iconify-icon>Adhérer au réseau</a>
+        <a href="/#don" class="btn" style="background:transparent;border:2px solid var(--dark);color:var(--dark)"><iconify-icon icon="mdi:heart-outline"></iconify-icon>Faire un don</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-logo">
+          <div class="footer-logo-i"><img src="/assets/img/logo.png" alt="Logo FODDEB" onerror="this.style.display='none';this.parentElement.textContent='FOD'"/></div>
+          <div class="footer-logo-t"><strong>FODDEB</strong><span style="font-size:11px;color:rgba(255,255,255,.4)">Droits de l'Enfant au Benin</span></div>
+        </div>
+        <p class="footer-desc">Forum des Organisations de Défense des Droits de l'Enfant au Bénin — coordonnant les actions de la société civile depuis 2015.</p>
+      </div>
+      <div class="footer-col"><h4>Navigation</h4><ul>
+        <li><a href="/">Accueil</a></li><li><a href="/pages/projets.html">Projets</a></li>
+        <li><a href="/pages/actualites.html">Actualités</a></li><li><a href="/pages/contact.html">Contact</a></li>
+      </ul></div>
+      <div class="footer-col"><h4>Espace membre</h4><ul>
+        <li><a href="/auth/login.html">Se connecter</a></li><li><a href="/auth/register.html">Adhérer</a></li>
+        <li><a href="/dashboard/member.html">Mon espace</a></li><li><a href="/dashboard/donor.html">Espace donateur</a></li>
+      </ul></div>
+      <div class="footer-col"><h4>Contact</h4><ul>
+        <li style="font-size:13.5px;color:rgba(255,255,255,.6);margin-bottom:9px">Agla Akplomey, Cotonou</li>
+        <li><a href="tel:+22901976964826">+229 01 97 69 64 26</a></li>
+        <li><a href="tel:+22901940817108">+229 01 94 08 17 10</a></li>
+        <li><a href="mailto:foddeb15@gmail.com">foddeb15@gmail.com</a></li>
+      </ul></div>
+    </div>
+    <div class="footer-bottom">
+      <p>2025 FODDEB — Tous droits reservés</p>
+      <div class="footer-bottom-links">
+        <a href="/mentions-legales.html">Mentions légales</a>
+        <a href="/confidentialite.html">Confidentialité</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src="/assets/js/services/api.js"></script>
+<script>
+'use strict';
+
+/* ═══ CHAR COUNT ═══ */
+document.getElementById('cMessage').addEventListener('input', function() {
+  const len = this.value.length;
+  const el  = document.getElementById('charCount');
+  if (len > 1000) this.value = this.value.slice(0, 1000);
+  el.textContent = Math.min(len, 1000) + ' / 1000';
+  el.className = 'char-count' + (len > 900 ? ' warn' : '');
+});
+
+/* ═══ FICHIER JOINT ═══ */
+let attachedFile = null;
+
+function handleFile(input) {
+  const file = input.files[0];
+  if (!file) return;
+  if (file.size > 5 * 1024 * 1024) {
+    toast('Fichier trop volumineux (max 5 Mo).', 'err');
+    input.value = ''; return;
+  }
+  attachedFile = file;
+  const lbl  = document.getElementById('fileLabel');
+  const zone = document.getElementById('fileZone');
+  if (lbl)  lbl.textContent = file.name + ' (' + (file.size/1024).toFixed(0) + ' Ko)';
+  if (zone) zone.classList.add('has-file');
+}
+
+document.getElementById('fileZone').addEventListener('keydown', e => {
+  if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); document.getElementById('cFile').click(); }
+});
+
+/* ═══ VALIDATION ═══ */
+function se(id, msg) {
+  const el = document.getElementById(id + '-err');
+  if (el) el.innerHTML = '<iconify-icon icon="mdi:alert-circle-outline" style="font-size:12px"></iconify-icon> ' + msg;
+  const inp = document.getElementById(id);
+  if (inp) inp.classList.add('error');
+}
+function ce(id) {
+  const el = document.getElementById(id + '-err'); if (el) el.textContent = '';
+  const inp = document.getElementById(id); if (inp) inp.classList.remove('error');
+}
+
+function validate() {
+  ['cPrenom','cNom','cEmail','cMessage','cConsent'].forEach(id => { ce(id); });
+  let ok = true;
+  const prenom  = document.getElementById('cPrenom').value.trim();
+  const nom     = document.getElementById('cNom').value.trim();
+  const email   = document.getElementById('cEmail').value.trim();
+  const message = document.getElementById('cMessage').value.trim();
+  const consent = document.getElementById('cConsent').checked;
+
+  if (!prenom)  { se('cPrenom',  'Le prenom est requis.'); ok = false; }
+  if (!nom)     { se('cNom',     'Le nom est requis.'); ok = false; }
+  if (!email)   { se('cEmail',   "L'email est requis."); ok = false; }
+  else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { se('cEmail', 'Adresse email invalide.'); ok = false; }
+  if (message.length < 20) { se('cMessage', 'Le message doit contenir au moins 20 caractères.'); ok = false; }
+  if (!consent) { se('cConsent', 'Vous devez accepter la politique de confidentialité.'); ok = false; }
+  return ok;
+}
+
+/* ═══ FICHIER EN BASE64 ═══ */
+function fileToBase64(file) {
+  return new Promise((res, rej) => {
+    const r = new FileReader();
+    r.onload  = () => res(r.result.split(',')[1]);
+    r.onerror = () => rej(new Error('Lecture fichier echouée'));
+    r.readAsDataURL(file);
+  });
+}
+
+/* ═══ SOUMISSION — API GAS REELLE ═══ */
+async function submitContact() {
+  if (!validate()) {
+    document.getElementById('cPrenom').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    return;
+  }
+
+  const btn = document.getElementById('submitBtn');
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner"></span> Envoi en cours...';
+
+  try {
+    // Token reCAPTCHA v3
+    let recaptchaToken = '';
+    if (typeof grecaptcha !== 'undefined') {
+      recaptchaToken = await new Promise(res =>
+        grecaptcha.ready(() =>
+          grecaptcha.execute('6LdU3tksAAAAAOAIdgtC7xsQURksQ9mHAZ3MVLXF', { action: 'contact' }).then(res)
+        )
+      );
+    }
+
+    const email   = document.getElementById('cEmail').value.trim();
+    const prenom  = document.getElementById('cPrenom').value.trim();
+    const nom     = document.getElementById('cNom').value.trim();
+    const sujet   = document.querySelector('input[name="sujet"]:checked')?.value || 'autre';
+    const abonne  = document.getElementById('cNewsletter').checked;
+
+    // Piece jointe optionnelle en base64
+    let pieceJointeB64 = '';
+    let pieceJointeNom  = '';
+    let pieceJointeType = '';
+    if (attachedFile) {
+      pieceJointeB64  = await fileToBase64(attachedFile);
+      pieceJointeNom  = attachedFile.name;
+      pieceJointeType = attachedFile.type;
+    }
+
+    const payload = {
+      prenom,
+      nom,
+      email,
+      telephone:      document.getElementById('cTel').value.trim(),
+      organisation:   document.getElementById('cOrg').value.trim(),
+      sujet,
+      message:        document.getElementById('cMessage').value.trim(),
+      newsletter:     abonne,
+      recaptchaToken,
+      pieceJointeB64,
+      pieceJointeNom,
+      pieceJointeType,
+      sentAt: new Date().toISOString(),
+    };
+
+    // Appel API GAS reel — contact.send
+    const result = await FODDEB_API.contact.send(payload);
+    if (!result.success) throw new Error(result.error || 'Erreur lors de l\'envoi');
+
+    // Abonnement newsletter si coché
+    if (abonne) {
+      try { await FODDEB_API.newsletter.subscribe(email, prenom + ' ' + nom); } catch(e) { /* non bloquant */ }
+    }
+
+    // Afficher succes
+    document.getElementById('successEmail').textContent = email;
+    document.getElementById('formWrap').style.display    = 'none';
+    document.getElementById('formSuccess').classList.add('visible');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+
+  } catch(err) {
+    toast(err.message || 'Une erreur est survenue. Veuillez reessayer.', 'err');
+    btn.disabled = false;
+    btn.innerHTML = '<iconify-icon icon="mdi:send-outline"></iconify-icon> Envoyer le message';
+  }
+}
+
+/* ═══ RESET FORMULAIRE ═══ */
+function resetForm() {
+  document.getElementById('cPrenom').value   = '';
+  document.getElementById('cNom').value      = '';
+  document.getElementById('cEmail').value    = '';
+  document.getElementById('cTel').value      = '';
+  document.getElementById('cOrg').value      = '';
+  document.getElementById('cMessage').value  = '';
+  document.getElementById('cConsent').checked    = false;
+  document.getElementById('cNewsletter').checked = false;
+  document.getElementById('charCount').textContent = '0 / 1000';
+  document.getElementById('charCount').className   = 'char-count';
+  document.getElementById('fileLabel').textContent  = 'PDF, Word, images — Max 5 Mo';
+  document.getElementById('fileZone').classList.remove('has-file');
+  document.getElementById('cFile').value = '';
+  attachedFile = null;
+  document.querySelector('input[name="sujet"]').checked = true;
+  document.getElementById('submitBtn').disabled = false;
+  document.getElementById('submitBtn').innerHTML = '<iconify-icon icon="mdi:send-outline"></iconify-icon> Envoyer le message';
+  document.getElementById('formWrap').style.display = 'block';
+  document.getElementById('formSuccess').classList.remove('visible');
+  window.scrollTo({ top: document.getElementById('formWrap').offsetTop - 100, behavior: 'smooth' });
+}
+
+/* ═══ FAQ ═══ */
+function toggleFaq(item) {
+  const isOpen = item.classList.contains('open');
+  document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+  if (!isOpen) item.classList.add('open');
+}
+
+/* ═══ TOAST ═══ */
+function toast(msg, type = 'ok') {
+  const c = document.getElementById('tc');
+  const t = document.createElement('div');
+  t.className = 'toast ' + type;
+  t.innerHTML = `<iconify-icon icon="${type==='err'?'mdi:alert-circle-outline':'mdi:check-circle-outline'}"></iconify-icon><span>${msg}</span>`;
+  c.appendChild(t);
+  setTimeout(() => { t.style.opacity='0'; t.style.transform='translateX(20px)'; t.style.transition='.3s'; setTimeout(()=>t.remove(),300); }, 4000);
+}
+
+/* ═══ MOBILE NAV ═══ */
+document.getElementById('hamburger').addEventListener('click', () => {
+  document.getElementById('mobileNav').classList.add('open');
+  document.body.style.overflow = 'hidden';
+});
+document.getElementById('mobileClose').addEventListener('click', () => {
+  document.getElementById('mobileNav').classList.remove('open');
+  document.body.style.overflow = '';
+});
+document.querySelectorAll('.mobile-links a').forEach(a => a.addEventListener('click', () => {
+  document.getElementById('mobileNav').classList.remove('open');
+  document.body.style.overflow = '';
+}));
+
+/* ═══ FADE IN ═══ */
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); } });
+}, { threshold: 0.1 });
+document.querySelectorAll('.fade-in').forEach(el => obs.observe(el));
+
+if ('serviceWorker' in navigator) navigator.serviceWorker.register('/sw.js').catch(() => {});
+</script>
+</body>
+</html>
