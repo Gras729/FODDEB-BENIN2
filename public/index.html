@@ -1,30 +1,2040 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>FODDEB — Site en construction</title>
-  <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body {
-      font-family: 'Segoe UI', sans-serif;
-      background: #0f172a;
-      color: #f8fafc;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      min-height: 100vh;
-      text-align: center;
-      padding: 2rem;
-    }
-    h1 { font-size: 2.5rem; font-weight: 700; color: #38bdf8; margin-bottom: 1rem; }
-    p  { color: #94a3b8; font-size: 1.1rem; }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FODDEB — Administration</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/css/bootstrap.min.css" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script src="https://code.iconify.design/3/3.1.1/iconify.min.js"></script>
+<style>
+/* ── TOKENS ──────────────────────────────────────────── */
+:root {
+  --c-bg:       #0b1120;
+  --c-surface:  #131d2e;
+  --c-border:   #1e2d42;
+  --c-primary:  #1a7fc1;
+  --c-accent:   #f0a500;
+  --c-success:  #22c55e;
+  --c-danger:   #ef4444;
+  --c-warning:  #f59e0b;
+  --c-muted:    #64748b;
+  --c-text:     #e2e8f0;
+  --c-text-dim: #94a3b8;
+  --sidebar-w:  260px;
+  --topbar-h:   60px;
+  --radius:     10px;
+  --transition: .18s ease;
+}
+
+/* ── RESET ────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Segoe UI', system-ui, sans-serif;
+  background: var(--c-bg);
+  color: var(--c-text);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+a { color: inherit; text-decoration: none; }
+button { cursor: pointer; border: none; background: none; }
+input, select, textarea {
+  background: var(--c-bg);
+  border: 1px solid var(--c-border);
+  color: var(--c-text);
+  border-radius: 6px;
+  padding: .5rem .75rem;
+  font-size: .875rem;
+  width: 100%;
+  outline: none;
+  transition: border-color var(--transition);
+}
+input:focus, select:focus, textarea:focus { border-color: var(--c-primary); }
+input::placeholder, textarea::placeholder { color: var(--c-muted); }
+select option { background: var(--c-surface); }
+label { font-size: .8125rem; color: var(--c-text-dim); margin-bottom: .35rem; display: block; }
+
+/* ── SCROLLBAR ────────────────────────────────────────── */
+::-webkit-scrollbar { width: 5px; height: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--c-border); border-radius: 99px; }
+
+/* ── LOGIN ────────────────────────────────────────────── */
+#login-screen {
+  position: fixed; inset: 0;
+  display: flex; align-items: center; justify-content: center;
+  background: var(--c-bg);
+  z-index: 9999;
+}
+.login-card {
+  background: var(--c-surface);
+  border: 1px solid var(--c-border);
+  border-radius: var(--radius);
+  padding: 2.5rem 2rem;
+  width: 100%;
+  max-width: 420px;
+}
+.login-logo {
+  font-size: 1.75rem;
+  font-weight: 800;
+  color: var(--c-primary);
+  letter-spacing: -1px;
+  text-align: center;
+  margin-bottom: .25rem;
+}
+.login-sub { text-align: center; color: var(--c-muted); font-size: .85rem; margin-bottom: 2rem; }
+
+/* ── SIDEBAR ──────────────────────────────────────────── */
+#sidebar {
+  position: fixed;
+  top: 0; left: 0;
+  width: var(--sidebar-w);
+  height: 100vh;
+  background: var(--c-surface);
+  border-right: 1px solid var(--c-border);
+  display: flex;
+  flex-direction: column;
+  z-index: 100;
+  transition: transform var(--transition);
+  overflow-y: auto;
+}
+.sidebar-logo {
+  padding: 1.25rem 1.5rem;
+  font-size: 1.3rem;
+  font-weight: 800;
+  color: var(--c-primary);
+  letter-spacing: -0.5px;
+  border-bottom: 1px solid var(--c-border);
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+}
+.sidebar-logo span { color: var(--c-accent); }
+.sidebar-section {
+  padding: .75rem 1rem .25rem;
+  font-size: .6875rem;
+  font-weight: 700;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--c-muted);
+}
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: .75rem;
+  padding: .6rem 1.25rem;
+  margin: .1rem .75rem;
+  border-radius: 7px;
+  color: var(--c-text-dim);
+  font-size: .875rem;
+  font-weight: 500;
+  transition: background var(--transition), color var(--transition);
+  cursor: pointer;
+}
+.nav-item:hover { background: rgba(26,127,193,.1); color: var(--c-text); }
+.nav-item.active { background: rgba(26,127,193,.18); color: var(--c-primary); font-weight: 600; }
+.nav-item iconify-icon { font-size: 1.1rem; flex-shrink: 0; }
+.sidebar-footer {
+  margin-top: auto;
+  padding: 1rem 1.25rem;
+  border-top: 1px solid var(--c-border);
+  display: flex;
+  align-items: center;
+  gap: .75rem;
+}
+.avatar {
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  background: var(--c-primary);
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 700; font-size: .875rem; flex-shrink: 0;
+}
+.sidebar-user-name { font-size: .875rem; font-weight: 600; }
+.sidebar-user-role { font-size: .75rem; color: var(--c-muted); }
+
+/* ── TOPBAR ───────────────────────────────────────────── */
+#topbar {
+  position: fixed;
+  top: 0;
+  left: var(--sidebar-w);
+  right: 0;
+  height: var(--topbar-h);
+  background: var(--c-surface);
+  border-bottom: 1px solid var(--c-border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 1.5rem;
+  z-index: 90;
+  transition: left var(--transition);
+}
+.topbar-title { font-size: 1rem; font-weight: 700; }
+.topbar-actions { display: flex; align-items: center; gap: .75rem; }
+.btn-icon {
+  width: 36px; height: 36px;
+  border-radius: 7px;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--c-text-dim);
+  transition: background var(--transition), color var(--transition);
+  font-size: 1.2rem;
+}
+.btn-icon:hover { background: var(--c-border); color: var(--c-text); }
+.hamburger { display: none; }
+
+/* ── MAIN ─────────────────────────────────────────────── */
+#main {
+  margin-left: var(--sidebar-w);
+  margin-top: var(--topbar-h);
+  padding: 1.5rem;
+  min-height: calc(100vh - var(--topbar-h));
+  transition: margin-left var(--transition);
+}
+
+/* ── PAGES ────────────────────────────────────────────── */
+.page { display: none; }
+.page.active { display: block; }
+
+/* ── STATS CARDS ──────────────────────────────────────── */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+.stat-card {
+  background: var(--c-surface);
+  border: 1px solid var(--c-border);
+  border-radius: var(--radius);
+  padding: 1.25rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+.stat-icon {
+  width: 44px; height: 44px;
+  border-radius: 9px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.4rem;
+  flex-shrink: 0;
+}
+.stat-icon.blue   { background: rgba(26,127,193,.15); color: var(--c-primary); }
+.stat-icon.amber  { background: rgba(240,165,0,.15);  color: var(--c-accent); }
+.stat-icon.green  { background: rgba(34,197,94,.15);  color: var(--c-success); }
+.stat-icon.red    { background: rgba(239,68,68,.15);  color: var(--c-danger); }
+.stat-value { font-size: 1.5rem; font-weight: 800; line-height: 1; }
+.stat-label { font-size: .75rem; color: var(--c-muted); margin-top: .2rem; }
+
+/* ── CARD ─────────────────────────────────────────────── */
+.card {
+  background: var(--c-surface);
+  border: 1px solid var(--c-border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  margin-bottom: 1.25rem;
+}
+.card-header {
+  padding: 1rem 1.25rem;
+  border-bottom: 1px solid var(--c-border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+.card-title { font-size: .9375rem; font-weight: 700; }
+.card-body { padding: 1.25rem; }
+
+/* ── TABLE ────────────────────────────────────────────── */
+.table-wrap { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; font-size: .8375rem; }
+thead th {
+  background: rgba(30,45,66,.6);
+  padding: .65rem 1rem;
+  text-align: left;
+  font-size: .75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: .05em;
+  color: var(--c-muted);
+  white-space: nowrap;
+}
+tbody td {
+  padding: .75rem 1rem;
+  border-bottom: 1px solid var(--c-border);
+  vertical-align: middle;
+}
+tbody tr:last-child td { border-bottom: none; }
+tbody tr:hover td { background: rgba(26,127,193,.04); }
+
+/* ── BADGES ───────────────────────────────────────────── */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: .2rem .6rem;
+  border-radius: 99px;
+  font-size: .7rem;
+  font-weight: 600;
+  letter-spacing: .02em;
+}
+.badge-actif, .badge-publie, .badge-approved, .badge-active, .badge-valide {
+  background: rgba(34,197,94,.15); color: var(--c-success);
+}
+.badge-inactif, .badge-brouillon, .badge-pending, .badge-unsubscribed, .badge-soumis {
+  background: rgba(100,116,139,.15); color: var(--c-muted);
+}
+.badge-suspendu, .badge-declined, .badge-annule, .badge-rejete {
+  background: rgba(239,68,68,.15); color: var(--c-danger);
+}
+.badge-en_attente, .badge-planifiee, .badge-prospect {
+  background: rgba(240,165,0,.15); color: var(--c-accent);
+}
+.badge-en_cours, .badge-manager { background: rgba(26,127,193,.15); color: var(--c-primary); }
+.badge-admin { background: rgba(168,85,247,.15); color: #a855f7; }
+.badge-member { background: rgba(100,116,139,.15); color: var(--c-muted); }
+.badge-archive { background: rgba(100,116,139,.1); color: var(--c-muted); }
+
+/* ── BUTTONS ──────────────────────────────────────────── */
+.btn-primary {
+  background: var(--c-primary);
+  color: #fff;
+  border-radius: 7px;
+  padding: .5rem 1.1rem;
+  font-size: .875rem;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: .4rem;
+  transition: opacity var(--transition);
+  border: none;
+}
+.btn-primary:hover { opacity: .88; }
+.btn-sm {
+  padding: .3rem .7rem;
+  font-size: .775rem;
+  border-radius: 5px;
+  display: inline-flex;
+  align-items: center;
+  gap: .3rem;
+  font-weight: 600;
+  transition: opacity var(--transition);
+  border: none;
+}
+.btn-sm:hover { opacity: .82; }
+.btn-edit   { background: rgba(26,127,193,.18); color: var(--c-primary); }
+.btn-delete { background: rgba(239,68,68,.15);  color: var(--c-danger); }
+.btn-view   { background: rgba(100,116,139,.15); color: var(--c-muted); }
+.btn-success { background: rgba(34,197,94,.18); color: var(--c-success); }
+.btn-outline {
+  background: transparent;
+  border: 1px solid var(--c-border);
+  color: var(--c-text-dim);
+  border-radius: 7px;
+  padding: .5rem 1.1rem;
+  font-size: .875rem;
+  font-weight: 500;
+  display: inline-flex;
+  align-items: center;
+  gap: .4rem;
+  transition: border-color var(--transition), color var(--transition);
+}
+.btn-outline:hover { border-color: var(--c-primary); color: var(--c-primary); }
+
+/* ── FORM MODAL ───────────────────────────────────────── */
+.modal-content {
+  background: var(--c-surface);
+  border: 1px solid var(--c-border);
+  border-radius: var(--radius);
+  color: var(--c-text);
+}
+.modal-header {
+  border-bottom: 1px solid var(--c-border);
+  padding: 1rem 1.25rem;
+}
+.modal-title { font-weight: 700; font-size: .9375rem; }
+.modal-footer { border-top: 1px solid var(--c-border); padding: 1rem 1.25rem; }
+.btn-close { filter: invert(1); opacity: .5; }
+
+/* ── SEARCH + FILTERS ─────────────────────────────────── */
+.filters {
+  display: flex;
+  align-items: center;
+  gap: .6rem;
+  flex-wrap: wrap;
+}
+.filters input, .filters select { width: auto; min-width: 160px; }
+.search-input { position: relative; }
+.search-input iconify-icon {
+  position: absolute;
+  left: .7rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--c-muted);
+  pointer-events: none;
+}
+.search-input input { padding-left: 2rem; }
+
+/* ── TOAST ────────────────────────────────────────────── */
+#toast-container {
+  position: fixed;
+  bottom: 1.25rem;
+  right: 1.25rem;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  gap: .5rem;
+}
+.toast-item {
+  background: var(--c-surface);
+  border: 1px solid var(--c-border);
+  border-radius: 8px;
+  padding: .75rem 1rem;
+  font-size: .875rem;
+  display: flex;
+  align-items: center;
+  gap: .6rem;
+  min-width: 260px;
+  animation: slideIn .2s ease;
+  box-shadow: 0 4px 24px rgba(0,0,0,.4);
+}
+.toast-item.success { border-left: 3px solid var(--c-success); }
+.toast-item.error   { border-left: 3px solid var(--c-danger);  }
+.toast-item.info    { border-left: 3px solid var(--c-primary);  }
+@keyframes slideIn {
+  from { opacity: 0; transform: translateX(20px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+/* ── EMPTY STATE ──────────────────────────────────────── */
+.empty-state {
+  text-align: center;
+  padding: 3rem 1rem;
+  color: var(--c-muted);
+}
+.empty-state iconify-icon { font-size: 2.5rem; margin-bottom: .75rem; display: block; }
+.empty-state p { font-size: .875rem; }
+
+/* ── PAGINATION ───────────────────────────────────────── */
+.pagination-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: .75rem 1.25rem;
+  border-top: 1px solid var(--c-border);
+  font-size: .8rem;
+  color: var(--c-muted);
+  flex-wrap: wrap;
+  gap: .5rem;
+}
+.pagination-btns { display: flex; gap: .4rem; }
+.page-btn {
+  padding: .3rem .65rem;
+  border-radius: 5px;
+  font-size: .8rem;
+  font-weight: 600;
+  background: var(--c-border);
+  color: var(--c-text);
+  transition: background var(--transition);
+}
+.page-btn:hover, .page-btn.active { background: var(--c-primary); color: #fff; }
+.page-btn:disabled { opacity: .4; pointer-events: none; }
+
+/* ── CHARTS GRID ──────────────────────────────────────── */
+.charts-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 1.25rem;
+  margin-bottom: 1.25rem;
+}
+.chart-card { background: var(--c-surface); border: 1px solid var(--c-border); border-radius: var(--radius); padding: 1.25rem; }
+.chart-card h3 { font-size: .875rem; font-weight: 700; margin-bottom: 1rem; color: var(--c-text-dim); }
+
+/* ── PROGRESS ─────────────────────────────────────────── */
+.progress-bar-wrap {
+  background: var(--c-border);
+  border-radius: 99px;
+  height: 6px;
+  overflow: hidden;
+  width: 80px;
+  display: inline-block;
+}
+.progress-bar-fill {
+  height: 100%;
+  background: var(--c-primary);
+  border-radius: 99px;
+}
+
+/* ── MOBILE ───────────────────────────────────────────── */
+@media (max-width: 768px) {
+  #sidebar { transform: translateX(-100%); }
+  #sidebar.open { transform: translateX(0); }
+  #topbar { left: 0; }
+  #main { margin-left: 0; }
+  .hamburger { display: flex !important; }
+  .sidebar-overlay {
+    display: none;
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,.5);
+    z-index: 99;
+  }
+  .sidebar-overlay.active { display: block; }
+  .stats-grid { grid-template-columns: repeat(2, 1fr); }
+  .charts-grid { grid-template-columns: 1fr; }
+}
+</style>
 </head>
 <body>
-  <div>
-    <h1>FODDEB</h1>
-    <p>Site en cours de construction.<br>Backend opérationnel.</p>
+
+<!-- ════════════════════════════════════════════════════════
+     LOGIN SCREEN
+═════════════════════════════════════════════════════════ -->
+<div id="login-screen">
+  <div class="login-card">
+    <div class="login-logo">FODDEB</div>
+    <div class="login-sub">Espace Administration</div>
+
+    <!-- Étape 1 : email + password -->
+    <div id="step-login">
+      <div class="mb-3">
+        <label>Adresse email</label>
+        <input type="email" id="login-email" placeholder="admin@foddeb.org" autocomplete="email">
+      </div>
+      <div class="mb-3">
+        <label>Mot de passe</label>
+        <input type="password" id="login-password" placeholder="••••••••" autocomplete="current-password">
+      </div>
+      <div id="login-error" class="text-danger mb-2" style="font-size:.8rem;display:none;"></div>
+      <button class="btn-primary w-100 justify-content-center" onclick="doLogin()" id="btn-login">
+        <iconify-icon icon="mdi:login"></iconify-icon> Connexion
+      </button>
+      <div class="text-center mt-3">
+        <button onclick="showReset()" style="font-size:.8rem;color:var(--c-muted);background:none;border:none;cursor:pointer;">
+          Mot de passe oublié ?
+        </button>
+      </div>
+    </div>
+
+    <!-- Étape 2 : code OTP -->
+    <div id="step-otp" style="display:none;">
+      <p style="font-size:.875rem;color:var(--c-muted);margin-bottom:1.25rem;text-align:center;">
+        Un code à 6 chiffres a été envoyé à votre adresse email.
+      </p>
+      <div class="mb-3">
+        <label>Code de vérification</label>
+        <input type="text" id="otp-code" placeholder="123456" maxlength="6"
+               style="text-align:center;font-size:1.5rem;letter-spacing:.5rem;"
+               oninput="this.value=this.value.replace(/\D/g,'')">
+      </div>
+      <div id="otp-error" class="text-danger mb-2" style="font-size:.8rem;display:none;"></div>
+      <button class="btn-primary w-100 justify-content-center" onclick="doVerifyOtp()" id="btn-otp">
+        <iconify-icon icon="mdi:shield-check"></iconify-icon> Vérifier le code
+      </button>
+      <div class="text-center mt-2">
+        <button onclick="backToLogin()" style="font-size:.8rem;color:var(--c-muted);background:none;border:none;cursor:pointer;">
+          Retour
+        </button>
+      </div>
+    </div>
+
+    <!-- Étape 3 : reset password -->
+    <div id="step-reset" style="display:none;">
+      <div id="reset-phase1">
+        <p style="font-size:.875rem;color:var(--c-muted);margin-bottom:1rem;">
+          Saisissez votre email pour recevoir un code de réinitialisation.
+        </p>
+        <div class="mb-3">
+          <label>Email</label>
+          <input type="email" id="reset-email" placeholder="admin@foddeb.org">
+        </div>
+        <button class="btn-primary w-100 justify-content-center" onclick="doResetRequest()">
+          Envoyer le code
+        </button>
+      </div>
+      <div id="reset-phase2" style="display:none;">
+        <div class="mb-3">
+          <label>Code reçu par email</label>
+          <input type="text" id="reset-code" placeholder="123456" maxlength="6">
+        </div>
+        <div class="mb-3">
+          <label>Nouveau mot de passe</label>
+          <input type="password" id="reset-newpwd" placeholder="Minimum 8 caractères">
+        </div>
+        <button class="btn-primary w-100 justify-content-center" onclick="doResetConfirm()">
+          Réinitialiser
+        </button>
+      </div>
+      <div class="text-center mt-2">
+        <button onclick="backToLogin()" style="font-size:.8rem;color:var(--c-muted);background:none;border:none;cursor:pointer;">
+          Retour à la connexion
+        </button>
+      </div>
+    </div>
   </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════
+     SIDEBAR OVERLAY (mobile)
+═════════════════════════════════════════════════════════ -->
+<div class="sidebar-overlay" id="sidebar-overlay" onclick="closeSidebar()"></div>
+
+<!-- ════════════════════════════════════════════════════════
+     SIDEBAR
+═════════════════════════════════════════════════════════ -->
+<nav id="sidebar">
+  <div class="sidebar-logo">
+    <iconify-icon icon="mdi:leaf-circle"></iconify-icon>
+    FODD<span>EB</span>
+  </div>
+
+  <div class="sidebar-section">Principal</div>
+  <div class="nav-item active" onclick="goTo('dashboard')">
+    <iconify-icon icon="mdi:view-dashboard-outline"></iconify-icon> Tableau de bord
+  </div>
+
+  <div class="sidebar-section">Gestion</div>
+  <div class="nav-item" onclick="goTo('membres')">
+    <iconify-icon icon="mdi:account-group-outline"></iconify-icon> Membres
+  </div>
+  <div class="nav-item" onclick="goTo('dons')">
+    <iconify-icon icon="mdi:hand-coin-outline"></iconify-icon> Dons
+  </div>
+  <div class="nav-item" onclick="goTo('projets')">
+    <iconify-icon icon="mdi:folder-multiple-outline"></iconify-icon> Projets
+  </div>
+  <div class="nav-item" onclick="goTo('actualites')">
+    <iconify-icon icon="mdi:newspaper-variant-outline"></iconify-icon> Actualités
+  </div>
+
+  <div class="sidebar-section">Partenaires</div>
+  <div class="nav-item" onclick="goTo('bailleurs')">
+    <iconify-icon icon="mdi:office-building-outline"></iconify-icon> Bailleurs
+  </div>
+  <div class="nav-item" onclick="goTo('rapports')">
+    <iconify-icon icon="mdi:file-chart-outline"></iconify-icon> Rapports
+  </div>
+  <div class="nav-item" onclick="goTo('newsletter')">
+    <iconify-icon icon="mdi:email-newsletter"></iconify-icon> Newsletter
+  </div>
+  <div class="nav-item" onclick="goTo('contacts')">
+    <iconify-icon icon="mdi:message-text-outline"></iconify-icon> Contacts
+  </div>
+
+  <div class="sidebar-section">Système</div>
+  <div class="nav-item" onclick="goTo('logs')">
+    <iconify-icon icon="mdi:history"></iconify-icon> Journaux
+  </div>
+  <div class="nav-item" onclick="goTo('parametres')">
+    <iconify-icon icon="mdi:cog-outline"></iconify-icon> Paramètres
+  </div>
+
+  <div class="sidebar-footer">
+    <div class="avatar" id="sidebar-avatar">A</div>
+    <div>
+      <div class="sidebar-user-name" id="sidebar-name">Admin</div>
+      <div class="sidebar-user-role" id="sidebar-role">Administrateur</div>
+    </div>
+    <button class="btn-icon ms-auto" onclick="doLogout()" title="Déconnexion">
+      <iconify-icon icon="mdi:logout"></iconify-icon>
+    </button>
+  </div>
+</nav>
+
+<!-- ════════════════════════════════════════════════════════
+     TOPBAR
+═════════════════════════════════════════════════════════ -->
+<header id="topbar">
+  <div style="display:flex;align-items:center;gap:.75rem;">
+    <button class="btn-icon hamburger" onclick="toggleSidebar()">
+      <iconify-icon icon="mdi:menu"></iconify-icon>
+    </button>
+    <span class="topbar-title" id="topbar-title">Tableau de bord</span>
+  </div>
+  <div class="topbar-actions">
+    <button class="btn-icon" title="Notifications">
+      <iconify-icon icon="mdi:bell-outline"></iconify-icon>
+    </button>
+    <button class="btn-icon" onclick="goTo('parametres')" title="Paramètres">
+      <iconify-icon icon="mdi:cog-outline"></iconify-icon>
+    </button>
+  </div>
+</header>
+
+<!-- ════════════════════════════════════════════════════════
+     MAIN CONTENT
+═════════════════════════════════════════════════════════ -->
+<main id="main">
+
+  <!-- ── DASHBOARD ───────────────────────────────────── -->
+  <section class="page active" id="page-dashboard">
+    <div class="stats-grid" id="stats-grid">
+      <div class="stat-card">
+        <div class="stat-icon blue"><iconify-icon icon="mdi:account-group"></iconify-icon></div>
+        <div><div class="stat-value" id="stat-membres">—</div><div class="stat-label">Membres actifs</div></div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon amber"><iconify-icon icon="mdi:hand-coin"></iconify-icon></div>
+        <div><div class="stat-value" id="stat-dons">—</div><div class="stat-label">Dons approuvés</div></div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon green"><iconify-icon icon="mdi:folder-open"></iconify-icon></div>
+        <div><div class="stat-value" id="stat-projets">—</div><div class="stat-label">Projets en cours</div></div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon red"><iconify-icon icon="mdi:message-alert"></iconify-icon></div>
+        <div><div class="stat-value" id="stat-contacts">—</div><div class="stat-label">Messages non lus</div></div>
+      </div>
+    </div>
+    <div class="charts-grid">
+      <div class="chart-card">
+        <h3>Dons par statut</h3>
+        <canvas id="chart-dons" height="180"></canvas>
+      </div>
+      <div class="chart-card">
+        <h3>Membres par rôle</h3>
+        <canvas id="chart-membres" height="180"></canvas>
+      </div>
+    </div>
+    <!-- Derniers membres en attente -->
+    <div class="card">
+      <div class="card-header">
+        <span class="card-title">Adhésions en attente</span>
+        <button class="btn-sm btn-view" onclick="goTo('membres')">Voir tout</button>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr>
+            <th>Nom</th><th>Email</th><th>Date</th><th>Actions</th>
+          </tr></thead>
+          <tbody id="dash-pending-membres">
+            <tr><td colspan="4"><div class="empty-state"><p>Chargement…</p></div></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── MEMBRES ─────────────────────────────────────── -->
+  <section class="page" id="page-membres">
+    <div class="card">
+      <div class="card-header">
+        <span class="card-title">Membres</span>
+        <div class="filters">
+          <div class="search-input">
+            <iconify-icon icon="mdi:magnify"></iconify-icon>
+            <input type="text" id="m-search" placeholder="Rechercher…" oninput="filterMembres()">
+          </div>
+          <select id="m-statut" onchange="filterMembres()">
+            <option value="">Tous les statuts</option>
+            <option value="actif">Actif</option>
+            <option value="en_attente">En attente</option>
+            <option value="suspendu">Suspendu</option>
+            <option value="inactif">Inactif</option>
+          </select>
+          <select id="m-role" onchange="filterMembres()">
+            <option value="">Tous les rôles</option>
+            <option value="member">Membre</option>
+            <option value="manager">Manager</option>
+            <option value="admin">Admin</option>
+          </select>
+        </div>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr>
+            <th>Nom</th><th>Email</th><th>Téléphone</th>
+            <th>Rôle</th><th>Statut</th><th>Adhésion</th><th>Actions</th>
+          </tr></thead>
+          <tbody id="membres-tbody">
+            <tr><td colspan="7"><div class="empty-state"><iconify-icon icon="mdi:loading"></iconify-icon><p>Chargement…</p></div></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="pagination-bar">
+        <span id="m-count">—</span>
+        <div class="pagination-btns" id="m-pagination"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── DONS ────────────────────────────────────────── -->
+  <section class="page" id="page-dons">
+    <div class="card">
+      <div class="card-header">
+        <span class="card-title">Dons</span>
+        <div class="filters">
+          <select id="d-statut" onchange="loadDons()">
+            <option value="">Tous</option>
+            <option value="pending">En attente</option>
+            <option value="approved">Approuvés</option>
+            <option value="declined">Refusés</option>
+            <option value="cancelled">Annulés</option>
+          </select>
+        </div>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr>
+            <th>Réf.</th><th>Donateur</th><th>Email</th>
+            <th>Montant</th><th>Type</th><th>Statut</th><th>Date</th><th>Actions</th>
+          </tr></thead>
+          <tbody id="dons-tbody">
+            <tr><td colspan="8"><div class="empty-state"><p>Chargement…</p></div></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="pagination-bar">
+        <span id="d-count">—</span>
+        <div class="pagination-btns" id="d-pagination"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── PROJETS ─────────────────────────────────────── -->
+  <section class="page" id="page-projets">
+    <div class="card">
+      <div class="card-header">
+        <span class="card-title">Projets</span>
+        <div class="filters">
+          <div class="search-input">
+            <iconify-icon icon="mdi:magnify"></iconify-icon>
+            <input type="text" id="p-search" placeholder="Rechercher…" oninput="loadProjets()">
+          </div>
+          <select id="p-statut" onchange="loadProjets()">
+            <option value="">Tous</option>
+            <option value="brouillon">Brouillon</option>
+            <option value="en_cours">En cours</option>
+            <option value="termine">Terminé</option>
+            <option value="suspendu">Suspendu</option>
+            <option value="annule">Annulé</option>
+          </select>
+          <button class="btn-primary" onclick="openProjetModal()">
+            <iconify-icon icon="mdi:plus"></iconify-icon> Nouveau
+          </button>
+        </div>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr>
+            <th>Titre</th><th>Département</th><th>Budget</th>
+            <th>Progression</th><th>Statut</th><th>Début</th><th>Actions</th>
+          </tr></thead>
+          <tbody id="projets-tbody">
+            <tr><td colspan="7"><div class="empty-state"><p>Chargement…</p></div></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="pagination-bar">
+        <span id="p-count">—</span>
+        <div class="pagination-btns" id="p-pagination"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── ACTUALITÉS ──────────────────────────────────── -->
+  <section class="page" id="page-actualites">
+    <div class="card">
+      <div class="card-header">
+        <span class="card-title">Actualités</span>
+        <div class="filters">
+          <select id="a-statut" onchange="loadActualites()">
+            <option value="">Tous</option>
+            <option value="brouillon">Brouillon</option>
+            <option value="publie">Publié</option>
+            <option value="archive">Archivé</option>
+          </select>
+          <button class="btn-primary" onclick="openActuModal()">
+            <iconify-icon icon="mdi:plus"></iconify-icon> Nouvelle
+          </button>
+        </div>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr>
+            <th>Titre</th><th>Catégorie</th><th>Auteur</th>
+            <th>Publication</th><th>Statut</th><th>Actions</th>
+          </tr></thead>
+          <tbody id="actualites-tbody">
+            <tr><td colspan="6"><div class="empty-state"><p>Chargement…</p></div></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── BAILLEURS ───────────────────────────────────── -->
+  <section class="page" id="page-bailleurs">
+    <div class="card">
+      <div class="card-header">
+        <span class="card-title">Bailleurs de fonds</span>
+        <button class="btn-primary" onclick="openBailleurModal()">
+          <iconify-icon icon="mdi:plus"></iconify-icon> Nouveau
+        </button>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr>
+            <th>Nom</th><th>Type</th><th>Pays</th>
+            <th>Montant</th><th>Décaissé</th><th>Statut</th><th>Actions</th>
+          </tr></thead>
+          <tbody id="bailleurs-tbody">
+            <tr><td colspan="7"><div class="empty-state"><p>Chargement…</p></div></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── RAPPORTS ────────────────────────────────────── -->
+  <section class="page" id="page-rapports">
+    <div class="card">
+      <div class="card-header">
+        <span class="card-title">Rapports</span>
+        <button class="btn-primary" onclick="openRapportModal()">
+          <iconify-icon icon="mdi:plus"></iconify-icon> Nouveau
+        </button>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr>
+            <th>Nom</th><th>Type</th><th>Bailleur</th>
+            <th>Période</th><th>Statut</th><th>Actions</th>
+          </tr></thead>
+          <tbody id="rapports-tbody">
+            <tr><td colspan="6"><div class="empty-state"><p>Chargement…</p></div></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── NEWSLETTER ──────────────────────────────────── -->
+  <section class="page" id="page-newsletter">
+    <div class="card">
+      <div class="card-header">
+        <span class="card-title">Abonnés newsletter</span>
+        <div class="filters">
+          <select id="nl-statut" onchange="loadNewsletter()">
+            <option value="">Tous</option>
+            <option value="active">Actifs</option>
+            <option value="unsubscribed">Désabonnés</option>
+          </select>
+        </div>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr>
+            <th>Email</th><th>Nom</th><th>Source</th><th>Date</th><th>Statut</th><th>Actions</th>
+          </tr></thead>
+          <tbody id="newsletter-tbody">
+            <tr><td colspan="6"><div class="empty-state"><p>Chargement…</p></div></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="pagination-bar">
+        <span id="nl-count">—</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── CONTACTS ────────────────────────────────────── -->
+  <section class="page" id="page-contacts">
+    <div class="card">
+      <div class="card-header">
+        <span class="card-title">Messages reçus</span>
+        <div class="filters">
+          <select id="ct-statut" onchange="loadContacts()">
+            <option value="">Tous</option>
+            <option value="nouveau">Nouveaux</option>
+            <option value="lu">Lus</option>
+            <option value="traite">Traités</option>
+            <option value="archive">Archivés</option>
+          </select>
+        </div>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr>
+            <th>Expéditeur</th><th>Email</th><th>Sujet</th><th>Date</th><th>Statut</th><th>Actions</th>
+          </tr></thead>
+          <tbody id="contacts-tbody">
+            <tr><td colspan="6"><div class="empty-state"><p>Chargement…</p></div></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── LOGS ────────────────────────────────────────── -->
+  <section class="page" id="page-logs">
+    <div class="card">
+      <div class="card-header">
+        <span class="card-title">Journaux d'activité</span>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr>
+            <th>Action</th><th>Données</th><th>IP</th><th>Date</th>
+          </tr></thead>
+          <tbody id="logs-tbody">
+            <tr><td colspan="4"><div class="empty-state"><p>Chargement…</p></div></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── PARAMÈTRES ──────────────────────────────────── -->
+  <section class="page" id="page-parametres">
+    <div class="card" style="max-width:640px;">
+      <div class="card-header">
+        <span class="card-title">Paramètres du site</span>
+      </div>
+      <div class="card-body">
+        <div class="mb-3"><label>Nom du site</label><input type="text" id="param-SITE_NAME"></div>
+        <div class="mb-3"><label>URL du site</label><input type="text" id="param-SITE_URL"></div>
+        <div class="mb-3"><label>Email administrateur</label><input type="email" id="param-ADMIN_EMAIL"></div>
+        <div class="mb-3"><label>Téléphone</label><input type="text" id="param-SITE_TEL"></div>
+        <div class="mb-3"><label>Adresse</label><input type="text" id="param-SITE_ADRESSE"></div>
+        <div class="mb-3"><label>Cotisation annuelle (FCFA)</label><input type="number" id="param-COTISATION_ANNUELLE"></div>
+        <div class="mb-3"><label>Frais d'adhésion (FCFA)</label><input type="number" id="param-COTISATION_INSCRIPTION"></div>
+        <button class="btn-primary" onclick="saveParametres()">
+          <iconify-icon icon="mdi:content-save-outline"></iconify-icon> Enregistrer
+        </button>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- ════════════════════════════════════════════════════════
+     MODALS
+═════════════════════════════════════════════════════════ -->
+
+<!-- Modal Membre : changer statut / rôle -->
+<div class="modal fade" id="modal-membre" tabindex="-1">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <span class="modal-title">Fiche membre</span>
+        <button class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body" id="modal-membre-body"></div>
+      <div class="modal-footer">
+        <button class="btn-outline" data-bs-dismiss="modal">Fermer</button>
+        <button class="btn-primary" onclick="saveMembre()">
+          <iconify-icon icon="mdi:content-save-outline"></iconify-icon> Enregistrer
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Projet -->
+<div class="modal fade" id="modal-projet" tabindex="-1">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <span class="modal-title" id="modal-projet-title">Nouveau projet</span>
+        <button class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <input type="hidden" id="projet-id">
+        <div class="row g-3">
+          <div class="col-12"><label>Titre *</label><input type="text" id="projet-titre"></div>
+          <div class="col-md-6"><label>Département</label><input type="text" id="projet-departement"></div>
+          <div class="col-md-6"><label>Domaine</label><input type="text" id="projet-domaine"></div>
+          <div class="col-md-6"><label>Budget (FCFA)</label><input type="number" id="projet-budget"></div>
+          <div class="col-md-6"><label>Dépensé (FCFA)</label><input type="number" id="projet-depense"></div>
+          <div class="col-md-6"><label>Date de début</label><input type="date" id="projet-date_debut"></div>
+          <div class="col-md-6"><label>Date de fin</label><input type="date" id="projet-date_fin"></div>
+          <div class="col-md-6"><label>Responsable</label><input type="text" id="projet-responsable"></div>
+          <div class="col-md-6">
+            <label>Statut</label>
+            <select id="projet-statut">
+              <option value="brouillon">Brouillon</option>
+              <option value="en_cours">En cours</option>
+              <option value="termine">Terminé</option>
+              <option value="suspendu">Suspendu</option>
+              <option value="annule">Annulé</option>
+            </select>
+          </div>
+          <div class="col-md-6"><label>Progression (%)</label><input type="number" id="projet-progression" min="0" max="100"></div>
+          <div class="col-md-6"><label>Bénéficiaires</label><input type="text" id="projet-beneficiaires"></div>
+          <div class="col-12"><label>Objectifs</label><textarea id="projet-objectifs" rows="2"></textarea></div>
+          <div class="col-12"><label>Description</label><textarea id="projet-description" rows="4"></textarea></div>
+          <div class="col-12"><label>Partenaires</label><input type="text" id="projet-partenaires"></div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-outline" data-bs-dismiss="modal">Annuler</button>
+        <button class="btn-primary" onclick="saveProjet()">
+          <iconify-icon icon="mdi:content-save-outline"></iconify-icon> Enregistrer
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Actualité -->
+<div class="modal fade" id="modal-actu" tabindex="-1">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <span class="modal-title" id="modal-actu-title">Nouvelle actualité</span>
+        <button class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <input type="hidden" id="actu-id">
+        <div class="row g-3">
+          <div class="col-12"><label>Titre *</label><input type="text" id="actu-titre"></div>
+          <div class="col-md-6"><label>Catégorie</label><input type="text" id="actu-categorie" placeholder="Événement, Formation…"></div>
+          <div class="col-md-6"><label>Auteur</label><input type="text" id="actu-auteur"></div>
+          <div class="col-md-6"><label>Date de publication</label><input type="date" id="actu-date_publication"></div>
+          <div class="col-md-6">
+            <label>Statut</label>
+            <select id="actu-statut">
+              <option value="brouillon">Brouillon</option>
+              <option value="publie">Publié</option>
+              <option value="archive">Archivé</option>
+            </select>
+          </div>
+          <div class="col-12"><label>Extrait</label><textarea id="actu-excerpt" rows="2" placeholder="Résumé court affiché dans la liste…"></textarea></div>
+          <div class="col-12"><label>Contenu complet</label><textarea id="actu-contenu" rows="7"></textarea></div>
+          <div class="col-12"><label>Tags (séparés par des virgules)</label><input type="text" id="actu-tags" placeholder="formation, santé, jeunesse"></div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-outline" data-bs-dismiss="modal">Annuler</button>
+        <button class="btn-primary" onclick="saveActu()">
+          <iconify-icon icon="mdi:content-save-outline"></iconify-icon> Enregistrer
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Bailleur -->
+<div class="modal fade" id="modal-bailleur" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <span class="modal-title" id="modal-bailleur-title">Nouveau bailleur</span>
+        <button class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <input type="hidden" id="bailleur-id">
+        <div class="row g-3">
+          <div class="col-12"><label>Nom *</label><input type="text" id="bailleur-nom"></div>
+          <div class="col-md-6">
+            <label>Type</label>
+            <select id="bailleur-type">
+              <option value="Institution">Institution</option>
+              <option value="ONG">ONG</option>
+              <option value="Gouvernement">Gouvernement</option>
+              <option value="Entreprise">Entreprise</option>
+              <option value="Individu">Individu</option>
+            </select>
+          </div>
+          <div class="col-md-6"><label>Pays</label><input type="text" id="bailleur-pays"></div>
+          <div class="col-md-6"><label>Montant total (FCFA)</label><input type="number" id="bailleur-montant"></div>
+          <div class="col-md-6"><label>Décaissé (FCFA)</label><input type="number" id="bailleur-decaisse"></div>
+          <div class="col-md-6"><label>Contact</label><input type="text" id="bailleur-contact"></div>
+          <div class="col-md-6"><label>Email</label><input type="email" id="bailleur-email"></div>
+          <div class="col-md-6"><label>Début</label><input type="date" id="bailleur-date_debut"></div>
+          <div class="col-md-6"><label>Fin</label><input type="date" id="bailleur-date_fin"></div>
+          <div class="col-md-6">
+            <label>Statut</label>
+            <select id="bailleur-statut">
+              <option value="actif">Actif</option>
+              <option value="inactif">Inactif</option>
+              <option value="prospect">Prospect</option>
+            </select>
+          </div>
+          <div class="col-12"><label>Notes</label><textarea id="bailleur-notes" rows="2"></textarea></div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-outline" data-bs-dismiss="modal">Annuler</button>
+        <button class="btn-primary" onclick="saveBailleur()">
+          <iconify-icon icon="mdi:content-save-outline"></iconify-icon> Enregistrer
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Rapport -->
+<div class="modal fade" id="modal-rapport" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <span class="modal-title" id="modal-rapport-title">Nouveau rapport</span>
+        <button class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <input type="hidden" id="rapport-id">
+        <div class="row g-3">
+          <div class="col-12"><label>Nom *</label><input type="text" id="rapport-nom"></div>
+          <div class="col-md-6"><label>Type</label><input type="text" id="rapport-type" placeholder="Trimestriel, Annuel…"></div>
+          <div class="col-md-6"><label>Bailleur</label><input type="text" id="rapport-bailleur"></div>
+          <div class="col-md-6"><label>Projet lié</label><input type="text" id="rapport-projet"></div>
+          <div class="col-md-6"><label>Période</label><input type="text" id="rapport-periode" placeholder="T1 2025, Jan-Mar 2025…"></div>
+          <div class="col-md-6">
+            <label>Statut</label>
+            <select id="rapport-statut">
+              <option value="brouillon">Brouillon</option>
+              <option value="soumis">Soumis</option>
+              <option value="valide">Validé</option>
+              <option value="rejete">Rejeté</option>
+            </select>
+          </div>
+          <div class="col-12"><label>URL du fichier</label><input type="text" id="rapport-url" placeholder="https://…"></div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-outline" data-bs-dismiss="modal">Annuler</button>
+        <button class="btn-primary" onclick="saveRapport()">
+          <iconify-icon icon="mdi:content-save-outline"></iconify-icon> Enregistrer
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal contact : voir message -->
+<div class="modal fade" id="modal-contact" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <span class="modal-title">Message</span>
+        <button class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body" id="modal-contact-body"></div>
+      <div class="modal-footer">
+        <button class="btn-outline" data-bs-dismiss="modal">Fermer</button>
+        <button class="btn-sm btn-success" id="btn-contact-traiter">Marquer traité</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal confirmation suppression -->
+<div class="modal fade" id="modal-confirm" tabindex="-1">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content">
+      <div class="modal-header">
+        <span class="modal-title">Confirmer la suppression</span>
+        <button class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body" style="font-size:.875rem;color:var(--c-text-dim);">
+        Cette action est irréversible. Continuer ?
+      </div>
+      <div class="modal-footer">
+        <button class="btn-outline" data-bs-dismiss="modal">Annuler</button>
+        <button class="btn-sm btn-delete" id="btn-confirm-delete" style="padding:.5rem 1rem;">
+          Supprimer
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Toast container -->
+<div id="toast-container"></div>
+
+<!-- ════════════════════════════════════════════════════════
+     JAVASCRIPT
+═════════════════════════════════════════════════════════ -->
+<script>
+'use strict';
+
+// ── CONFIG ────────────────────────────────────────────────
+const API = window.location.origin; // Vercel proxy — même domaine
+let SESSION = { token: null, membre: null };
+
+// ── UTILS ─────────────────────────────────────────────────
+function toast(msg, type = 'info') {
+  const c = document.getElementById('toast-container');
+  const icons = { success: 'mdi:check-circle', error: 'mdi:alert-circle', info: 'mdi:information' };
+  const el = document.createElement('div');
+  el.className = `toast-item ${type}`;
+  el.innerHTML = `<iconify-icon icon="${icons[type]}"></iconify-icon><span>${msg}</span>`;
+  c.appendChild(el);
+  setTimeout(() => el.remove(), 4000);
+}
+
+function fmt(n) {
+  if (n == null) return '—';
+  return Number(n).toLocaleString('fr-FR');
+}
+
+function fmtDate(d) {
+  if (!d) return '—';
+  return new Date(d).toLocaleDateString('fr-FR');
+}
+
+function badge(val) {
+  if (!val) return '—';
+  const labels = {
+    actif:'Actif', inactif:'Inactif', suspendu:'Suspendu', en_attente:'En attente',
+    pending:'En attente', approved:'Approuvé', declined:'Refusé', cancelled:'Annulé',
+    brouillon:'Brouillon', en_cours:'En cours', termine:'Terminé', annule:'Annulé',
+    publie:'Publié', archive:'Archivé',
+    active:'Actif', unsubscribed:'Désabonné',
+    nouveau:'Nouveau', lu:'Lu', traite:'Traité',
+    soumis:'Soumis', valide:'Validé', rejete:'Rejeté',
+    member:'Membre', manager:'Manager', admin:'Admin',
+    planifiee:'Planifiée', terminee:'Terminée',
+    prospect:'Prospect',
+  };
+  return `<span class="badge badge-${val}">${labels[val] || val}</span>`;
+}
+
+function setLoading(tbodyId, cols) {
+  document.getElementById(tbodyId).innerHTML =
+    `<tr><td colspan="${cols}"><div class="empty-state">
+      <iconify-icon icon="mdi:loading" style="animation:spin 1s linear infinite"></iconify-icon>
+      <p>Chargement…</p></div></td></tr>`;
+}
+
+function setEmpty(tbodyId, cols, msg = 'Aucun enregistrement') {
+  document.getElementById(tbodyId).innerHTML =
+    `<tr><td colspan="${cols}"><div class="empty-state">
+      <iconify-icon icon="mdi:inbox-outline"></iconify-icon>
+      <p>${msg}</p></div></td></tr>`;
+}
+
+// Spin keyframe
+const style = document.createElement('style');
+style.textContent = '@keyframes spin{to{transform:rotate(360deg)}}';
+document.head.appendChild(style);
+
+// ── API CALL ──────────────────────────────────────────────
+async function api(endpoint, payload) {
+  const headers = { 'Content-Type': 'application/json' };
+  if (SESSION.token) headers['Authorization'] = `Bearer ${SESSION.token}`;
+  const r = await fetch(`${API}/api/${endpoint}`, {
+    method: 'POST',
+    headers,
+    body: JSON.stringify(payload),
+  });
+  return r.json();
+}
+
+// ── AUTH ──────────────────────────────────────────────────
+async function doLogin() {
+  const email    = document.getElementById('login-email').value.trim();
+  const password = document.getElementById('login-password').value;
+  const errEl    = document.getElementById('login-error');
+  errEl.style.display = 'none';
+  if (!email || !password) { errEl.textContent = 'Email et mot de passe requis.'; errEl.style.display = 'block'; return; }
+  const btn = document.getElementById('btn-login');
+  btn.disabled = true; btn.textContent = 'Connexion…';
+  try {
+    const data = await api('auth', { action: 'login', email, password });
+    if (!data.success) { errEl.textContent = data.error; errEl.style.display = 'block'; return; }
+    document.getElementById('step-login').style.display = 'none';
+    document.getElementById('step-otp').style.display = 'block';
+    toast('Code OTP envoyé à votre email.', 'info');
+  } catch(e) {
+    errEl.textContent = 'Erreur réseau.'; errEl.style.display = 'block';
+  } finally {
+    btn.disabled = false; btn.innerHTML = '<iconify-icon icon="mdi:login"></iconify-icon> Connexion';
+  }
+}
+
+async function doVerifyOtp() {
+  const email = document.getElementById('login-email').value.trim();
+  const code  = document.getElementById('otp-code').value.trim();
+  const errEl = document.getElementById('otp-error');
+  errEl.style.display = 'none';
+  if (!code || code.length !== 6) { errEl.textContent = 'Code à 6 chiffres requis.'; errEl.style.display = 'block'; return; }
+  const btn = document.getElementById('btn-otp');
+  btn.disabled = true; btn.textContent = 'Vérification…';
+  try {
+    const data = await api('auth', { action: 'verify_otp', email, code });
+    if (!data.success) { errEl.textContent = data.error; errEl.style.display = 'block'; return; }
+    SESSION.token  = data.token;
+    SESSION.membre = data.membre;
+    localStorage.setItem('foddeb_token',  data.token);
+    localStorage.setItem('foddeb_membre', JSON.stringify(data.membre));
+    initDashboard();
+  } catch(e) {
+    errEl.textContent = 'Erreur réseau.'; errEl.style.display = 'block';
+  } finally {
+    btn.disabled = false; btn.innerHTML = '<iconify-icon icon="mdi:shield-check"></iconify-icon> Vérifier le code';
+  }
+}
+
+function backToLogin() {
+  document.getElementById('step-login').style.display = 'block';
+  document.getElementById('step-otp').style.display   = 'none';
+  document.getElementById('step-reset').style.display = 'none';
+}
+
+function showReset() {
+  document.getElementById('step-login').style.display = 'none';
+  document.getElementById('step-reset').style.display = 'block';
+}
+
+async function doResetRequest() {
+  const email = document.getElementById('reset-email').value.trim();
+  if (!email) return toast('Email requis.', 'error');
+  const data = await api('auth', { action: 'reset_password', email });
+  if (data.success) {
+    document.getElementById('reset-phase1').style.display = 'none';
+    document.getElementById('reset-phase2').style.display = 'block';
+    toast('Code envoyé si l\'email existe.', 'info');
+  }
+}
+
+async function doResetConfirm() {
+  const email       = document.getElementById('reset-email').value.trim();
+  const code        = document.getElementById('reset-code').value.trim();
+  const newPassword = document.getElementById('reset-newpwd').value;
+  const data = await api('auth', { action: 'reset_password', email, code, newPassword });
+  if (data.success) { toast('Mot de passe réinitialisé.', 'success'); backToLogin(); }
+  else toast(data.error, 'error');
+}
+
+async function doLogout() {
+  await api('auth', { action: 'logout', token: SESSION.token });
+  SESSION = { token: null, membre: null };
+  localStorage.removeItem('foddeb_token');
+  localStorage.removeItem('foddeb_membre');
+  location.reload();
+}
+
+// ── INIT ──────────────────────────────────────────────────
+function initDashboard() {
+  document.getElementById('login-screen').style.display = 'none';
+  const m = SESSION.membre;
+  document.getElementById('sidebar-avatar').textContent = (m.prenom?.[0] || 'A').toUpperCase();
+  document.getElementById('sidebar-name').textContent = `${m.prenom} ${m.nom}`;
+  document.getElementById('sidebar-role').textContent = m.role === 'admin' ? 'Administrateur' : m.role === 'manager' ? 'Manager' : 'Membre';
+  loadDashboard();
+}
+
+// ── NAVIGATION ────────────────────────────────────────────
+const PAGE_TITLES = {
+  dashboard: 'Tableau de bord', membres: 'Membres', dons: 'Dons',
+  projets: 'Projets', actualites: 'Actualités', bailleurs: 'Bailleurs de fonds',
+  rapports: 'Rapports', newsletter: 'Newsletter', contacts: 'Contacts',
+  logs: 'Journaux d\'activité', parametres: 'Paramètres',
+};
+
+function goTo(page) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById(`page-${page}`).classList.add('active');
+  document.querySelectorAll('.nav-item').forEach(n => {
+    if (n.textContent.toLowerCase().includes(PAGE_TITLES[page]?.toLowerCase().split(' ')[0]?.toLowerCase() || ''))
+      n.classList.add('active');
+  });
+  document.getElementById('topbar-title').textContent = PAGE_TITLES[page] || page;
+  closeSidebar();
+  const loaders = {
+    membres: loadMembres, dons: loadDons, projets: loadProjets,
+    actualites: loadActualites, bailleurs: loadBailleurs,
+    rapports: loadRapports, newsletter: loadNewsletter,
+    contacts: loadContacts, logs: loadLogs, parametres: loadParametres,
+  };
+  if (loaders[page]) loaders[page]();
+}
+
+function toggleSidebar() {
+  document.getElementById('sidebar').classList.toggle('open');
+  document.getElementById('sidebar-overlay').classList.toggle('active');
+}
+function closeSidebar() {
+  document.getElementById('sidebar').classList.remove('open');
+  document.getElementById('sidebar-overlay').classList.remove('active');
+}
+
+// ── DASHBOARD ─────────────────────────────────────────────
+async function loadDashboard() {
+  // Chargement des stats en parallèle
+  const [membres, dons, projets, contacts] = await Promise.all([
+    api('membres',  { action: 'list', statut: 'actif', limit: 1 }),
+    api('dons',     { action: 'list', statut: 'approved', limit: 1 }),
+    api('projets',  { action: 'list', statut: 'en_cours', limit: 1 }),
+    api('contacts', { action: 'list', statut: 'nouveau', limit: 1 }),
+  ]);
+  document.getElementById('stat-membres').textContent  = membres.total  || 0;
+  document.getElementById('stat-projets').textContent  = projets.total  || 0;
+  document.getElementById('stat-contacts').textContent = contacts.total || 0;
+
+  // Total dons approuvés en montant
+  const donsAll = await api('dons', { action: 'list', statut: 'approved', limit: 500 });
+  const total = (donsAll.data || []).reduce((s, d) => s + Number(d.montant), 0);
+  document.getElementById('stat-dons').textContent = fmt(total) + ' FCFA';
+
+  // Charts
+  const donsStats = await api('dons', { action: 'list', limit: 500 });
+  const statusCount = {};
+  (donsStats.data || []).forEach(d => { statusCount[d.statut] = (statusCount[d.statut]||0)+1; });
+  new Chart(document.getElementById('chart-dons'), {
+    type: 'doughnut',
+    data: {
+      labels: ['En attente','Approuvé','Refusé','Annulé'],
+      datasets: [{ data: [
+        statusCount.pending||0, statusCount.approved||0,
+        statusCount.declined||0, statusCount.cancelled||0,
+      ], backgroundColor: ['#f59e0b','#22c55e','#ef4444','#64748b'], borderWidth: 0 }]
+    },
+    options: { plugins: { legend: { labels: { color: '#94a3b8', font: { size: 11 } } } }, cutout: '70%' }
+  });
+
+  const memAll = await api('membres', { action: 'list', limit: 500 });
+  const roles = {};
+  (memAll.data||[]).forEach(m => { roles[m.role] = (roles[m.role]||0)+1; });
+  new Chart(document.getElementById('chart-membres'), {
+    type: 'bar',
+    data: {
+      labels: ['Membre','Manager','Admin'],
+      datasets: [{ data: [roles.member||0, roles.manager||0, roles.admin||0],
+        backgroundColor: ['#1a7fc1','#f0a500','#a855f7'], borderRadius: 6, borderWidth: 0 }]
+    },
+    options: {
+      plugins: { legend: { display: false } },
+      scales: {
+        y: { ticks: { color: '#64748b' }, grid: { color: '#1e2d42' } },
+        x: { ticks: { color: '#64748b' }, grid: { display: false } }
+      }
+    }
+  });
+
+  // Membres en attente
+  const pending = await api('membres', { action: 'list', statut: 'en_attente', limit: 5 });
+  const tb = document.getElementById('dash-pending-membres');
+  if (!pending.data?.length) { tb.innerHTML = `<tr><td colspan="4"><div class="empty-state"><iconify-icon icon="mdi:check-all"></iconify-icon><p>Aucune adhésion en attente</p></div></td></tr>`; return; }
+  tb.innerHTML = pending.data.map(m => `
+    <tr>
+      <td><strong>${m.prenom} ${m.nom}</strong></td>
+      <td style="color:var(--c-muted)">${m.email}</td>
+      <td>${fmtDate(m.date_adhesion)}</td>
+      <td>
+        <button class="btn-sm btn-success" onclick="quickActivate('${m.id}')">
+          <iconify-icon icon="mdi:check"></iconify-icon> Activer
+        </button>
+      </td>
+    </tr>`).join('');
+}
+
+async function quickActivate(id) {
+  const r = await api('membres', { action: 'update_statut', id, statut: 'actif' });
+  if (r.success) { toast('Membre activé.', 'success'); loadDashboard(); }
+  else toast(r.error, 'error');
+}
+
+// ── MEMBRES ───────────────────────────────────────────────
+let membresData = [], membrePage = 0;
+const MEM_LIMIT = 20;
+
+async function loadMembres() {
+  setLoading('membres-tbody', 7);
+  const statut = document.getElementById('m-statut').value;
+  const role   = document.getElementById('m-role').value;
+  const search = document.getElementById('m-search').value.trim();
+  const r = await api('membres', { action: 'list', statut, role, search, limit: MEM_LIMIT, offset: membrePage * MEM_LIMIT });
+  if (!r.success) { toast(r.error, 'error'); return; }
+  membresData = r.data || [];
+  document.getElementById('m-count').textContent = `${r.total || 0} membres`;
+  renderMembres();
+}
+
+function filterMembres() { membrePage = 0; loadMembres(); }
+
+function renderMembres() {
+  const tb = document.getElementById('membres-tbody');
+  if (!membresData.length) { setEmpty('membres-tbody', 7, 'Aucun membre trouvé'); return; }
+  tb.innerHTML = membresData.map(m => `
+    <tr>
+      <td><strong>${m.prenom} ${m.nom}</strong><br><span style="font-size:.75rem;color:var(--c-muted)">${m.organisation||''}</span></td>
+      <td>${m.email}</td>
+      <td>${m.telephone||'—'}</td>
+      <td>${badge(m.role)}</td>
+      <td>${badge(m.statut)}</td>
+      <td>${fmtDate(m.date_adhesion)}</td>
+      <td style="white-space:nowrap">
+        <button class="btn-sm btn-edit" onclick="openMembreModal('${m.id}')"><iconify-icon icon="mdi:pencil"></iconify-icon></button>
+        <button class="btn-sm btn-delete ms-1" onclick="confirmDelete('membres','${m.id}')"><iconify-icon icon="mdi:trash-can-outline"></iconify-icon></button>
+      </td>
+    </tr>`).join('');
+}
+
+async function openMembreModal(id) {
+  const r = await api('membres', { action: 'get', id });
+  if (!r.success) { toast(r.error, 'error'); return; }
+  const m = r.data;
+  document.getElementById('modal-membre-body').innerHTML = `
+    <input type="hidden" id="m-edit-id" value="${m.id}">
+    <div class="row g-3">
+      <div class="col-md-6"><label>Prénom</label><input type="text" id="m-edit-prenom" value="${m.prenom}"></div>
+      <div class="col-md-6"><label>Nom</label><input type="text" id="m-edit-nom" value="${m.nom}"></div>
+      <div class="col-12"><label>Email</label><input type="text" value="${m.email}" disabled style="opacity:.5"></div>
+      <div class="col-md-6"><label>Téléphone</label><input type="text" id="m-edit-telephone" value="${m.telephone||''}"></div>
+      <div class="col-md-6"><label>Organisation</label><input type="text" id="m-edit-organisation" value="${m.organisation||''}"></div>
+      <div class="col-md-6"><label>Département</label><input type="text" id="m-edit-departement" value="${m.departement||''}"></div>
+      <div class="col-md-6"><label>Domaine</label><input type="text" id="m-edit-domaine" value="${m.domaine||''}"></div>
+      <div class="col-md-6">
+        <label>Rôle</label>
+        <select id="m-edit-role">
+          <option value="member" ${m.role==='member'?'selected':''}>Membre</option>
+          <option value="manager" ${m.role==='manager'?'selected':''}>Manager</option>
+          <option value="admin" ${m.role==='admin'?'selected':''}>Administrateur</option>
+        </select>
+      </div>
+      <div class="col-md-6">
+        <label>Statut</label>
+        <select id="m-edit-statut">
+          <option value="actif" ${m.statut==='actif'?'selected':''}>Actif</option>
+          <option value="en_attente" ${m.statut==='en_attente'?'selected':''}>En attente</option>
+          <option value="suspendu" ${m.statut==='suspendu'?'selected':''}>Suspendu</option>
+          <option value="inactif" ${m.statut==='inactif'?'selected':''}>Inactif</option>
+        </select>
+      </div>
+      <div class="col-12"><label>Notes</label><textarea id="m-edit-notes" rows="2">${m.notes||''}</textarea></div>
+    </div>`;
+  new bootstrap.Modal(document.getElementById('modal-membre')).show();
+}
+
+async function saveMembre() {
+  const id      = document.getElementById('m-edit-id').value;
+  const role    = document.getElementById('m-edit-role').value;
+  const statut  = document.getElementById('m-edit-statut').value;
+  const updates = {
+    prenom:       document.getElementById('m-edit-prenom').value,
+    nom:          document.getElementById('m-edit-nom').value,
+    telephone:    document.getElementById('m-edit-telephone').value,
+    organisation: document.getElementById('m-edit-organisation').value,
+    departement:  document.getElementById('m-edit-departement').value,
+    domaine:      document.getElementById('m-edit-domaine').value,
+    notes:        document.getElementById('m-edit-notes').value,
+  };
+  // Mise à jour profil + rôle + statut en parallèle
+  const [rp, rr, rs] = await Promise.all([
+    api('membres', { action: 'update', id, ...updates }),
+    api('membres', { action: 'update_role',   id, role }),
+    api('membres', { action: 'update_statut', id, statut }),
+  ]);
+  if (rp.success && rr.success && rs.success) {
+    toast('Membre mis à jour.', 'success');
+    bootstrap.Modal.getInstance(document.getElementById('modal-membre')).hide();
+    loadMembres();
+  } else {
+    toast(rp.error || rr.error || rs.error, 'error');
+  }
+}
+
+// ── DONS ──────────────────────────────────────────────────
+async function loadDons() {
+  setLoading('dons-tbody', 8);
+  const statut = document.getElementById('d-statut').value;
+  const r = await api('dons', { action: 'list', statut, limit: 50 });
+  if (!r.success) { toast(r.error, 'error'); return; }
+  document.getElementById('d-count').textContent = `${r.total||0} dons`;
+  const tb = document.getElementById('dons-tbody');
+  if (!r.data?.length) { setEmpty('dons-tbody', 8); return; }
+  tb.innerHTML = r.data.map(d => `
+    <tr>
+      <td style="font-family:monospace;font-size:.75rem">${d.ref}</td>
+      <td>${d.prenom} ${d.nom}</td>
+      <td style="color:var(--c-muted)">${d.email}</td>
+      <td><strong>${fmt(d.montant)} FCFA</strong></td>
+      <td>${badge(d.type_don)}</td>
+      <td>${badge(d.statut)}</td>
+      <td>${fmtDate(d.date_don)}</td>
+      <td>
+        ${d.statut==='pending'?`<button class="btn-sm btn-success" onclick="updateDonStatut('${d.id}','approved')"><iconify-icon icon="mdi:check"></iconify-icon></button>`:''}
+        <button class="btn-sm btn-delete ms-1" onclick="confirmDelete('dons','${d.id}')"><iconify-icon icon="mdi:trash-can-outline"></iconify-icon></button>
+      </td>
+    </tr>`).join('');
+}
+
+async function updateDonStatut(id, statut) {
+  const r = await api('dons', { action: 'update', id, statut });
+  if (r.success) { toast('Statut mis à jour.', 'success'); loadDons(); }
+  else toast(r.error, 'error');
+}
+
+// ── PROJETS ───────────────────────────────────────────────
+async function loadProjets() {
+  setLoading('projets-tbody', 7);
+  const statut = document.getElementById('p-statut').value;
+  const search = document.getElementById('p-search').value.trim();
+  const r = await api('projets', { action: 'list', statut, search, limit: 50 });
+  if (!r.success) { toast(r.error, 'error'); return; }
+  document.getElementById('p-count').textContent = `${r.total||0} projets`;
+  const tb = document.getElementById('projets-tbody');
+  if (!r.data?.length) { setEmpty('projets-tbody', 7); return; }
+  tb.innerHTML = r.data.map(p => `
+    <tr>
+      <td><strong>${p.titre}</strong></td>
+      <td>${p.departement||'—'}</td>
+      <td>${fmt(p.budget)} FCFA</td>
+      <td>
+        <div style="display:flex;align-items:center;gap:.5rem">
+          <div class="progress-bar-wrap"><div class="progress-bar-fill" style="width:${p.progression||0}%"></div></div>
+          <span style="font-size:.75rem;color:var(--c-muted)">${p.progression||0}%</span>
+        </div>
+      </td>
+      <td>${badge(p.statut)}</td>
+      <td>${fmtDate(p.date_debut)}</td>
+      <td style="white-space:nowrap">
+        <button class="btn-sm btn-edit" onclick="openProjetModal('${p.id}')"><iconify-icon icon="mdi:pencil"></iconify-icon></button>
+        <button class="btn-sm btn-delete ms-1" onclick="confirmDelete('projets','${p.id}')"><iconify-icon icon="mdi:trash-can-outline"></iconify-icon></button>
+      </td>
+    </tr>`).join('');
+}
+
+function openProjetModal(id = null) {
+  const fields = ['titre','departement','domaine','budget','depense','date_debut','date_fin','responsable','statut','progression','beneficiaires','objectifs','description','partenaires'];
+  fields.forEach(f => { const el = document.getElementById(`projet-${f}`); if (el) el.value = ''; });
+  document.getElementById('projet-id').value = '';
+  document.getElementById('modal-projet-title').textContent = id ? 'Modifier le projet' : 'Nouveau projet';
+  if (id) {
+    api('projets', { action: 'get', id }).then(r => {
+      if (!r.success) return;
+      const p = r.data;
+      document.getElementById('projet-id').value = p.id;
+      fields.forEach(f => { const el = document.getElementById(`projet-${f}`); if (el && p[f] != null) el.value = p[f]; });
+      new bootstrap.Modal(document.getElementById('modal-projet')).show();
+    });
+  } else {
+    new bootstrap.Modal(document.getElementById('modal-projet')).show();
+  }
+}
+
+async function saveProjet() {
+  const id = document.getElementById('projet-id').value;
+  const fields = ['titre','departement','domaine','budget','depense','date_debut','date_fin','responsable','statut','progression','beneficiaires','objectifs','description','partenaires'];
+  const payload = { action: id ? 'update' : 'create' };
+  if (id) payload.id = id;
+  fields.forEach(f => { const el = document.getElementById(`projet-${f}`); if (el) payload[f] = el.value; });
+  if (!payload.titre) { toast('Le titre est requis.', 'error'); return; }
+  const r = await api('projets', payload);
+  if (r.success) {
+    toast(id ? 'Projet mis à jour.' : 'Projet créé.', 'success');
+    bootstrap.Modal.getInstance(document.getElementById('modal-projet')).hide();
+    loadProjets();
+  } else toast(r.error, 'error');
+}
+
+// ── ACTUALITÉS ────────────────────────────────────────────
+async function loadActualites() {
+  setLoading('actualites-tbody', 6);
+  const statut = document.getElementById('a-statut').value;
+  const r = await api('actualites', { action: 'list', statut, limit: 50 });
+  if (!r.success) { toast(r.error, 'error'); return; }
+  const tb = document.getElementById('actualites-tbody');
+  if (!r.data?.length) { setEmpty('actualites-tbody', 6); return; }
+  tb.innerHTML = r.data.map(a => `
+    <tr>
+      <td><strong>${a.titre}</strong></td>
+      <td>${a.categorie||'—'}</td>
+      <td>${a.auteur||'—'}</td>
+      <td>${fmtDate(a.date_publication)}</td>
+      <td>${badge(a.statut)}</td>
+      <td style="white-space:nowrap">
+        <button class="btn-sm btn-edit" onclick="openActuModal('${a.id}')"><iconify-icon icon="mdi:pencil"></iconify-icon></button>
+        <button class="btn-sm btn-delete ms-1" onclick="confirmDelete('actualites','${a.id}')"><iconify-icon icon="mdi:trash-can-outline"></iconify-icon></button>
+      </td>
+    </tr>`).join('');
+}
+
+function openActuModal(id = null) {
+  const fields = ['titre','categorie','auteur','date_publication','statut','excerpt','contenu','tags'];
+  fields.forEach(f => { const el = document.getElementById(`actu-${f}`); if (el) el.value = f==='statut'?'brouillon':''; });
+  document.getElementById('actu-id').value = '';
+  document.getElementById('modal-actu-title').textContent = id ? 'Modifier l\'actualité' : 'Nouvelle actualité';
+  if (id) {
+    api('actualites', { action: 'get', id }).then(r => {
+      if (!r.success) return;
+      const a = r.data;
+      document.getElementById('actu-id').value = a.id;
+      fields.forEach(f => {
+        const el = document.getElementById(`actu-${f}`);
+        if (!el) return;
+        el.value = f === 'tags' ? (a.tags||[]).join(', ') : (a[f] != null ? a[f] : '');
+      });
+      new bootstrap.Modal(document.getElementById('modal-actu')).show();
+    });
+  } else {
+    new bootstrap.Modal(document.getElementById('modal-actu')).show();
+  }
+}
+
+async function saveActu() {
+  const id = document.getElementById('actu-id').value;
+  const tagsRaw = document.getElementById('actu-tags').value;
+  const tags = tagsRaw ? tagsRaw.split(',').map(t => t.trim()).filter(Boolean) : [];
+  const payload = {
+    action: id ? 'update' : 'create',
+    titre:            document.getElementById('actu-titre').value,
+    categorie:        document.getElementById('actu-categorie').value,
+    auteur:           document.getElementById('actu-auteur').value,
+    date_publication: document.getElementById('actu-date_publication').value,
+    statut:           document.getElementById('actu-statut').value,
+    excerpt:          document.getElementById('actu-excerpt').value,
+    contenu:          document.getElementById('actu-contenu').value,
+    tags,
+  };
+  if (id) payload.id = id;
+  if (!payload.titre) { toast('Titre requis.', 'error'); return; }
+  const r = await api('actualites', payload);
+  if (r.success) {
+    toast(id ? 'Actualité mise à jour.' : 'Actualité créée.', 'success');
+    bootstrap.Modal.getInstance(document.getElementById('modal-actu')).hide();
+    loadActualites();
+  } else toast(r.error, 'error');
+}
+
+// ── BAILLEURS ─────────────────────────────────────────────
+async function loadBailleurs() {
+  setLoading('bailleurs-tbody', 7);
+  const r = await api('bailleurs', { action: 'list', limit: 100 });
+  if (!r.success) { toast(r.error, 'error'); return; }
+  const tb = document.getElementById('bailleurs-tbody');
+  if (!r.data?.length) { setEmpty('bailleurs-tbody', 7); return; }
+  tb.innerHTML = r.data.map(b => `
+    <tr>
+      <td><strong>${b.nom}</strong></td>
+      <td>${b.type}</td>
+      <td>${b.pays||'—'}</td>
+      <td>${fmt(b.montant)} FCFA</td>
+      <td>${fmt(b.decaisse)} FCFA</td>
+      <td>${badge(b.statut)}</td>
+      <td style="white-space:nowrap">
+        <button class="btn-sm btn-edit" onclick="openBailleurModal('${b.id}')"><iconify-icon icon="mdi:pencil"></iconify-icon></button>
+        <button class="btn-sm btn-delete ms-1" onclick="confirmDelete('bailleurs','${b.id}')"><iconify-icon icon="mdi:trash-can-outline"></iconify-icon></button>
+      </td>
+    </tr>`).join('');
+}
+
+function openBailleurModal(id = null) {
+  const fields = ['nom','type','pays','montant','decaisse','contact','email','date_debut','date_fin','statut','notes'];
+  fields.forEach(f => { const el = document.getElementById(`bailleur-${f}`); if (el) el.value = ''; });
+  document.getElementById('bailleur-id').value = '';
+  document.getElementById('modal-bailleur-title').textContent = id ? 'Modifier le bailleur' : 'Nouveau bailleur';
+  if (id) {
+    api('bailleurs', { action: 'get', id }).then(r => {
+      if (!r.success) return;
+      const b = r.data;
+      document.getElementById('bailleur-id').value = b.id;
+      fields.forEach(f => { const el = document.getElementById(`bailleur-${f}`); if (el && b[f] != null) el.value = b[f]; });
+      new bootstrap.Modal(document.getElementById('modal-bailleur')).show();
+    });
+  } else {
+    new bootstrap.Modal(document.getElementById('modal-bailleur')).show();
+  }
+}
+
+async function saveBailleur() {
+  const id = document.getElementById('bailleur-id').value;
+  const fields = ['nom','type','pays','montant','decaisse','contact','email','date_debut','date_fin','statut','notes'];
+  const payload = { action: id ? 'update' : 'create' };
+  if (id) payload.id = id;
+  fields.forEach(f => { const el = document.getElementById(`bailleur-${f}`); if (el) payload[f] = el.value; });
+  if (!payload.nom) { toast('Nom requis.', 'error'); return; }
+  const r = await api('bailleurs', payload);
+  if (r.success) {
+    toast(id ? 'Bailleur mis à jour.' : 'Bailleur créé.', 'success');
+    bootstrap.Modal.getInstance(document.getElementById('modal-bailleur')).hide();
+    loadBailleurs();
+  } else toast(r.error, 'error');
+}
+
+// ── RAPPORTS ──────────────────────────────────────────────
+async function loadRapports() {
+  setLoading('rapports-tbody', 6);
+  const r = await api('rapports', { action: 'list', limit: 100 });
+  if (!r.success) { toast(r.error, 'error'); return; }
+  const tb = document.getElementById('rapports-tbody');
+  if (!r.data?.length) { setEmpty('rapports-tbody', 6); return; }
+  tb.innerHTML = r.data.map(rp => `
+    <tr>
+      <td><strong>${rp.nom}</strong></td>
+      <td>${rp.type||'—'}</td>
+      <td>${rp.bailleur||'—'}</td>
+      <td>${rp.periode||'—'}</td>
+      <td>${badge(rp.statut)}</td>
+      <td style="white-space:nowrap">
+        ${rp.url?`<a href="${rp.url}" target="_blank" class="btn-sm btn-view"><iconify-icon icon="mdi:open-in-new"></iconify-icon></a>`:''}
+        <button class="btn-sm btn-edit ms-1" onclick="openRapportModal('${rp.id}')"><iconify-icon icon="mdi:pencil"></iconify-icon></button>
+        <button class="btn-sm btn-delete ms-1" onclick="confirmDelete('rapports','${rp.id}')"><iconify-icon icon="mdi:trash-can-outline"></iconify-icon></button>
+      </td>
+    </tr>`).join('');
+}
+
+function openRapportModal(id = null) {
+  const fields = ['nom','type','bailleur','projet','periode','statut','url'];
+  fields.forEach(f => { const el = document.getElementById(`rapport-${f}`); if (el) el.value = ''; });
+  document.getElementById('rapport-id').value = '';
+  document.getElementById('modal-rapport-title').textContent = id ? 'Modifier le rapport' : 'Nouveau rapport';
+  if (id) {
+    api('rapports', { action: 'get', id }).then(r => {
+      if (!r.success) return;
+      const rp = r.data;
+      document.getElementById('rapport-id').value = rp.id;
+      fields.forEach(f => { const el = document.getElementById(`rapport-${f}`); if (el && rp[f] != null) el.value = rp[f]; });
+      new bootstrap.Modal(document.getElementById('modal-rapport')).show();
+    });
+  } else {
+    new bootstrap.Modal(document.getElementById('modal-rapport')).show();
+  }
+}
+
+async function saveRapport() {
+  const id = document.getElementById('rapport-id').value;
+  const fields = ['nom','type','bailleur','projet','periode','statut','url'];
+  const payload = { action: id ? 'update' : 'create' };
+  if (id) payload.id = id;
+  fields.forEach(f => { const el = document.getElementById(`rapport-${f}`); if (el) payload[f] = el.value; });
+  if (!payload.nom) { toast('Nom requis.', 'error'); return; }
+  const r = await api('rapports', payload);
+  if (r.success) {
+    toast(id ? 'Rapport mis à jour.' : 'Rapport créé.', 'success');
+    bootstrap.Modal.getInstance(document.getElementById('modal-rapport')).hide();
+    loadRapports();
+  } else toast(r.error, 'error');
+}
+
+// ── NEWSLETTER ────────────────────────────────────────────
+async function loadNewsletter() {
+  setLoading('newsletter-tbody', 6);
+  const statut = document.getElementById('nl-statut').value;
+  const r = await api('newsletter', { action: 'list', statut, limit: 200 });
+  if (!r.success) { toast(r.error, 'error'); return; }
+  document.getElementById('nl-count').textContent = `${r.total||0} abonnés`;
+  const tb = document.getElementById('newsletter-tbody');
+  if (!r.data?.length) { setEmpty('newsletter-tbody', 6); return; }
+  tb.innerHTML = r.data.map(n => `
+    <tr>
+      <td>${n.email}</td>
+      <td>${n.nom||'—'}</td>
+      <td>${n.source||'—'}</td>
+      <td>${fmtDate(n.date_inscription)}</td>
+      <td>${badge(n.statut)}</td>
+      <td>
+        <button class="btn-sm btn-delete" onclick="confirmDelete('newsletter','${n.id}')"><iconify-icon icon="mdi:trash-can-outline"></iconify-icon></button>
+      </td>
+    </tr>`).join('');
+}
+
+// ── CONTACTS ──────────────────────────────────────────────
+async function loadContacts() {
+  setLoading('contacts-tbody', 6);
+  const statut = document.getElementById('ct-statut').value;
+  const r = await api('contacts', { action: 'list', statut, limit: 100 });
+  if (!r.success) { toast(r.error, 'error'); return; }
+  const tb = document.getElementById('contacts-tbody');
+  if (!r.data?.length) { setEmpty('contacts-tbody', 6); return; }
+  tb.innerHTML = r.data.map(c => `
+    <tr>
+      <td><strong>${c.prenom} ${c.nom}</strong></td>
+      <td style="color:var(--c-muted)">${c.email}</td>
+      <td>${c.sujet||'—'}</td>
+      <td>${fmtDate(c.created_at)}</td>
+      <td>${badge(c.statut)}</td>
+      <td style="white-space:nowrap">
+        <button class="btn-sm btn-view" onclick="openContactModal('${c.id}')"><iconify-icon icon="mdi:eye-outline"></iconify-icon></button>
+        <button class="btn-sm btn-delete ms-1" onclick="confirmDelete('contacts','${c.id}')"><iconify-icon icon="mdi:trash-can-outline"></iconify-icon></button>
+      </td>
+    </tr>`).join('');
+}
+
+async function openContactModal(id) {
+  const r = await api('contacts', { action: 'get' });
+  // Chercher dans la liste chargée
+  const all = await api('contacts', { action: 'list', limit: 100 });
+  const c = (all.data||[]).find(x => x.id === id);
+  if (!c) return;
+  document.getElementById('modal-contact-body').innerHTML = `
+    <p><strong>${c.prenom} ${c.nom}</strong> — ${c.email}${c.telephone?' · '+c.telephone:''}</p>
+    ${c.organisation?`<p style="color:var(--c-muted);font-size:.8rem">${c.organisation}</p>`:''}
+    <hr style="border-color:var(--c-border);margin:1rem 0">
+    <p style="font-size:.875rem">${c.message.replace(/\n/g,'<br>')}</p>`;
+  document.getElementById('btn-contact-traiter').onclick = async () => {
+    await api('contacts', { action: 'update_statut', id, statut: 'traite' });
+    toast('Marqué comme traité.', 'success');
+    bootstrap.Modal.getInstance(document.getElementById('modal-contact')).hide();
+    loadContacts();
+  };
+  // Marquer lu
+  if (c.statut === 'nouveau') await api('contacts', { action: 'update_statut', id, statut: 'lu' });
+  new bootstrap.Modal(document.getElementById('modal-contact')).show();
+}
+
+// ── LOGS ──────────────────────────────────────────────────
+async function loadLogs() {
+  setLoading('logs-tbody', 4);
+  // Lecture directe via Supabase — logs exposés via une route dédiée
+  // Pour l'instant on appelle contacts comme proxy (à remplacer par /api/logs si ajouté)
+  const r = await api('membres', { action: 'list', limit: 1 }); // ping test
+  // Les logs ne sont pas encore une route API publique — afficher un message
+  document.getElementById('logs-tbody').innerHTML = `
+    <tr><td colspan="4"><div class="empty-state">
+      <iconify-icon icon="mdi:shield-lock-outline"></iconify-icon>
+      <p>Les journaux sont accessibles via Supabase Dashboard → Table Editor → logs</p>
+    </div></td></tr>`;
+}
+
+// ── PARAMÈTRES ────────────────────────────────────────────
+async function loadParametres() {
+  const r = await api('parametres', { action: 'get' });
+  if (!r.success) { toast(r.error, 'error'); return; }
+  const params = r.data || {};
+  Object.keys(params).forEach(cle => {
+    const el = document.getElementById(`param-${cle}`);
+    if (el) el.value = params[cle] || '';
+  });
+}
+
+async function saveParametres() {
+  const keys = ['SITE_NAME','SITE_URL','ADMIN_EMAIL','SITE_TEL','SITE_ADRESSE','COTISATION_ANNUELLE','COTISATION_INSCRIPTION'];
+  const payload = { action: 'update' };
+  keys.forEach(k => { const el = document.getElementById(`param-${k}`); if (el) payload[k] = el.value; });
+  const r = await api('parametres', payload);
+  if (r.success) toast('Paramètres enregistrés.', 'success');
+  else toast(r.error, 'error');
+}
+
+// ── SUPPRESSION ───────────────────────────────────────────
+let _deleteTarget = null;
+
+function confirmDelete(module, id) {
+  _deleteTarget = { module, id };
+  new bootstrap.Modal(document.getElementById('modal-confirm')).show();
+}
+
+document.getElementById('btn-confirm-delete').addEventListener('click', async () => {
+  if (!_deleteTarget) return;
+  const { module, id } = _deleteTarget;
+  const r = await api(module, { action: 'delete', id });
+  bootstrap.Modal.getInstance(document.getElementById('modal-confirm')).hide();
+  if (r.success) {
+    toast('Supprimé avec succès.', 'success');
+    const reloaders = {
+      membres: loadMembres, dons: loadDons, projets: loadProjets,
+      actualites: loadActualites, bailleurs: loadBailleurs,
+      rapports: loadRapports, newsletter: loadNewsletter, contacts: loadContacts,
+    };
+    if (reloaders[module]) reloaders[module]();
+  } else toast(r.error, 'error');
+  _deleteTarget = null;
+});
+
+// ── DÉMARRAGE ─────────────────────────────────────────────
+(function init() {
+  const token  = localStorage.getItem('foddeb_token');
+  const membre = localStorage.getItem('foddeb_membre');
+  if (token && membre) {
+    SESSION.token  = token;
+    SESSION.membre = JSON.parse(membre);
+    initDashboard();
+  }
+})();
+</script>
 </body>
 </html>
