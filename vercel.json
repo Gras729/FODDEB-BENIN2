@@ -1,117 +1,27 @@
 {
   "version": 2,
-  "name": "foddeb",
-  "cleanUrls": true,
-  "trailingSlash": false,
+  "rewrites": [
+    { "source": "/api/auth/:path*",       "destination": "/api/auth/index.js" },
+    { "source": "/api/membres/:path*",    "destination": "/api/membres/index.js" },
+    { "source": "/api/dons/:path*",       "destination": "/api/dons/index.js" },
+    { "source": "/api/projets/:path*",    "destination": "/api/projets/index.js" },
+    { "source": "/api/activites/:path*",  "destination": "/api/activites/index.js" },
+    { "source": "/api/actualites/:path*", "destination": "/api/actualites/index.js" },
+    { "source": "/api/newsletter/:path*", "destination": "/api/newsletter/index.js" },
+    { "source": "/api/contacts/:path*",   "destination": "/api/contacts/index.js" },
+    { "source": "/api/bailleurs/:path*",  "destination": "/api/bailleurs/index.js" },
+    { "source": "/api/rapports/:path*",   "destination": "/api/rapports/index.js" },
+    { "source": "/api/upload/:path*",     "destination": "/api/upload/index.js" },
+    { "source": "/api/parametres/:path*", "destination": "/api/parametres/index.js" }
+  ],
   "headers": [
     {
-      "source": "/sw.js",
+      "source": "/api/(.*)",
       "headers": [
-        {
-          "key": "Service-Worker-Allowed",
-          "value": "/"
-        },
-        {
-          "key": "Cache-Control",
-          "value": "no-cache, no-store, must-revalidate"
-        }
+        { "key": "Access-Control-Allow-Origin",  "value": "*" },
+        { "key": "Access-Control-Allow-Methods", "value": "POST, OPTIONS" },
+        { "key": "Access-Control-Allow-Headers", "value": "Content-Type, Authorization" }
       ]
-    },
-    {
-      "source": "/manifest.json",
-      "headers": [
-        {
-          "key": "Cache-Control",
-          "value": "public, max-age=86400"
-        },
-        {
-          "key": "Content-Type",
-          "value": "application/manifest+json; charset=utf-8"
-        }
-      ]
-    },
-    {
-      "source": "/assets/js/:path*",
-      "headers": [
-        {
-          "key": "Cache-Control",
-          "value": "public, max-age=31536000, immutable"
-        }
-      ]
-    },
-    {
-      "source": "/assets/css/:path*",
-      "headers": [
-        {
-          "key": "Cache-Control",
-          "value": "public, max-age=31536000, immutable"
-        }
-      ]
-    },
-    {
-      "source": "/assets/images/:path*",
-      "headers": [
-        {
-          "key": "Cache-Control",
-          "value": "public, max-age=604800"
-        }
-      ]
-    },
-    {
-      "source": "/api/:path*",
-      "headers": [
-        {
-          "key": "Cache-Control",
-          "value": "no-store"
-        },
-        {
-          "key": "Access-Control-Allow-Origin",
-          "value": "*"
-        },
-        {
-          "key": "Access-Control-Allow-Methods",
-          "value": "POST, OPTIONS"
-        },
-        {
-          "key": "Access-Control-Allow-Headers",
-          "value": "Content-Type"
-        }
-      ]
-    },
-    {
-      "source": "/:path*",
-      "headers": [
-        {
-          "key": "X-Content-Type-Options",
-          "value": "nosniff"
-        },
-        {
-          "key": "X-Frame-Options",
-          "value": "DENY"
-        },
-        {
-          "key": "X-XSS-Protection",
-          "value": "1; mode=block"
-        },
-        {
-          "key": "Referrer-Policy",
-          "value": "strict-origin-when-cross-origin"
-        },
-        {
-          "key": "Permissions-Policy",
-          "value": "geolocation=(), microphone=()"
-        }
-      ]
-    }
-  ],
-  "rewrites": [
-    {
-      "source": "/admin/:path*",
-      "destination": "/admin/:path*"
-    },
-    {
-      "source": "/:path*",
-      "destination": "/:path*"
     }
   ]
 }
