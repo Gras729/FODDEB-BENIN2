@@ -1,5 +1,6 @@
 {
   "version": 2,
+  "outputDirectory": "public",
   "rewrites": [
     { "source": "/api/auth/:path*",       "destination": "/api/auth/index.js" },
     { "source": "/api/membres/:path*",    "destination": "/api/membres/index.js" },
