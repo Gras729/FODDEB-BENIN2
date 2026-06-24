@@ -501,7 +501,13 @@ tbody tr:hover td { background: rgba(26,127,193,.04); }
       </div>
       <div class="mb-3">
         <label>Mot de passe</label>
-        <input type="password" id="login-password" placeholder="••••••••" autocomplete="current-password">
+        <div style="position:relative">
+          <input type="password" id="login-password" placeholder="••••••••" autocomplete="current-password" style="padding-right:2.5rem">
+          <button type="button" onclick="togglePwd('login-password','eye-login')"
+            style="position:absolute;right:.6rem;top:50%;transform:translateY(-50%);background:none;border:none;color:var(--c-muted);cursor:pointer;padding:0;display:flex;align-items:center;">
+            <iconify-icon id="eye-login" icon="mdi:eye-outline" style="font-size:1.1rem"></iconify-icon>
+          </button>
+        </div>
       </div>
       <div id="login-error" class="text-danger mb-2" style="font-size:.8rem;display:none;"></div>
       <button class="btn-primary w-100 justify-content-center" onclick="doLogin()" id="btn-login">
@@ -1319,6 +1325,19 @@ async function api(endpoint, payload) {
     body: JSON.stringify(payload),
   });
   return r.json();
+}
+
+// ── TOGGLE MOT DE PASSE ───────────────────────────────────
+function togglePwd(inputId, iconId) {
+  const input = document.getElementById(inputId);
+  const icon  = document.getElementById(iconId);
+  if (input.type === 'password') {
+    input.type = 'text';
+    icon.setAttribute('icon', 'mdi:eye-off-outline');
+  } else {
+    input.type = 'password';
+    icon.setAttribute('icon', 'mdi:eye-outline');
+  }
 }
 
 // ── AUTH ──────────────────────────────────────────────────
