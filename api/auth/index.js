@@ -18,37 +18,56 @@ function makeTransport() {
 }
 
 module.exports = async function handler(req, res) {
+  // CORS preflight
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+  if (req.method === 'OPTIONS') return res.status(200).end();
   if (req.method !== 'POST') return err(res, 'Méthode non autorisée', 405);
-  const { action, ...body } = req.body || {};
+
+  // Parsing body manuel si nécessaire
+  let body = req.body;
+  if (!body || typeof body === 'string') {
+    try { body = JSON.parse(body || '{}'); } catch(e) { body = {}; }
+  }
+
+  const { action, ...payload } = body;
   if (!action) return err(res, 'Action manquante');
-  const ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
+
+  const ip = req.headers['x-forwarded-for'] || req.socket?.remoteAddress || '';
+
   try {
     switch (action) {
-      case 'login':          return await actionLogin(body, res, ip);
-      case 'verify_otp':     return await actionVerifyOtp(body, res, ip);
-      case 'reset_password': return await actionResetPassword(body, res, ip);
-      case 'logout':         return await actionLogout(body, res);
+      case 'login':          return await actionLogin(payload, res, ip);
+      case 'verify_otp':     return await actionVerifyOtp(payload, res, ip);
+      case 'reset_password': return await actionResetPassword(payload, res, ip);
+      case 'logout':         return await actionLogout(payload, res);
       default:               return err(res, 'Action inconnue');
     }
   } catch (e) {
-    console.error('[auth]', e.message);
+    console.error('[auth] ERREUR :', e.message, e.stack);
     return err(res, 'Erreur interne : ' + e.message, 500);
   }
 };
 
 async function actionLogin({ email, password }, res, ip) {
+  console.log('[auth] login attempt:', email);
   if (!email || !password) return err(res, 'Email et mot de passe requis.');
 
-  const { data: membre, error } = await supabase
+  const { data: membre, error: dbError } = await supabase
     .from('membres')
     .select('id, prenom, email, password_hash, statut, role')
     .eq('email', email.toLowerCase().trim())
     .single();
 
-  if (error || !membre) return err(res, 'Identifiants invalides.', 401);
+  console.log('[auth] membre trouvé:', membre ? 'oui' : 'non', dbError?.message);
+
+  if (dbError || !membre) return err(res, 'Identifiants invalides.', 401);
   if (membre.statut !== 'actif') return err(res, 'Compte inactif ou suspendu.', 403);
 
   const valid = await bcrypt.compare(password, membre.password_hash || '');
+  console.log('[auth] bcrypt valid:', valid);
+
   if (!valid) return err(res, 'Identifiants invalides.', 401);
 
   const code      = String(Math.floor(100000 + Math.random() * 900000));
@@ -71,6 +90,7 @@ async function actionLogin({ email, password }, res, ip) {
       subject: 'Votre code de connexion FODDEB',
       html:    `<p>Bonjour ${membre.prenom},</p><p>Code : <strong style="font-size:24px">${code}</strong></p><p>Expire dans ${OTP_TTL_MIN} minutes.</p>`,
     });
+    console.log('[auth] OTP envoyé à', email);
   } catch (mailErr) {
     console.error('[auth] Email OTP non envoyé :', mailErr.message);
   }
@@ -111,11 +131,7 @@ async function actionVerifyOtp({ email, code }, res, ip) {
   const expiresAt = new Date(Date.now() + SESSION_TTL_H * 3600 * 1000).toISOString();
 
   await supabase.from('sessions').insert({
-    membre_id:  otpRow.membre_id,
-    token,
-    expires_at: expiresAt,
-    ip,
-    user_agent: '',
+    membre_id: otpRow.membre_id, token, expires_at: expiresAt, ip, user_agent: '',
   });
 
   const { data: membre } = await supabase
@@ -132,7 +148,7 @@ async function actionResetPassword({ email, code, newPassword }, res, ip) {
   if (!code) {
     if (!email) return err(res, 'Email requis.');
     const { data: membre } = await supabase
-      .from('membres').select('id, prenom, email').eq('email', email.toLowerCase()).single();
+      .from('membres').select('id, prenom').eq('email', email.toLowerCase()).single();
 
     if (membre) {
       const otpCode   = String(Math.floor(100000 + Math.random() * 900000));
@@ -147,11 +163,11 @@ async function actionResetPassword({ email, code, newPassword }, res, ip) {
         await t.sendMail({
           from: `"FODDEB" <${process.env.GMAIL_USER}>`, to: email,
           subject: 'Réinitialisation mot de passe FODDEB',
-          html: `<p>Code : <strong>${otpCode}</strong> — expire dans ${OTP_TTL_MIN} min.</p>`,
+          html: `<p>Bonjour ${membre.prenom},</p><p>Code : <strong>${otpCode}</strong> — expire dans ${OTP_TTL_MIN} min.</p>`,
         });
-      } catch(e) { console.error('[reset]', e.message); }
+      } catch(e) { console.error('[reset email]', e.message); }
     }
-    return ok(res, { message: 'Si l\'email existe, un code a été envoyé.' });
+    return ok(res, { message: "Si l'email existe, un code a été envoyé." });
   }
 
   if (!email || !code || !newPassword) return err(res, 'Données incomplètes.');
