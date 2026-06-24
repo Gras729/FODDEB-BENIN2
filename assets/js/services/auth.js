@@ -1,142 +1,86 @@
 /* ============================================================
-   FODDEB — auth.js  (assets/js/services/auth.js)
-   Gestion authentification : login, OTP, session, rôles
+   FODDEB — assets/js/services/auth.js
+   Authentification : login → OTP serveur → session locale
+   Backend : API routes Vercel (plus GAS)
    ============================================================ */
 
 'use strict';
 
 const FODDEB_AUTH = (() => {
 
-  const OTP_TTL_MS    = 5 * 60 * 1000; // 5 minutes
-  const MAX_ATTEMPTS  = 5;
-  const LOCKOUT_MS    = 15 * 60 * 1000; // 15 minutes
+  const SESSION_KEY = 'foddeb_membre';
+  const TOKEN_KEY   = 'foddeb_token';
 
-  /* -------- Stockage temporaire OTP (sessionStorage) -------- */
-  const otpStore = {
-    save(userId, otp) {
-      sessionStorage.setItem('foddeb_otp', JSON.stringify({
-        userId, otp, expires: Date.now() + OTP_TTL_MS, attempts: 0
-      }));
-    },
-    get() {
-      try { return JSON.parse(sessionStorage.getItem('foddeb_otp')); } catch { return null; }
-    },
-    clear() { sessionStorage.removeItem('foddeb_otp'); },
-    isExpired() {
-      const d = this.get();
-      return !d || Date.now() > d.expires;
-    },
-    incrementAttempts() {
-      const d = this.get();
-      if (!d) return;
-      d.attempts = (d.attempts || 0) + 1;
-      sessionStorage.setItem('foddeb_otp', JSON.stringify(d));
-      return d.attempts;
-    }
+  /* ══════════════════════════════════════════════════════════
+     ÉTAPE 1 — Login email + password
+     Appelle /api/auth { action: 'login' }
+     Le serveur envoie un OTP par Gmail SMTP.
+  ══════════════════════════════════════════════════════════ */
+  const stepLogin = async (email, password) => {
+    const res = await FODDEB_API.auth.login(email, password);
+    // Stocker l'email temporairement pour l'étape OTP
+    sessionStorage.setItem('foddeb_pending_email', email.toLowerCase().trim());
+    return { success: true, message: res.message };
   };
 
-  /* -------- Brute-force protection -------- */
-  const lockout = {
-    key:    'foddeb_lockout',
-    check() {
-      const d = JSON.parse(localStorage.getItem(this.key) || '{}');
-      if (d.until && Date.now() < d.until) {
-        const remaining = Math.ceil((d.until - Date.now()) / 60000);
-        throw new Error(`Trop de tentatives. Réessayez dans ${remaining} min.`);
-      }
-    },
-    register() {
-      const d = JSON.parse(localStorage.getItem(this.key) || '{"count":0}');
-      d.count = (d.count || 0) + 1;
-      if (d.count >= MAX_ATTEMPTS) {
-        d.until = Date.now() + LOCKOUT_MS;
-        d.count = 0;
-      }
-      localStorage.setItem(this.key, JSON.stringify(d));
-    },
-    reset() { localStorage.removeItem(this.key); }
+  /* ══════════════════════════════════════════════════════════
+     ÉTAPE 2 — Vérification OTP
+     Appelle /api/auth { action: 'verify_otp' }
+     Le serveur retourne { token, membre, expiresAt }
+  ══════════════════════════════════════════════════════════ */
+  const stepVerifyOTP = async (code) => {
+    const email = sessionStorage.getItem('foddeb_pending_email');
+    if (!email) throw new Error('Session expirée. Recommencez la connexion.');
+
+    const res = await FODDEB_API.auth.verifyOtp(email, code);
+
+    // Persister la session
+    localStorage.setItem(TOKEN_KEY,   res.token);
+    localStorage.setItem(SESSION_KEY, JSON.stringify(res.membre));
+    sessionStorage.setItem('foddeb_session_token', res.token);
+    sessionStorage.removeItem('foddeb_pending_email');
+
+    return { success: true, user: res.membre };
   };
 
-  /* ============================================================
-     ÉTAPE 1 — Vérification identifiant + mot de passe
-  ============================================================ */
-  const stepLogin = async (identifier, password) => {
-    lockout.check();
-
-    const passwordHash = await FODDEB.hashPassword(password);
-    let user;
-
-    try {
-      const res = await FODDEB_API.auth.login(identifier, passwordHash);
-      user = res.user;
-    } catch (err) {
-      lockout.register();
-      throw err;
-    }
-
-    // Stocker userId temporairement pour l'étape OTP
-    sessionStorage.setItem('foddeb_pending_user', JSON.stringify(user));
-
-    // Générer et envoyer OTP
-    const otp = FODDEB.generateOTP();
-    otpStore.save(user.id, otp);
-
-    // En production : appel API pour envoi email
-    await FODDEB_API.auth.sendOTP(user.id, user.email);
-    // En développement — afficher dans console pour tests
-    if (location.hostname === 'localhost' || location.hostname === '127.0.0.1') {
-      console.info(`[DEV] OTP pour ${user.email} : ${otp}`);
-    }
-
-    lockout.reset();
-    return { success: true, email: user.email, maskedEmail: maskEmail(user.email) };
-  };
-
-  /* ============================================================
-     ÉTAPE 2 — Validation OTP
-  ============================================================ */
-  const stepVerifyOTP = async (otpInput) => {
-    const stored = otpStore.get();
-
-    if (!stored)           throw new Error('Session expirée. Recommencez.');
-    if (otpStore.isExpired()) { otpStore.clear(); throw new Error('Code OTP expiré. Recommencez.'); }
-
-    const attempts = otpStore.incrementAttempts();
-    if (attempts > 3) { otpStore.clear(); throw new Error('Trop de tentatives OTP. Recommencez.'); }
-
-    // Validation côté serveur
-    const res = await FODDEB_API.auth.verifyOTP(stored.userId, otpInput);
-    if (!res.valid) throw new Error(`Code OTP incorrect. ${3 - attempts} essai(s) restant(s).`);
-
-    // OTP validé → ouvrir session et sauvegarder le token de session
-    const user = JSON.parse(sessionStorage.getItem('foddeb_pending_user') || '{}');
-    FODDEB.session.set(user);
-    // sessionToken retourné par le GAS — stocker pour les appels sécurisés
-    if (res.sessionToken) FODDEB.session.setToken(res.sessionToken);
-    otpStore.clear();
-    sessionStorage.removeItem('foddeb_pending_user');
-
-    return { success: true, user };
-  };
-
-  /* ============================================================
+  /* ══════════════════════════════════════════════════════════
      DÉCONNEXION
-  ============================================================ */
-  const logout = (redirect = '/login.html') => {
-    FODDEB.session.clear();
-    otpStore.clear();
-    sessionStorage.removeItem('foddeb_pending_user');
-    window.location.href = redirect;
+  ══════════════════════════════════════════════════════════ */
+  const logout = async (redirect = '/') => {
+    const token = localStorage.getItem(TOKEN_KEY);
+    try {
+      if (token) await FODDEB_API.auth.logout(token);
+    } catch (e) {
+      console.warn('[auth] logout serveur :', e.message);
+    }
+    localStorage.removeItem(TOKEN_KEY);
+    localStorage.removeItem(SESSION_KEY);
+    sessionStorage.removeItem('foddeb_session_token');
+    sessionStorage.removeItem('foddeb_pending_email');
+    if (redirect) window.location.href = redirect;
   };
 
-  /* ============================================================
+  /* ══════════════════════════════════════════════════════════
+     SESSION — Lecture locale
+  ══════════════════════════════════════════════════════════ */
+  const getUser = () => {
+    try {
+      return JSON.parse(localStorage.getItem(SESSION_KEY));
+    } catch { return null; }
+  };
+
+  const getToken = () => localStorage.getItem(TOKEN_KEY) || null;
+
+  const isLoggedIn = () => !!getToken() && !!getUser();
+
+  /* ══════════════════════════════════════════════════════════
      GUARDS — Protection des pages
-  ============================================================ */
+  ══════════════════════════════════════════════════════════ */
   const requireAuth = (roles = []) => {
-    const user = FODDEB.session.get();
-    if (!user) {
+    const user = getUser();
+    if (!user || !getToken()) {
       sessionStorage.setItem('foddeb_redirect', window.location.href);
-      window.location.href = '/login.html';
+      window.location.href = '/auth/login.html';
       return false;
     }
     if (roles.length && !roles.includes(user.role)) {
@@ -148,41 +92,62 @@ const FODDEB_AUTH = (() => {
 
   const requireAdmin   = () => requireAuth(['admin']);
   const requireManager = () => requireAuth(['admin', 'manager']);
-  const requireMember  = () => requireAuth(['admin', 'manager', 'member', 'donor']);
+  const requireMember  = () => requireAuth(['admin', 'manager', 'member']);
 
-  /* ============================================================
+  /* ══════════════════════════════════════════════════════════
+     RESET MOT DE PASSE
+  ══════════════════════════════════════════════════════════ */
+  const resetRequest = async (email) => {
+    await FODDEB_API.auth.resetRequest(email);
+    sessionStorage.setItem('foddeb_reset_email', email.toLowerCase().trim());
+    return { success: true };
+  };
+
+  const resetConfirm = async (code, newPassword) => {
+    const email = sessionStorage.getItem('foddeb_reset_email');
+    if (!email) throw new Error('Session expirée. Recommencez.');
+    await FODDEB_API.auth.resetConfirm(email, code, newPassword);
+    sessionStorage.removeItem('foddeb_reset_email');
+    return { success: true };
+  };
+
+  /* ══════════════════════════════════════════════════════════
      UTILS
-  ============================================================ */
+  ══════════════════════════════════════════════════════════ */
   const maskEmail = (email) => {
+    if (!email) return '';
     const [name, domain] = email.split('@');
     return name.slice(0, 2) + '***@' + domain;
   };
 
   const getRoleLabel = (role) => ({
     admin:   'Administrateur',
-    manager: 'Gestionnaire',
+    manager: 'Manager',
     member:  'Membre',
-    donor:   'Donateur',
   }[role] || role);
 
   const getRoleBadgeColor = (role) => ({
-    admin:   '#1B5E20',
-    manager: '#1565C0',
-    member:  '#4A5568',
-    donor:   '#F57F17',
-  }[role] || '#4A5568');
+    admin:   '#2d8a4e',
+    manager: '#f0a500',
+    member:  '#64748b',
+  }[role] || '#64748b');
 
   return {
     stepLogin,
     stepVerifyOTP,
     logout,
+    getUser,
+    getToken,
+    isLoggedIn,
     requireAuth,
     requireAdmin,
     requireManager,
     requireMember,
+    resetRequest,
+    resetConfirm,
+    maskEmail,
     getRoleLabel,
     getRoleBadgeColor,
-    maskEmail,
   };
 
 })();
