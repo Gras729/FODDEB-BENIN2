@@ -2,7 +2,6 @@
   "name": "foddeb",
   "version": "1.0.0",
   "description": "FODDEB — Plateforme de gestion associative. Backend : Supabase. Hébergement : Vercel.",
-  "type": "module",
   "engines": { "node": ">=18" },
   "dependencies": {
     "@supabase/supabase-js": "^2.43.0",
@@ -10,12 +9,7 @@
     "formidable": "^3.5.1",
     "nodemailer": "^6.9.13"
   },
-  "devDependencies": {
-    "supabase": "^1.168.0"
-  },
   "scripts": {
-    "dev":   "vercel dev",
-    "build": "echo 'Rien à compiler — HTML/CSS/JS statique'",
-    "db:push": "supabase db push"
+    "build": "echo 'Rien à compiler — HTML/CSS/JS statique'"
   }
 }
