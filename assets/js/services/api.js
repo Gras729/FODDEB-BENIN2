@@ -1,326 +1,226 @@
 /* ============================================================
-   FODDEB — api.js  (assets/js/services/api.js)
-   Connecteur Google Apps Script (GAS) — base de données Sheets
+   FODDEB — assets/js/services/api.js
+   Client API universel — pointe vers les routes Vercel /api/...
+   Remplace l'ancien client GAS (doGet/doPost Apps Script).
    ============================================================ */
 
-/* ── Guard double-inclusion ────────────────────────────────────────────────
-   'var' tolère la re-déclaration. config.js doit être chargé avant api.js.
-   'document.write' supprimé — config.js est chargé en 1er dans le <head>.
-   ────────────────────────────────────────────────────────────────────────── */
 'use strict';
 
-// eslint-disable-next-line no-var
-var FODDEB_API = window.FODDEB_API || (() => {
+const FODDEB_API = (() => {
 
-  const GAS_URL = '/api/gas';
+  const BASE = window.location.origin; // même domaine Vercel
 
-  /* -------- Requête générique — timeout adaptatif -------- */
-  const request = async (action, payload = {}, timeoutMs = 15_000) => {
-    const body       = JSON.stringify({ action, ...payload });
-    const controller = new AbortController();
-    const timer      = setTimeout(() => controller.abort(), timeoutMs);
-    try {
-      const resp = await fetch(GAS_URL, {
+  /* ── Appel générique ──────────────────────────────────────── */
+  async function call(endpoint, payload = {}) {
+    const headers = { 'Content-Type': 'application/json' };
+
+    // Injecter le token de session si disponible
+    const token = sessionStorage.getItem('foddeb_session_token')
+               || localStorage.getItem('foddeb_token');
+    if (token) headers['Authorization'] = `Bearer ${token}`;
+
+    const res = await fetch(`${BASE}/api/${endpoint}`, {
+      method:  'POST',
+      headers,
+      body:    JSON.stringify(payload),
+    });
+
+    let data;
+    try { data = await res.json(); } catch (e) {
+      throw new Error('Réponse serveur invalide.');
+    }
+
+    if (!data.success) throw new Error(data.error || 'Erreur inconnue.');
+    return data;
+  }
+
+  /* ══════════════════════════════════════════════════════════
+     AUTH
+  ══════════════════════════════════════════════════════════ */
+  const auth = {
+    login:    (email, password)        => call('auth', { action: 'login', email, password }),
+    verifyOtp:(email, code)            => call('auth', { action: 'verify_otp', email, code }),
+    logout:   (token)                  => call('auth', { action: 'logout', token }),
+    resetRequest: (email)              => call('auth', { action: 'reset_password', email }),
+    resetConfirm: (email, code, pwd)   => call('auth', { action: 'reset_password', email, code, newPassword: pwd }),
+  };
+
+  /* ══════════════════════════════════════════════════════════
+     MEMBRES
+  ══════════════════════════════════════════════════════════ */
+  const membres = {
+    create:        (data)              => call('membres', { action: 'create', ...data }),
+    list:          (filters = {})      => call('membres', { action: 'list', ...filters }),
+    get:           (id)                => call('membres', { action: 'get', id }),
+    update:        (id, data)          => call('membres', { action: 'update', id, ...data }),
+    updateRole:    (id, role)          => call('membres', { action: 'update_role', id, role }),
+    updateStatut:  (id, statut)        => call('membres', { action: 'update_statut', id, statut }),
+    delete:        (id)                => call('membres', { action: 'delete', id }),
+    checkEmail:    (value)             => call('membres', { action: 'check_email', value }),
+    checkPhone:    (value)             => call('membres', { action: 'check_phone', value }),
+    checkCni:      (value)             => call('membres', { action: 'check_cni', value }),
+  };
+
+  /* ══════════════════════════════════════════════════════════
+     DONS
+  ══════════════════════════════════════════════════════════ */
+  const dons = {
+    create:  (data)                    => call('dons', { action: 'create', ...data }),
+    list:    (filters = {})            => call('dons', { action: 'list', ...filters }),
+    get:     (id)                      => call('dons', { action: 'get', id }),
+    update:  (id, data)                => call('dons', { action: 'update', id, ...data }),
+    delete:  (id)                      => call('dons', { action: 'delete', id }),
+  };
+
+  /* ══════════════════════════════════════════════════════════
+     PROJETS
+  ══════════════════════════════════════════════════════════ */
+  const projets = {
+    listPublic: (filters = {})         => call('projets', { action: 'list_public', ...filters }),
+    list:       (filters = {})         => call('projets', { action: 'list', ...filters }),
+    get:        (id)                   => call('projets', { action: 'get', id }),
+    create:     (data)                 => call('projets', { action: 'create', ...data }),
+    update:     (id, data)             => call('projets', { action: 'update', id, ...data }),
+    delete:     (id)                   => call('projets', { action: 'delete', id }),
+  };
+
+  /* ══════════════════════════════════════════════════════════
+     ACTUALITÉS
+  ══════════════════════════════════════════════════════════ */
+  const actualites = {
+    listPublic: (filters = {})         => call('actualites', { action: 'list_public', ...filters }),
+    list:       (filters = {})         => call('actualites', { action: 'list', ...filters }),
+    get:        (id)                   => call('actualites', { action: 'get', id }),
+    create:     (data)                 => call('actualites', { action: 'create', ...data }),
+    update:     (id, data)             => call('actualites', { action: 'update', id, ...data }),
+    delete:     (id)                   => call('actualites', { action: 'delete', id }),
+  };
+
+  /* ══════════════════════════════════════════════════════════
+     NEWSLETTER
+  ══════════════════════════════════════════════════════════ */
+  const newsletter = {
+    subscribe:   (email, nom, source)  => call('newsletter', { action: 'subscribe', email, nom, source }),
+    unsubscribe: (email)               => call('newsletter', { action: 'unsubscribe', email }),
+    list:        (filters = {})        => call('newsletter', { action: 'list', ...filters }),
+    delete:      (id)                  => call('newsletter', { action: 'delete', id }),
+  };
+
+  /* ══════════════════════════════════════════════════════════
+     CONTACTS
+  ══════════════════════════════════════════════════════════ */
+  const contact = {
+    send:          (data)              => call('contacts', { action: 'send', ...data }),
+    list:          (filters = {})      => call('contacts', { action: 'list', ...filters }),
+    updateStatut:  (id, statut)        => call('contacts', { action: 'update_statut', id, statut }),
+    delete:        (id)                => call('contacts', { action: 'delete', id }),
+  };
+
+  /* ══════════════════════════════════════════════════════════
+     BAILLEURS
+  ══════════════════════════════════════════════════════════ */
+  const bailleurs = {
+    list:    (filters = {})            => call('bailleurs', { action: 'list', ...filters }),
+    get:     (id)                      => call('bailleurs', { action: 'get', id }),
+    create:  (data)                    => call('bailleurs', { action: 'create', ...data }),
+    update:  (id, data)                => call('bailleurs', { action: 'update', id, ...data }),
+    delete:  (id)                      => call('bailleurs', { action: 'delete', id }),
+  };
+
+  /* ══════════════════════════════════════════════════════════
+     RAPPORTS
+  ══════════════════════════════════════════════════════════ */
+  const rapports = {
+    list:    (filters = {})            => call('rapports', { action: 'list', ...filters }),
+    get:     (id)                      => call('rapports', { action: 'get', id }),
+    create:  (data)                    => call('rapports', { action: 'create', ...data }),
+    update:  (id, data)                => call('rapports', { action: 'update', id, ...data }),
+    delete:  (id)                      => call('rapports', { action: 'delete', id }),
+  };
+
+  /* ══════════════════════════════════════════════════════════
+     PARAMÈTRES
+  ══════════════════════════════════════════════════════════ */
+  const parametres = {
+    get:     ()                        => call('parametres', { action: 'get' }),
+    update:  (data)                    => call('parametres', { action: 'update', ...data }),
+  };
+
+  /* ══════════════════════════════════════════════════════════
+     UPLOAD (Supabase Storage)
+  ══════════════════════════════════════════════════════════ */
+  const upload = {
+    /**
+     * @param {File}   file    - objet File du input
+     * @param {string} bucket  - ex. 'membres-photos'
+     * @param {string} path    - ex. 'uuid-membre/photo'
+     */
+    async send(file, bucket, path) {
+      const token = sessionStorage.getItem('foddeb_session_token')
+                 || localStorage.getItem('foddeb_token');
+      const form = new FormData();
+      form.append('file',   file);
+      form.append('bucket', bucket);
+      form.append('path',   path);
+
+      const res = await fetch(`${BASE}/api/upload`, {
         method:  'POST',
-        headers: { 'Content-Type': 'text/plain' },
-        signal:  controller.signal,
-        body,
+        headers: token ? { 'Authorization': `Bearer ${token}` } : {},
+        body:    form,
       });
-      clearTimeout(timer);
-      if (!resp.ok) throw new Error(`Erreur réseau : ${resp.status}`);
-      const data = await resp.json();
-      if (data.error) throw new Error(data.error);
-      return data;
-    } catch (err) {
-      clearTimeout(timer);
-      if (err.name === 'AbortError')
-        throw new Error('Délai dépassé. Vérifiez votre connexion et réessayez.');
-      if (err.message === 'Failed to fetch' || err.message === 'NetworkError when attempting to fetch resource.')
-        throw new Error('Impossible de joindre le serveur. Vérifiez votre connexion internet.');
-      throw err;
+
+      let data;
+      try { data = await res.json(); } catch (e) {
+        throw new Error('Réponse serveur invalide.');
+      }
+      if (!data.success) throw new Error(data.error || 'Erreur upload.');
+      return data; // { url, path, bucket, size }
     }
   };
 
-  /* -------- Lecture session robuste (supporte ID/id, Role/role) -------- */
-  const getSession = () => {
-    try {
-      // Tentative 1 : FODDEB.session (dashboard membres)
-      let u = (window.FODDEB && FODDEB.session) ? FODDEB.session.get() : null;
-      // Tentative 2 : sessionStorage (pages admin — projets, dons, actualites...)
-      if (!u) {
-        const raw = sessionStorage.getItem('foddeb_user');
-        if (raw) u = JSON.parse(raw);
-      }
-      if (!u) return null;
-      return {
-        id:   u.ID   || u.id   || '',
-        role: u.Role || u.role || 'member',
-        raw:  u,
-      };
-    } catch { return null; }
-  };
-
-  // Docs Google — Actualités
-  const newsDocs = {
-    create: (id, Titre, Contenu) => request('news_doc_create', { id, Titre, Contenu }),
-    read:   (id)                 => request('news_doc_read',   { id }),
-    update: (id, html)           => request('news_doc_update', { id, html }),
-  };
-
-  // Docs Google — Projets
-  const projetsDocs = {
-    create: (id, Titre, Description) => request('projets_doc_create', { id, Titre, Description }),
-    read:   (id)                     => request('projets_doc_read',   { id }),
-    update: (id, html)               => request('projets_doc_update', { id, html }),
-  };
-
-  /* ============================================================
-     AUTHENTIFICATION
-  ============================================================ */
-  const auth = {
-    login:          (identifier, passwordHash, recaptchaToken) =>
-                      request('auth_login', { identifier, passwordHash, recaptchaToken }),
-    sendOTP:        (userId, email) =>
-                      request('auth_send_otp', { userId, email }),
-    verifyOTP:      (userId, otp) =>
-                      request('auth_verify_otp', { userId, otp }),
-    resetPassword:  (email) =>
-                      request('auth_reset_password', { email }),
-    changePassword: (userId, oldHash, newHash) =>
-                      request('auth_change_password', { userId, oldHash, newHash }),
-  };
-
-  /* ============================================================
-     MEMBRES
-  ============================================================ */
-  const members = {
-    list:      (page = 1, perPage = 20, search = '') =>
-                 request('members_list', { page, perPage, search }),
-    get:       (id)       => request('members_get', { id }),
-    create:    (data)     => request('members_create', data),
-    update:    (id, data) => request('members_update', { id, ...data }),
-    delete:    (id)       => request('members_delete', { id }),
-    validate:  (id)       => request('members_validate', { id }),
-    reject:    (id, reason) => request('members_reject', { id, reason }),
-    setRole:   (id, role) => request('members_set_role', { id, role }),
-    stats:     ()         => request('members_stats'),
-    exportCSV: ()         => request('members_export'),
-
-    checkEmail: (email) => request('members_check_email', { email }),
-    checkPhone: (phone) => request('members_check_phone', { phone }),
-    checkCni:   (cni)   => request('members_check_cni',   { cni }),
-
-    /* ─── Upload fichier PROJET vers Drive ─────────────────────────────
-     * FIX : renommé en uploadProjectFile pour éviter le conflit
-     * avec uploadFile (inscriptions membres).
-     * context   : 'projet'
-     * contextId : ID temporaire du projet (ex: 'proj_1717123456789')
-     * Retourne  : { success, url, fileName }
-     */
-    // sessionToken requis côté GAS pour vérifier que le membre modifie bien sa propre photo
-    uploadProfilePhoto: (base64, mimeType, membreId, sessionToken = null) =>
-      request('upload_profile_photo', { base64, mimeType, membreId, sessionToken }),
-
-    // Récupère une photo Drive en data URI base64 — utilisé par downloadBadge()
-    // pour contourner la restriction "tainted canvas" de html2canvas.
-    getPhotoBase64: (fileId) => request('get_photo_base64', { fileId }),
-
-    uploadProjectFile: (base64, fileName, mimeType, context, contextId) =>
-                         request('upload_file', { base64, fileName, mimeType, context, contextId }, 30_000),
-
-    /* ─── Upload fichier INSCRIPTION membre ────────────────────────────
-     * Phase 2 inscription — upload photo/CNI après création du compte
-     * memberId : ID du membre dans la feuille Membres
-     * fileType : 'photo' | 'cni' | 'autre'
-     */
-    uploadFile: (memberId, fileType, base64, mime) =>
-                  request('member_upload_file', { memberId, fileType, base64, mime }, 30_000),
-
-    /* Phase 3 — email admin après tous les uploads */
-    finalize: (memberId) => request('member_finalize', { memberId }),
-  };
-
-  /* ============================================================
-     DONS
-  ============================================================ */
-  const dons = {
-    list:      (page = 1, filters = {}) => request('dons_list', { page, ...filters }),
-    get:       (id)               => request('dons_get', { id }),
-    create:    (data)             => request('dons_create', data),
-    confirm:   (id, fedapayRef)   => request('dons_confirm', { id, fedapayRef }),
-    stats:     ()                 => request('dons_stats'),
-    history:   (userId)           => request('dons_history', { userId }),
-    exportCSV: ()                 => request('dons_export'),
-  };
-
-  /* ============================================================
-     PROJETS
-  ============================================================ */
-  const projets = {
-    list: (filters = {}) => {
-      /* Injection automatique membreId + role depuis session.
-       * Timeout 30s : GAS Apps Script peut avoir un cold start de 10-20s. */
-      const sess = getSession();
-      return request('projets_list', {
-        membreId: sess ? sess.id   : '',
-        role:     sess ? sess.role : 'member',
-        ...filters,
-      }, 30_000);
-    },
-
-    get: (id) => request('projets_get', { id }),
-
-    create: (data) => {
-      const sess = getSession();
-      return request('projets_create', {
-        membreId: sess ? sess.id : '',
-        ...data,
-      });
-    },
-
-    update: (id, data) => {
-      const sess = getSession();
-      return request('projets_update', {
-        id,
-        membreId: sess ? sess.id   : '',
-        role:     sess ? sess.role : 'member',
-        ...data,
-      });
-    },
-
-    delete: (id) => {
-      const sess = getSession();
-      return request('projets_delete', {
-        id,
-        membreId: sess ? sess.id   : '',
-        role:     sess ? sess.role : 'member',
-      });
-    },
-
-    addActivity:    (projetId, data) => request('projets_add_activity', { projetId, ...data }),
-    updateProgress: (id, progress)   => request('projets_update_progress', { id, progress }),
-    stats:          ()               => request('projets_stats'),
-  };
-
-  /* ============================================================
-     ACTUALITÉS
-  ============================================================ */
+  /* ══════════════════════════════════════════════════════════
+     COMPATIBILITÉ ANCIENNE API GAS
+     Alias pour ne pas casser les appels existants dans index.html
+  ══════════════════════════════════════════════════════════ */
   const news = {
-    list:    (page = 1, perPage = 10) => request('news_list', { page, perPage }, 30_000),
-    get:     (id)       => request('news_get', { id }),
-    create:  (data)     => request('news_create', data),
-    update:  (id, data) => request('news_update', { id, ...data }),
-    delete:  (id)       => request('news_delete', { id }),
-    publish: (id)       => request('news_publish', { id }),
+    list: (page = 1, limit = 10) => actualites.listPublic({ limit, offset: (page - 1) * limit }),
   };
 
-  /* ============================================================
-     NEWSLETTER
-  ============================================================ */
-  const newsletter = {
-    subscribe:   (email, nom = '') => request('newsletter_subscribe', { email, nom }),
-    unsubscribe: (email)           => request('newsletter_unsubscribe', { email }),
-    list:        ()                => request('newsletter_list'),
-    send:        (subject, htmlBody, test = false) => request('newsletter_send', { subject, htmlBody, test }),
-    stats:       ()                => request('newsletter_stats'),
-  };
-
-  /* ============================================================
-     CONTACT
-  ============================================================ */
-  const contact = {
-    send: (data) => request('contact_send', data),
-    list: ()     => request('contact_list'),
-  };
-
-  /* ============================================================
-     TABLEAU DE BORD
-  ============================================================ */
-  const dashboard = {
-    stats:         ()                 => request('dashboard_stats'),
-    recentDons:    (limit = 5)        => request('dashboard_recent_dons', { limit }),
-    recentMembers: (limit = 5)        => request('dashboard_recent_members', { limit }),
-    chartDons:     (period = 'month') => request('dashboard_chart_dons', { period }),
-    chartMembers:  (period = 'month') => request('dashboard_chart_members', { period }),
-    alerts:        ()                 => request('dashboard_alerts'),
-  };
-
-  /* ============================================================
-     FEDAPAY — Paiement
-  ============================================================ */
   const fedapay = {
-    initTransaction: (amount, customer, description) =>
-                       request('fedapay_init', { amount, customer, description }),
-    checkStatus:     (transactionId) =>
-                       request('fedapay_status', { transactionId }),
-  };
-
-  /* ============================================================
-     RESSOURCES & ÉVÉNEMENTS — publics, page d'accueil
-  ============================================================ */
-  const ressources = {
-    list: () => request('ressources_list'),
-  };
-
-  const evenements = {
-    list: () => request('evenements_list'),
-  };
-
-  /* ============================================================
-     ADMIN — actions réservées au backoffice
-     Préfixe 'admin_' côté GAS pour distinguer des routes membres.
-     Appeler uniquement depuis les pages /admin/*.html.
-  ============================================================ */
-  const admin = {
-    upload: (base64, fileName, mimeType, context, contextId) =>
-              request('upload_file', { base64, fileName, mimeType, context, contextId }, 30_000),
-
-    // Membres
-    members: {
-      list:     (statut = '', limit = 50) => request('admin_members_list',     { statut, limit }),
-      validate: (id)                      => request('admin_members_validate', { id }),
-      update:   (id, data)                => request('admin_members_update',   { id, ...data }),
-      exportCSV: ()                       => request('members_export_csv'),
-    },
-
-    // Dons
-    dons: {
-      list:    (limit = 50) => request('admin_dons_list',    { limit }),
-      confirm: (id)         => request('admin_dons_confirm', { id }),
-    },
-
-    // Newsletter
-    newsletter: {
-      list:        (limit = 100)       => request('admin_newsletter_list',        { limit }),
-      subscribe:   (email, nom = '')   => request('admin_newsletter_subscribe',   { email, nom }),
-      unsubscribe: (email)             => request('admin_newsletter_unsubscribe', { email }),
-    },
-
-    // Actualités
-    news: {
-      list:    (limit = 100)  => request('admin_news_list',    { limit }),
-      create:  (data)         => request('admin_news_create',  data),
-      update:  (id, data)     => request('admin_news_update',  { id, ...data }),
-      publish: (id)           => request('admin_news_publish', { id }),
-      delete:  (id)           => request('admin_news_delete',  { id }),
+    // FedaPay est maintenant géré côté serveur dans api/dons/index.js
+    // Cette méthode retourne l'URL de paiement depuis la réponse du don créé
+    initTransaction: async (montant, customer, description) => {
+      const parts  = (customer.name || '').split(' ');
+      const prenom = parts[0] || '';
+      const nom    = parts.slice(1).join(' ') || prenom;
+      const res    = await dons.create({
+        prenom,
+        nom,
+        email:   customer.email,
+        montant,
+        type_don: 'don_libre',
+      });
+      return { payment_url: res.payment_url || null };
     },
   };
 
-  // Bailleurs
-  const bailleurs = {
-    list:   ()         => request('bailleurs_list'),
-    create: (data)     => request('bailleurs_create', data),
-    update: (id, data) => request('bailleurs_update', { id, ...data }),
-    delete: (id)       => request('bailleurs_delete', { id }),
+  return {
+    call,
+    auth,
+    membres,
+    dons,
+    projets,
+    actualites,
+    newsletter,
+    contact,
+    bailleurs,
+    rapports,
+    parametres,
+    upload,
+    // Alias compatibilité
+    news,
+    fedapay,
   };
-
-  // Paramètres
-  const parametres = {
-    get:    ()     => request('parametres_get'),
-    update: (data) => request('parametres_update', data),
-  };
-
-  return { auth, members, dons, projets, news, newsletter, contact, dashboard, fedapay, ressources, evenements, admin, bailleurs, parametres, newsDocs, projetsDocs };
 
 })();
 
