@@ -4,12 +4,12 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Rejoindre le réseau — FODDEB</title>
-  <link rel="manifest" href="/manifest.json"/>
+  <link rel="icon" href="/assets/icons/favicon.ico"/>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
   <script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js" defer></script>
-  <script src="https://www.google.com/recaptcha/api.js?render=6LdU3tksAAAAAOAIdgtC7xsQURksQ9mHAZ3MVLXF" async defer></script>
+  <script src="/assets/js/config.js"></script>
   <style>
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
     :root{
@@ -73,7 +73,7 @@
     .fsel:focus{border-color:var(--g5);background:var(--white);box-shadow:0 0 0 3px rgba(76,175,80,.12);}
     .fta{width:100%;padding:12px 14px;border:1.5px solid var(--gray-200);border-radius:var(--rs);font-family:var(--fb);font-size:14.5px;color:var(--gray-800);background:var(--gray-100);outline:none;transition:all .2s;resize:vertical;min-height:100px;}
     .fta:focus{border-color:var(--g5);background:var(--white);box-shadow:0 0 0 3px rgba(76,175,80,.12);}
-    .ferr{font-size:12px;color:var(--red);margin-top:5px;display:flex;align-items:center;gap:4px;}
+    .ferr{font-size:12px;color:var(--red);margin-top:5px;display:flex;align-items:center;gap:4px;min-height:18px;}
     .type-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:18px;}
     .type-opt{display:none;}
     .type-opt+label{display:flex;flex-direction:column;gap:6px;padding:16px 14px;border:1.5px solid var(--gray-200);border-radius:var(--r);cursor:pointer;transition:all .2s;background:var(--gray-100);}
@@ -99,30 +99,16 @@
     .up-bar{height:4px;background:var(--gray-200);border-radius:99px;overflow:hidden;}
     .up-fill{height:100%;background:var(--g7);border-radius:99px;transition:width .3s;}
     .up-label{font-size:11px;color:var(--g7);margin-top:4px;}
-
-    /* ═══ SIGNATURE PAD — corrige ═══ */
     .sig-container{border:1.5px solid var(--gray-200);border-radius:var(--rs);overflow:hidden;background:#fff;}
     .sig-toolbar{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:var(--g0);border-bottom:1px solid var(--g1);}
     .sig-toolbar-title{font-size:13px;font-weight:600;color:var(--g8);display:flex;align-items:center;gap:6px;}
     .sig-clear{display:flex;align-items:center;gap:6px;font-size:12.5px;font-weight:600;color:var(--red);cursor:pointer;padding:5px 10px;border-radius:5px;border:1px solid #FFCDD2;background:var(--redf);transition:all .2s;}
     .sig-clear:hover{background:#FFCDD2;}
-    /* LE FIX : le canvas occupe 100% de la largeur disponible.
-       Les dimensions width/height HTML sont définies dynamiquement par JS.
-       NE PAS mettre height fixe en CSS — laisser le JS contrôler. */
-    #sigCanvas{
-      display:block;
-      width:100%;
-      /* height contrôlé par l'attribut HTML = résolution réelle */
-      background:#fff;
-      cursor:crosshair;
-      touch-action:none;
-    }
+    #sigCanvas{display:block;width:100%;background:#fff;cursor:crosshair;touch-action:none;}
     .sig-hint{padding:8px 14px;font-size:12px;color:#B0BEC5;text-align:center;border-top:1px solid var(--g1);}
     .sig-status{display:flex;align-items:center;gap:6px;padding:8px 14px;font-size:12.5px;font-weight:600;border-top:1px solid var(--g1);}
     .sig-status.empty{color:#B0BEC5;}
     .sig-status.signed{color:var(--g7);}
-    /* ══════════════════════════════ */
-
     .pwd-strength{margin-top:8px;}
     .pwd-bar-wrap{display:flex;gap:3px;margin-bottom:5px;}
     .pbs{flex:1;height:4px;border-radius:2px;background:var(--gray-200);transition:background .3s;}
@@ -145,15 +131,7 @@
     .btn-next:disabled,.btn-submit:disabled{opacity:.55;cursor:not-allowed;transform:none;box-shadow:none;}
     .spinner{width:17px;height:17px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;display:inline-block;}
     @keyframes spin{to{transform:rotate(360deg)}}
-    @keyframes shake{
-      0%,100%{transform:translateX(0)}
-      15%    {transform:translateX(-7px)}
-      30%    {transform:translateX( 7px)}
-      45%    {transform:translateX(-5px)}
-      60%    {transform:translateX( 5px)}
-      75%    {transform:translateX(-3px)}
-      90%    {transform:translateX( 3px)}
-    }
+    @keyframes shake{0%,100%{transform:translateX(0)}15%{transform:translateX(-7px)}30%{transform:translateX(7px)}45%{transform:translateX(-5px)}60%{transform:translateX(5px)}75%{transform:translateX(-3px)}90%{transform:translateX(3px)}}
     .shake{animation:shake .45s cubic-bezier(.36,.07,.19,.97) both;}
     .reg-success{display:none;text-align:center;padding:40px 20px;}
     .reg-success.visible{display:block;}
@@ -177,12 +155,13 @@
 </head>
 <body>
 
-<!-- LEFT -->
+<!-- LEFT — identique à l'original -->
 <div class="auth-left">
   <div class="accent-bar" aria-hidden="true"></div>
   <div class="auth-logo">
     <div class="auth-logo-icon">
-      <img src="/assets/img/logo.png" alt="Logo FODDEB" onerror="this.style.display='none';this.parentElement.textContent='FOD'"/>
+      <img src="/assets/icons/logo-medium.png" alt="Logo FODDEB"
+           onerror="this.style.display='none';this.parentElement.textContent='FOD'"/>
     </div>
     <div class="auth-logo-text"><strong>FODDEB</strong><span>Droits de l'Enfant au Bénin</span></div>
   </div>
@@ -193,12 +172,12 @@
       <div class="benefit"><div class="benefit-icon"><iconify-icon icon="mdi:account-group-outline"></iconify-icon></div><span class="benefit-text">Accès au réseau des OSC membres</span></div>
       <div class="benefit"><div class="benefit-icon"><iconify-icon icon="mdi:clipboard-list-outline"></iconify-icon></div><span class="benefit-text">Participation aux projets collectifs</span></div>
       <div class="benefit"><div class="benefit-icon"><iconify-icon icon="mdi:email-newsletter"></iconify-icon></div><span class="benefit-text">Newsletter mensuelle et ressources exclusives</span></div>
-      <div class="benefit"><div class="benefit-icon"><iconify-icon icon="mdi:map-marker-radius-outline"></iconify-icon></div><span class="benefit-text">Visibilite sur la carte d'impact FODDEB</span></div>
+      <div class="benefit"><div class="benefit-icon"><iconify-icon icon="mdi:map-marker-radius-outline"></iconify-icon></div><span class="benefit-text">Visibilité sur la carte d'impact FODDEB</span></div>
     </div>
     <div class="devises">
-      <div class="devise-tag">Solidarite</div>
+      <div class="devise-tag">Solidarité</div>
       <div class="devise-tag">Justice</div>
-      <div class="devise-tag">Epanouissement</div>
+      <div class="devise-tag">Épanouissement</div>
     </div>
   </div>
   <div class="left-bottom">Agla Akplomey, Cotonou, Bénin · Fond. 10 Sept. 2015</div>
@@ -208,42 +187,78 @@
 <main class="auth-right" role="main">
   <div id="regFormWrap">
     <div class="page-top">
-      <a href="/auth/login.html" class="page-top-back"><iconify-icon icon="mdi:arrow-left"></iconify-icon> Retour</a>
-      <div class="page-top-login">Deja membre ? <a href="/auth/login.html">Se connecter</a></div>
+      <a href="/public/auth/login.html" class="page-top-back">
+        <iconify-icon icon="mdi:arrow-left"></iconify-icon> Retour
+      </a>
+      <div class="page-top-login">Déjà membre ? <a href="/public/auth/login.html">Se connecter</a></div>
     </div>
 
-    <!-- Progress -->
+    <!-- Barre de progression -->
     <div class="reg-progress" role="list">
-      <div class="reg-step"><div class="sc active" id="sc1">1</div><span class="sl active" id="sl1">Identite</span></div>
+      <div class="reg-step"><div class="sc active" id="sc1">1</div><span class="sl active" id="sl1">Identité</span></div>
       <div class="step-line" id="line1"></div>
       <div class="reg-step"><div class="sc" id="sc2">2</div><span class="sl" id="sl2">Organisation</span></div>
       <div class="step-line" id="line2"></div>
       <div class="reg-step"><div class="sc" id="sc3">3</div><span class="sl" id="sl3">Documents</span></div>
       <div class="step-line" id="line3"></div>
-      <div class="reg-step"><div class="sc" id="sc4">4</div><span class="sl" id="sl4">Securite</span></div>
+      <div class="reg-step"><div class="sc" id="sc4">4</div><span class="sl" id="sl4">Sécurité</span></div>
     </div>
 
-    <!-- STEP 1 -->
+    <!-- STEP 1 — Identité -->
     <div class="reg-section active" id="step1">
       <h2 class="reg-section-title">Vos informations personnelles</h2>
       <p class="reg-section-sub">Ces informations permettront à l'administrateur de valider votre adhésion au réseau.</p>
       <div class="form-row">
-        <div class="form-group"><label class="fl" for="prenom">Prénom <span class="req">*</span></label><div class="iw"><input type="text" id="prenom" class="fi" placeholder="Votre prénom" autocomplete="given-name"/><iconify-icon icon="mdi:account-outline" class="ii"></iconify-icon></div><span class="ferr" id="prenom-err"></span></div>
-        <div class="form-group"><label class="fl" for="nom">Nom <span class="req">*</span></label><div class="iw"><input type="text" id="nom" class="fi" placeholder="Votre nom" autocomplete="family-name"/><iconify-icon icon="mdi:account-outline" class="ii"></iconify-icon></div><span class="ferr" id="nom-err"></span></div>
+        <div class="form-group">
+          <label class="fl" for="prenom">Prénom <span class="req">*</span></label>
+          <div class="iw"><input type="text" id="prenom" class="fi" placeholder="Votre prénom" autocomplete="given-name"/><iconify-icon icon="mdi:account-outline" class="ii"></iconify-icon></div>
+          <span class="ferr" id="prenom-err"></span>
+        </div>
+        <div class="form-group">
+          <label class="fl" for="nom">Nom <span class="req">*</span></label>
+          <div class="iw"><input type="text" id="nom" class="fi" placeholder="Votre nom" autocomplete="family-name"/><iconify-icon icon="mdi:account-outline" class="ii"></iconify-icon></div>
+          <span class="ferr" id="nom-err"></span>
+        </div>
       </div>
-      <div class="form-group"><label class="fl" for="email">Email <span class="req">*</span></label><div class="iw"><input type="email" id="email" class="fi" placeholder="votre@email.com" autocomplete="email"/><iconify-icon icon="mdi:email-outline" class="ii"></iconify-icon></div><span class="ferr" id="email-err"></span></div>
+      <div class="form-group">
+        <label class="fl" for="email">Email <span class="req">*</span></label>
+        <div class="iw"><input type="email" id="email" class="fi" placeholder="votre@email.com" autocomplete="email"/><iconify-icon icon="mdi:email-outline" class="ii"></iconify-icon></div>
+        <span class="ferr" id="email-err"></span>
+      </div>
       <div class="form-row">
-        <div class="form-group"><label class="fl" for="telephone">Téléphone <span class="req">*</span></label><div class="iw"><input type="tel" id="telephone" class="fi" placeholder="+229 XX XX XX XX" autocomplete="tel"/><iconify-icon icon="mdi:phone-outline" class="ii"></iconify-icon></div><span class="ferr" id="tel-err"></span></div>
-        <div class="form-group"><label class="fl" for="genre">Genre</label><select id="genre" class="fsel"><option value="">Sélectionnez</option><option value="F">Femme</option><option value="M">Homme</option><option value="N">Préfère ne pas préciser</option></select></div>
+        <div class="form-group">
+          <label class="fl" for="telephone">Téléphone <span class="req">*</span></label>
+          <div class="iw"><input type="tel" id="telephone" class="fi" placeholder="+229 XX XX XX XX" autocomplete="tel"/><iconify-icon icon="mdi:phone-outline" class="ii"></iconify-icon></div>
+          <span class="ferr" id="tel-err"></span>
+        </div>
+        <div class="form-group">
+          <label class="fl" for="genre">Genre</label>
+          <select id="genre" class="fsel">
+            <option value="">Sélectionnez</option>
+            <option value="F">Femme</option>
+            <option value="M">Homme</option>
+            <option value="N">Préfère ne pas préciser</option>
+          </select>
+        </div>
       </div>
       <div class="form-row">
-        <div class="form-group"><label class="fl" for="cniNum">N° CNI <span class="req">*</span></label><div class="iw"><input type="text" id="cniNum" class="fi" placeholder="Ex : A-123456789" autocomplete="off" maxlength="20"/><iconify-icon icon="mdi:card-account-details-outline" class="ii"></iconify-icon></div><span class="ferr" id="cniNum-err"></span></div>
-        <div class="form-group" style="align-self:flex-end"><p style="font-size:12px;color:var(--gray-500);line-height:1.5;margin:0 0 6px">Numéro imprimé sur votre carte nationale d'identité.</p></div>
+        <div class="form-group">
+          <label class="fl" for="cniNum">N° CNI <span class="req">*</span></label>
+          <div class="iw"><input type="text" id="cniNum" class="fi" placeholder="Ex : A-123456789" autocomplete="off" maxlength="20"/><iconify-icon icon="mdi:card-account-details-outline" class="ii"></iconify-icon></div>
+          <span class="ferr" id="cniNum-err"></span>
+        </div>
+        <div class="form-group" style="align-self:flex-end">
+          <p style="font-size:12px;color:var(--gray-500);line-height:1.5;margin:0 0 6px">Numéro imprimé sur votre carte nationale d'identité.</p>
+        </div>
       </div>
-      <div class="reg-nav"><button type="button" class="btn-next" onclick="goStep(2)">Suivant <iconify-icon icon="mdi:arrow-right"></iconify-icon></button></div>
+      <div class="reg-nav">
+        <button type="button" class="btn-next" id="btnNext1" onclick="goStep(2)">
+          Suivant <iconify-icon icon="mdi:arrow-right"></iconify-icon>
+        </button>
+      </div>
     </div>
 
-    <!-- STEP 2 -->
+    <!-- STEP 2 — Organisation -->
     <div class="reg-section" id="step2">
       <h2 class="reg-section-title">Votre organisation</h2>
       <p class="reg-section-sub">Informations sur la structure pour laquelle vous souhaitez adhérer au réseau FODDEB.</p>
@@ -255,48 +270,64 @@
           <input type="radio" name="typeMemb" id="t2" value="institution" class="type-opt"/>
           <label for="t2"><iconify-icon icon="mdi:bank-outline" class="ti"></iconify-icon><span class="tl">Institution</span><span class="td">Organisme public ou parapublic</span></label>
           <input type="radio" name="typeMemb" id="t3" value="reseau" class="type-opt"/>
-          <label for="t3"><iconify-icon icon="mdi:account-network-outline" class="ti"></iconify-icon><span class="tl">Reseau / Coalition</span><span class="td">Reseau d'organisations ou coalition</span></label>
+          <label for="t3"><iconify-icon icon="mdi:account-network-outline" class="ti"></iconify-icon><span class="tl">Réseau / Coalition</span><span class="td">Réseau d'organisations ou coalition</span></label>
           <input type="radio" name="typeMemb" id="t4" value="individuel" class="type-opt"/>
-          <label for="t4"><iconify-icon icon="mdi:account-star-outline" class="ti"></iconify-icon><span class="tl">Expert individuel</span><span class="td">Consultant ou chercheur independant</span></label>
+          <label for="t4"><iconify-icon icon="mdi:account-star-outline" class="ti"></iconify-icon><span class="tl">Expert individuel</span><span class="td">Consultant ou chercheur indépendant</span></label>
         </div>
       </div>
-      <div class="form-group"><label class="fl" for="orgNom">Nom de l'organisation <span class="req">*</span></label><input type="text" id="orgNom" class="fi no-icon" placeholder="Nom complet"/><span class="ferr" id="orgNom-err"></span></div>
+      <div class="form-group">
+        <label class="fl" for="orgNom">Nom de l'organisation <span class="req">*</span></label>
+        <input type="text" id="orgNom" class="fi no-icon" placeholder="Nom complet"/>
+        <span class="ferr" id="orgNom-err"></span>
+      </div>
       <div class="form-row">
-        <div class="form-group"><label class="fl" for="poste">Fonction / Poste <span class="req">*</span></label><input type="text" id="poste" class="fi no-icon" placeholder="Ex: Directeur executif"/><span class="ferr" id="poste-err"></span></div>
-        <div class="form-group"><label class="fl" for="departement">Département <span class="req">*</span></label>
+        <div class="form-group">
+          <label class="fl" for="poste">Fonction / Poste <span class="req">*</span></label>
+          <input type="text" id="poste" class="fi no-icon" placeholder="Ex : Directeur exécutif"/>
+          <span class="ferr" id="poste-err"></span>
+        </div>
+        <div class="form-group">
+          <label class="fl" for="departement">Département <span class="req">*</span></label>
           <select id="departement" class="fsel">
             <option value="">Sélectionnez</option>
             <option>Alibori</option><option>Atacora</option><option>Atlantique</option>
             <option>Borgou</option><option>Collines</option><option>Couffo</option>
             <option>Donga</option><option>Littoral</option><option>Mono</option>
-            <option>Oueme</option><option>Plateau</option><option>Zou</option>
+            <option>Ouémé</option><option>Plateau</option><option>Zou</option>
           </select>
           <span class="ferr" id="dept-err"></span>
         </div>
       </div>
-      <div class="form-group"><label class="fl" for="domaine">Domaine d'intervention principal</label>
+      <div class="form-group">
+        <label class="fl" for="domaine">Domaine d'intervention principal</label>
         <select id="domaine" class="fsel">
           <option value="">Sélectionnez</option>
           <option>Protection de l'enfant</option><option>Éducation et formation</option>
-          <option>Sante</option><option>Numerique et TIC</option>
-          <option>Developpement local</option><option>Environnement et Climat</option>
+          <option>Santé</option><option>Numérique et TIC</option>
+          <option>Développement local</option><option>Environnement et Climat</option>
           <option>Droits des femmes</option><option>Autre</option>
         </select>
       </div>
-      <div class="form-group"><label class="fl" for="motivation">Motivation <span class="req">*</span></label><textarea id="motivation" class="fta" placeholder="Expliquez pourquoi vous souhaitez rejoindre le réseau FODDEB."></textarea><span class="ferr" id="motiv-err"></span></div>
-      <div class="reg-nav"><button type="button" class="btn-prev" onclick="goStep(1)"><iconify-icon icon="mdi:arrow-left"></iconify-icon> Retour</button><button type="button" class="btn-next" onclick="goStep(3)">Suivant <iconify-icon icon="mdi:arrow-right"></iconify-icon></button></div>
+      <div class="form-group">
+        <label class="fl" for="motivation">Motivation <span class="req">*</span></label>
+        <textarea id="motivation" class="fta" placeholder="Expliquez pourquoi vous souhaitez rejoindre le réseau FODDEB."></textarea>
+        <span class="ferr" id="motiv-err"></span>
+      </div>
+      <div class="reg-nav">
+        <button type="button" class="btn-prev" onclick="goStep(1)"><iconify-icon icon="mdi:arrow-left"></iconify-icon> Retour</button>
+        <button type="button" class="btn-next" onclick="goStep(3)">Suivant <iconify-icon icon="mdi:arrow-right"></iconify-icon></button>
+      </div>
     </div>
 
     <!-- STEP 3 — Documents + Signature -->
     <div class="reg-section" id="step3">
-      <h2 class="reg-section-title">Pieces a fournir</h2>
-      <p class="reg-section-sub">Formats acceptes : JPG, PNG, PDF. Taille max. 5 Mo par fichier.</p>
+      <h2 class="reg-section-title">Pièces à fournir</h2>
+      <p class="reg-section-sub">Formats acceptés : JPG, PNG, PDF. Taille max. 5 Mo par fichier.</p>
       <div class="alert-info">
         <iconify-icon icon="mdi:information-outline"></iconify-icon>
         <span>Les trois documents et la signature sont <strong>obligatoires</strong> pour valider votre adhésion.</span>
       </div>
 
-      <!-- Photo -->
       <div class="form-group">
         <label class="fl">Photo d'identité récente <span class="req">*</span><span class="file-required-badge"><iconify-icon icon="mdi:alert-circle-outline"></iconify-icon>Obligatoire</span></label>
         <div class="file-upload-wrap" id="wrap-photo" onclick="triggerFile('file-photo')" role="button" tabindex="0">
@@ -312,7 +343,6 @@
         <span class="ferr" id="photo-err"></span>
       </div>
 
-      <!-- CNI -->
       <div class="form-group">
         <label class="fl">Carte nationale d'identité en cours de validité <span class="req">*</span><span class="file-required-badge"><iconify-icon icon="mdi:alert-circle-outline"></iconify-icon>Obligatoire</span></label>
         <div class="file-upload-wrap" id="wrap-cni" onclick="triggerFile('file-cni')" role="button" tabindex="0">
@@ -327,7 +357,6 @@
         <span class="ferr" id="cni-err"></span>
       </div>
 
-      <!-- Récépissé -->
       <div class="form-group">
         <label class="fl">Récépissé de l'organisation <span class="req">*</span><span class="file-required-badge"><iconify-icon icon="mdi:alert-circle-outline"></iconify-icon>Obligatoire</span></label>
         <div class="file-upload-wrap" id="wrap-recepisse" onclick="triggerFile('file-recepisse')" role="button" tabindex="0">
@@ -342,32 +371,19 @@
         <span class="ferr" id="recepisse-err"></span>
       </div>
 
-      <!-- SIGNATURE DIGITALE -->
       <div class="form-group">
         <label class="fl">Signature digitale <span class="req">*</span></label>
         <p style="font-size:13px;color:var(--gray-600);margin-bottom:12px;line-height:1.6">
-          Tracez votre signature avec votre doigt (mobile) ou votre souris (ordinateur) dans la zone ci-dessous.
+          Tracez votre signature avec votre doigt (mobile) ou votre souris (ordinateur).
         </p>
         <div class="sig-container">
           <div class="sig-toolbar">
-            <div class="sig-toolbar-title">
-              <iconify-icon icon="mdi:draw-pen"></iconify-icon>
-              Zone de signature
-            </div>
-            <button type="button" class="sig-clear" onclick="clearSignature()">
-              <iconify-icon icon="mdi:eraser"></iconify-icon>Effacer
-            </button>
+            <div class="sig-toolbar-title"><iconify-icon icon="mdi:draw-pen"></iconify-icon> Zone de signature</div>
+            <button type="button" class="sig-clear" onclick="clearSignature()"><iconify-icon icon="mdi:eraser"></iconify-icon>Effacer</button>
           </div>
-          <!-- Le canvas — PAS de width/height ici, défini par JS après rendu -->
           <canvas id="sigCanvas" aria-label="Zone de signature" role="img"></canvas>
-          <div class="sig-hint">
-            <iconify-icon icon="mdi:gesture-tap" style="vertical-align:middle;margin-right:4px"></iconify-icon>
-            Dessinez votre signature ici avec votre doigt ou votre souris
-          </div>
-          <div class="sig-status empty" id="sigStatus">
-            <iconify-icon icon="mdi:pencil-outline"></iconify-icon>
-            <span>Signature en attente</span>
-          </div>
+          <div class="sig-hint"><iconify-icon icon="mdi:gesture-tap" style="vertical-align:middle;margin-right:4px"></iconify-icon>Dessinez votre signature ici</div>
+          <div class="sig-status empty" id="sigStatus"><iconify-icon icon="mdi:pencil-outline"></iconify-icon><span>Signature en attente</span></div>
         </div>
         <span class="ferr" id="sig-err"></span>
       </div>
@@ -378,47 +394,48 @@
       </div>
     </div>
 
-    <!-- STEP 4 — Securite -->
+    <!-- STEP 4 — Sécurité -->
     <div class="reg-section" id="step4">
-      <h2 class="reg-section-title">Securite du compte</h2>
-      <p class="reg-section-sub">Choisissez un identifiant unique et un mot de passe fort.</p>
-      <div class="form-group">
-        <label class="fl" for="username">Identifiant <span class="req">*</span></label>
-        <div class="iw"><input type="text" id="username" class="fi" placeholder="Ex: adjovi.rosine" autocomplete="username"/><iconify-icon icon="mdi:at" class="ii"></iconify-icon></div>
-        <span style="font-size:11.5px;color:#B0BEC5;margin-top:5px;display:block">Lettres, chiffres et points uniquement.</span>
-        <span class="ferr" id="usr-err"></span>
-      </div>
+      <h2 class="reg-section-title">Sécurité du compte</h2>
+      <p class="reg-section-sub">Choisissez un mot de passe fort pour sécuriser votre accès.</p>
       <div class="form-group">
         <label class="fl" for="pwd">Mot de passe <span class="req">*</span></label>
         <div class="iw">
-          <input type="password" id="pwd" class="fi" placeholder="Minimum 8 caracteres" autocomplete="new-password" oninput="checkPwdStrength(this.value)"/>
+          <input type="password" id="pwd" class="fi" placeholder="Minimum 8 caractères"
+                 autocomplete="new-password" oninput="checkPwdStrength(this.value)"/>
           <iconify-icon icon="mdi:lock-outline" class="ii"></iconify-icon>
-          <button type="button" onclick="togglePwd('pwd','eye1')" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:var(--gray-200);font-size:17px"><iconify-icon id="eye1" icon="mdi:eye-outline"></iconify-icon></button>
+          <button type="button" onclick="togglePwd('pwd','eye1')"
+                  style="position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:var(--gray-200);font-size:17px">
+            <iconify-icon id="eye1" icon="mdi:eye-outline"></iconify-icon>
+          </button>
         </div>
         <div class="pwd-strength">
           <div class="pwd-bar-wrap"><div class="pbs" id="ps1"></div><div class="pbs" id="ps2"></div><div class="pbs" id="ps3"></div><div class="pbs" id="ps4"></div></div>
           <span class="pwd-lbl" id="pwdLbl">Saisissez un mot de passe</span>
         </div>
         <div class="pwd-rules">
-          <div class="pwd-rule" id="r-len"><iconify-icon icon="mdi:circle-outline"></iconify-icon> Min. 8 caracteres</div>
+          <div class="pwd-rule" id="r-len"><iconify-icon icon="mdi:circle-outline"></iconify-icon> Min. 8 caractères</div>
           <div class="pwd-rule" id="r-upper"><iconify-icon icon="mdi:circle-outline"></iconify-icon> Majuscule</div>
           <div class="pwd-rule" id="r-num"><iconify-icon icon="mdi:circle-outline"></iconify-icon> Chiffre</div>
-          <div class="pwd-rule" id="r-special"><iconify-icon icon="mdi:circle-outline"></iconify-icon> Caractere special</div>
+          <div class="pwd-rule" id="r-special"><iconify-icon icon="mdi:circle-outline"></iconify-icon> Caractère spécial</div>
         </div>
         <span class="ferr" id="pwd-err"></span>
       </div>
       <div class="form-group">
         <label class="fl" for="pwdConfirm">Confirmer le mot de passe <span class="req">*</span></label>
         <div class="iw">
-          <input type="password" id="pwdConfirm" class="fi" placeholder="Repetez votre mot de passe" autocomplete="new-password"/>
+          <input type="password" id="pwdConfirm" class="fi" placeholder="Répétez votre mot de passe" autocomplete="new-password"/>
           <iconify-icon icon="mdi:lock-check-outline" class="ii"></iconify-icon>
-          <button type="button" onclick="togglePwd('pwdConfirm','eye2')" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:var(--gray-200);font-size:17px"><iconify-icon id="eye2" icon="mdi:eye-outline"></iconify-icon></button>
+          <button type="button" onclick="togglePwd('pwdConfirm','eye2')"
+                  style="position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:var(--gray-200);font-size:17px">
+            <iconify-icon id="eye2" icon="mdi:eye-outline"></iconify-icon>
+          </button>
         </div>
         <span class="ferr" id="pwdC-err"></span>
       </div>
       <div class="cb-wrap">
         <input type="checkbox" id="cgv"/>
-        <label class="cb-label" for="cgv">J'accepte les <a href="/mentions-legales.html" target="_blank">Conditions d'utilisation</a> et la <a href="/confidentialite.html" target="_blank">Politique de confidentialite</a>. <span class="req">*</span></label>
+        <label class="cb-label" for="cgv">J'accepte les <a href="/mentions-legales.html" target="_blank">Conditions d'utilisation</a> et la <a href="/confidentialite.html" target="_blank">Politique de confidentialité</a>. <span class="req">*</span></label>
       </div>
       <div class="cb-wrap">
         <input type="checkbox" id="newsletter_opt"/>
@@ -427,7 +444,7 @@
       <span class="ferr" id="cgv-err"></span>
       <div style="background:var(--g0);border:1px solid var(--g1);border-radius:var(--rs);padding:12px 14px;font-size:12.5px;color:var(--g8);display:flex;align-items:center;gap:8px;margin-top:16px;">
         <iconify-icon icon="mdi:shield-check-outline" style="flex-shrink:0;font-size:16px"></iconify-icon>
-        Formulaire protege par Google reCAPTCHA v3 — vos donnees sont chiffrees
+        Formulaire protégé par Google reCAPTCHA v3 — vos données sont chiffrées
       </div>
       <div class="reg-nav">
         <button type="button" class="btn-prev" onclick="goStep(3)"><iconify-icon icon="mdi:arrow-left"></iconify-icon> Retour</button>
@@ -435,7 +452,7 @@
           <iconify-icon icon="mdi:account-plus-outline"></iconify-icon> Soumettre ma demande
         </button>
       </div>
-      <p style="font-size:11px;color:#B0BEC5;text-align:center;margin-top:14px">Adhesion examinee sous 48h — notification par email.</p>
+      <p style="font-size:11px;color:#B0BEC5;text-align:center;margin-top:14px">Adhésion examinée sous 48h — notification par email.</p>
     </div>
   </div>
 
@@ -443,43 +460,53 @@
   <div class="reg-success" id="regSuccess" role="status" aria-live="polite">
     <div class="success-circle"><iconify-icon icon="mdi:check-bold" style="font-size:40px"></iconify-icon></div>
     <h2>Demande envoyée !</h2>
-    <p>Votre demande d'adhésion a bien été soumise avec tous les documents. Un administrateur l'examinera sous <strong>48 heures</strong>.</p>
+    <p>Votre demande d'adhésion a bien été soumise. Un administrateur l'examinera sous <strong>48 heures</strong>.</p>
     <div class="reg-success-info">
-      <p><iconify-icon icon="mdi:email-check-outline" style="vertical-align:middle;margin-right:6px;color:var(--g7)"></iconify-icon>Email de confirmation envoye.</p>
-      <p><iconify-icon icon="mdi:clock-outline" style="vertical-align:middle;margin-right:6px;color:var(--g7)"></iconify-icon>Delai : 24 a 48 heures ouvrables.</p>
+      <p><iconify-icon icon="mdi:email-check-outline" style="vertical-align:middle;margin-right:6px;color:var(--g7)"></iconify-icon>Email de confirmation envoyé.</p>
+      <p><iconify-icon icon="mdi:clock-outline" style="vertical-align:middle;margin-right:6px;color:var(--g7)"></iconify-icon>Délai : 24 à 48 heures ouvrables.</p>
       <p><iconify-icon icon="mdi:information-outline" style="vertical-align:middle;margin-right:6px;color:var(--g7)"></iconify-icon>Contact : <a href="mailto:foddeb15@gmail.com" style="color:var(--g7)">foddeb15@gmail.com</a></p>
     </div>
     <a href="/" style="display:inline-flex;align-items:center;gap:8px;padding:13px 28px;background:var(--g8);color:#fff;border-radius:var(--rs);font-family:var(--fh);font-weight:700;font-size:15px;text-decoration:none">
-      <iconify-icon icon="mdi:home-outline"></iconify-icon>Retour a l'accueil
+      <iconify-icon icon="mdi:home-outline"></iconify-icon>Retour à l'accueil
     </a>
   </div>
 </main>
 
+<script src="/assets/js/utils.js"></script>
 <script src="/assets/js/services/api.js"></script>
 <script>
 'use strict';
 
-/* ═══ NAVIGATION ENTRE ETAPES ═══ */
-let currentStep = 1;
-const TOTAL = 4;
+/* ══════════════════════════════════════════════════════
+   ÉTAT
+══════════════════════════════════════════════════════ */
+let currentStep  = 1;
+const TOTAL      = 4;
+let emailFlagged = '';
+let phoneFlagged = '';
+let cniFlagged   = '';
+const FILES      = { photo: null, cni: null, recepisse: null };
 
+/* ══════════════════════════════════════════════════════
+   NAVIGATION
+══════════════════════════════════════════════════════ */
 async function goStep(n) {
   if (n > currentStep) {
-    // ── Étape 1 → 2 : check email serveur FORCÉ avant de valider ──
-    // Contourne le bypass "taper sans blur" ou "delete+retype sans blur"
+    // Vérifications serveur forcées à l'étape 1 → 2
     if (currentStep === 1) {
-      // Checks serveur en parallèle — email, téléphone, numéro CNI
-      const em    = document.getElementById('email').value.trim();
-      const tel   = document.getElementById('telephone').value.trim();
-      const cni   = document.getElementById('cniNum').value.trim();
-      const btn   = document.querySelector('#step1 .btn-next');
-      if (btn) { btn.disabled = true; btn.innerHTML = '<span class="spinner"></span> Vérification…'; }
+      const em  = document.getElementById('email').value.trim();
+      const tel = document.getElementById('telephone').value.trim();
+      const cni = document.getElementById('cniNum').value.trim();
+      const btn = document.getElementById('btnNext1');
+      btn.disabled = true;
+      btn.innerHTML = '<span class="spinner"></span> Vérification…';
       await Promise.all([
-        (em  && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(em)) ? checkEmailUniqueness(em)  : Promise.resolve(),
-        (tel && tel.length >= 8)                            ? checkPhoneUniqueness(tel) : Promise.resolve(),
-        (cni && cni.length >= 4)                            ? checkCniUniqueness(cni)   : Promise.resolve(),
+        (em  && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(em)) ? checkEmailUniq(em)  : Promise.resolve(),
+        (tel && tel.length >= 8)                         ? checkPhoneUniq(tel) : Promise.resolve(),
+        (cni && cni.length >= 4)                         ? checkCniUniq(cni)   : Promise.resolve(),
       ]);
-      if (btn) { btn.disabled = false; btn.innerHTML = 'Suivant <iconify-icon icon="mdi:arrow-right"></iconify-icon>'; }
+      btn.disabled = false;
+      btn.innerHTML = 'Suivant <iconify-icon icon="mdi:arrow-right"></iconify-icon>';
     }
     if (!validateStep(currentStep)) return;
   }
@@ -488,7 +515,6 @@ async function goStep(n) {
   document.getElementById('step' + n).classList.add('active');
   updateProgress(n);
   window.scrollTo({ top: 0, behavior: 'smooth' });
-  // Recalculer le canvas si on arrive à l'étape 3
   if (n === 3) setTimeout(initSignaturePad, 50);
 }
 
@@ -496,16 +522,17 @@ function updateProgress(n) {
   for (let i = 1; i <= TOTAL; i++) {
     const c = document.getElementById('sc' + i);
     const l = document.getElementById('sl' + i);
-    c.classList.remove('active', 'done');
-    l.classList.remove('active', 'done');
+    c.classList.remove('active','done'); l.classList.remove('active','done');
     if (i < n)  { c.classList.add('done');   l.classList.add('done');   c.innerHTML = '<iconify-icon icon="mdi:check-bold" style="font-size:14px"></iconify-icon>'; }
-    if (i === n) { c.classList.add('active'); l.classList.add('active'); c.textContent = i; }
-    if (i > n)   { c.textContent = i; }
+    if (i === n){ c.classList.add('active'); l.classList.add('active'); c.textContent = i; }
+    if (i > n)  { c.textContent = i; }
     if (i < TOTAL) document.getElementById('line' + i)?.classList.toggle('done', i < n);
   }
 }
 
-/* ═══ VALIDATION ═══ */
+/* ══════════════════════════════════════════════════════
+   VALIDATION
+══════════════════════════════════════════════════════ */
 function se(id, msg) {
   const el = document.getElementById(id + '-err');
   if (el) el.innerHTML = '<iconify-icon icon="mdi:alert-circle-outline" style="font-size:12px"></iconify-icon> ' + msg;
@@ -515,44 +542,42 @@ function ce(id) {
   const el = document.getElementById(id + '-err'); if (el) el.textContent = '';
   const inp = document.getElementById(id); if (inp) inp.classList.remove('error');
 }
+function shakeEl(el) {
+  if (!el) return;
+  el.classList.remove('shake'); void el.offsetWidth; el.classList.add('shake');
+}
 
 function validateStep(step) {
   let ok = true;
   if (step === 1) {
-    ['prenom','nom','email','telephone'].forEach(ce);
-    if (!document.getElementById('prenom').value.trim())   { se('prenom','Le prénom est requis.'); ok=false; }
-    if (!document.getElementById('nom').value.trim())      { se('nom','Le nom est requis.'); ok=false; }
-    const em    = document.getElementById('email').value.trim();
-    if (!em)                                                  { se('email', "L'email est requis."); ok=false; }
-    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(em))       { se('email','Email invalide.'); ok=false; }
-    // Règle : 1 email = 1 compte — comparer à l'email flaggé par le serveur
+    ['prenom','nom','email','tel','cniNum'].forEach(ce);
+    if (!document.getElementById('prenom').value.trim())    { se('prenom','Le prénom est requis.'); ok=false; }
+    if (!document.getElementById('nom').value.trim())       { se('nom','Le nom est requis.'); ok=false; }
+    const em = document.getElementById('email').value.trim();
+    if (!em)                                                  { se('email',"L'email est requis."); ok=false; }
+    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(em))        { se('email','Email invalide.'); ok=false; }
     else if (emailFlagged && em.toLowerCase() === emailFlagged) {
-      const errEl = document.getElementById('email-err');
-      errEl.innerHTML =
-        'Un compte existe déjà avec cet email. ' +
-        '<a href="/auth/login.html" style="color:var(--g9);font-weight:600">Se connecter</a>';
-      shakeEl(errEl);
-      ok = false;
+      const el = document.getElementById('email-err');
+      el.innerHTML = 'Un compte existe déjà. <a href="/public/auth/login.html" style="color:var(--g9);font-weight:600">Se connecter</a>';
+      shakeEl(el); ok=false;
     }
-    if (!document.getElementById('telephone').value.trim())   { se('tel','Le téléphone est requis.'); ok=false; }
+    if (!document.getElementById('telephone').value.trim()) { se('tel','Le téléphone est requis.'); ok=false; }
     else if (phoneFlagged && document.getElementById('telephone').value.trim() === phoneFlagged) {
-      const pErr = document.getElementById('tel-err');
-      pErr.innerHTML = 'Ce numéro est déjà associé à un compte.';
-      shakeEl(pErr); ok = false;
+      const el = document.getElementById('tel-err');
+      el.textContent = 'Ce numéro est déjà associé à un compte.'; shakeEl(el); ok=false;
     }
     const cniVal = document.getElementById('cniNum').value.trim();
-    if (!cniVal)                                               { se('cniNum','Le numéro de CNI est requis.'); ok=false; }
+    if (!cniVal)                                              { se('cniNum','Le numéro de CNI est requis.'); ok=false; }
     else if (cniFlagged && cniVal.toLowerCase() === cniFlagged) {
-      const cErr = document.getElementById('cniNum-err');
-      cErr.innerHTML = 'Ce numéro de CNI est déjà enregistré.';
-      shakeEl(cErr); ok = false;
+      const el = document.getElementById('cniNum-err');
+      el.textContent = 'Ce numéro de CNI est déjà enregistré.'; shakeEl(el); ok=false;
     }
   }
   if (step === 2) {
     ['orgNom','poste','dept','motiv'].forEach(ce);
-    if (!document.getElementById('orgNom').value.trim())   { se('orgNom',"Nom de l'organisation requis."); ok=false; }
-    if (!document.getElementById('poste').value.trim())    { se('poste','Le poste est requis.'); ok=false; }
-    if (!document.getElementById('departement').value)     { se('dept','Sélectionnez un département.'); ok=false; }
+    if (!document.getElementById('orgNom').value.trim())    { se('orgNom',"Nom de l'organisation requis."); ok=false; }
+    if (!document.getElementById('poste').value.trim())     { se('poste','Le poste est requis.'); ok=false; }
+    if (!document.getElementById('departement').value)      { se('dept','Sélectionnez un département.'); ok=false; }
     if (document.getElementById('motivation').value.trim().length < 30) { se('motiv','Motivation trop courte (min. 30 car.).'); ok=false; }
   }
   if (step === 3) {
@@ -563,29 +588,61 @@ function validateStep(step) {
     if (!sigSigned)       { se('sig','Votre signature est obligatoire.'); ok=false; }
   }
   if (step === 4) {
-    ['usr','pwd','pwdC','cgv'].forEach(id => { const el = document.getElementById(id+'-err'); if(el) el.textContent=''; });
-    if (!document.getElementById('username').value.trim()) { document.getElementById('usr-err').textContent="L'identifiant est requis."; ok=false; }
-    if (document.getElementById('pwd').value.length < 8)   { document.getElementById('pwd-err').textContent='Mot de passe trop court (min. 8 car.).'; ok=false; }
+    ['pwd','pwdC','cgv'].forEach(id => { const el = document.getElementById(id+'-err'); if(el) el.textContent=''; });
+    if (document.getElementById('pwd').value.length < 8)    { document.getElementById('pwd-err').textContent='Mot de passe trop court (min. 8 car.).'; ok=false; }
     if (document.getElementById('pwd').value !== document.getElementById('pwdConfirm').value) { document.getElementById('pwdC-err').textContent='Les mots de passe ne correspondent pas.'; ok=false; }
-    if (!document.getElementById('cgv').checked) { document.getElementById('cgv-err').textContent='Vous devez accepter les conditions.'; ok=false; }
+    if (!document.getElementById('cgv').checked)            { document.getElementById('cgv-err').textContent='Vous devez accepter les conditions.'; ok=false; }
   }
   return ok;
 }
 
-/* ═══ FICHIERS ═══ */
-const FILES = { photo: null, cni: null, recepisse: null };
-// Règle 1 email = 1 compte — état persistant indépendant du DOM
-let emailFlagged = ''; // email confirmé comme existant côté serveur (string, pas bool)
-let phoneFlagged = ''; // téléphone confirmé comme existant côté serveur
-let cniFlagged   = ''; // numéro CNI confirmé comme existant côté serveur
+/* ══════════════════════════════════════════════════════
+   VÉRIFICATIONS UNICITÉ — pointent vers /api/membres
+══════════════════════════════════════════════════════ */
+async function checkEmailUniq(email) {
+  try {
+    const r = await FODDEB_API.membres.checkEmail(email);
+    emailFlagged = r.available === false ? email.toLowerCase() : '';
+    if (emailFlagged) {
+      const el = document.getElementById('email-err');
+      el.innerHTML = 'Un compte existe déjà avec cet email. <a href="/public/auth/login.html" style="color:var(--g9);font-weight:600">Se connecter</a>';
+      shakeEl(el);
+    }
+  } catch(_) {}
+}
 
+async function checkPhoneUniq(phone) {
+  try {
+    const r = await FODDEB_API.membres.checkPhone(phone);
+    phoneFlagged = r.available === false ? phone : '';
+    if (phoneFlagged) {
+      const el = document.getElementById('tel-err');
+      el.textContent = 'Ce numéro est déjà associé à un compte.'; shakeEl(el);
+    }
+  } catch(_) {}
+}
+
+async function checkCniUniq(cni) {
+  try {
+    const r = await FODDEB_API.membres.checkCni(cni);
+    cniFlagged = r.available === false ? cni.toLowerCase() : '';
+    if (cniFlagged) {
+      const el = document.getElementById('cniNum-err');
+      el.textContent = 'Ce numéro de CNI est déjà enregistré.'; shakeEl(el);
+    }
+  } catch(_) {}
+}
+
+/* ══════════════════════════════════════════════════════
+   FICHIERS
+══════════════════════════════════════════════════════ */
 function triggerFile(id) { document.getElementById(id)?.click(); }
 
 function handleFile(input, key, maxMB) {
   const file = input.files[0];
   if (!file) return;
   if (file.size > maxMB * 1024 * 1024) {
-    document.getElementById(key+'-err').innerHTML = '<iconify-icon icon="mdi:alert-circle-outline" style="font-size:12px"></iconify-icon> Fichier trop volumineux (max ' + maxMB + ' Mo).';
+    document.getElementById(key+'-err').textContent = 'Fichier trop volumineux (max ' + maxMB + ' Mo).';
     input.value = ''; return;
   }
   FILES[key] = file;
@@ -593,7 +650,7 @@ function handleFile(input, key, maxMB) {
   const lbl = document.getElementById('label-'+key);
   if (lbl) lbl.textContent = file.name + ' (' + (file.size/1024).toFixed(0) + ' Ko)';
   const errEl = document.getElementById(key+'-err'); if(errEl) errEl.textContent='';
-  // Barre de progression simulee
+  // Progression simulée
   const prog = document.getElementById('prog-'+key);
   const fill = document.getElementById('fill-'+key);
   const lp   = document.getElementById('lp-'+key);
@@ -603,472 +660,183 @@ function handleFile(input, key, maxMB) {
     const iv = setInterval(() => {
       pct = Math.min(pct + Math.random()*25, 100);
       fill.style.width = pct + '%';
-      if (lp) lp.textContent = Math.round(pct) + '% — ' + (pct < 100 ? 'Chargement...' : 'Fichier pret');
+      if (lp) lp.textContent = Math.round(pct) + '% — ' + (pct < 100 ? 'Chargement…' : 'Fichier prêt');
       if (pct >= 100) clearInterval(iv);
     }, 80);
   }
 }
 
-document.querySelectorAll('.file-upload-wrap').forEach(w => {
-  w.addEventListener('keydown', e => { if (e.key==='Enter'||e.key===' ') { e.preventDefault(); w.click(); } });
-});
-
-/* ═══════════════════════════════════════════════
-   SIGNATURE PAD — CORRECTION COMPLETE
-   
-   Problème précédent : le canvas avait width:100% en CSS
-   mais les coordonnees de dessin etaient calculees par rapport
-   aux coordonnees physiques du canvas (attributs width/height).
-   
-   Solution : definir les attributs width/height du canvas
-   apres rendu pour qu'ils correspondent exactement aux
-   dimensions CSS en pixels physiques (avec devicePixelRatio).
-═══════════════════════════════════════════════ */
-let sigSigned  = false;
-let sigDrawing = false;
-let sigCtx     = null;
-let sigCanvas  = null;
-let sigInited  = false;
+/* ══════════════════════════════════════════════════════
+   SIGNATURE PAD (inchangé — fonctionne)
+══════════════════════════════════════════════════════ */
+let sigSigned = false, sigDrawing = false, sigCtx = null, sigCanvas = null, sigInited = false;
 
 function initSignaturePad() {
   sigCanvas = document.getElementById('sigCanvas');
   if (!sigCanvas) return;
-
-  // Obtenir la largeur CSS reelle du canvas
   const cssW = sigCanvas.getBoundingClientRect().width;
-  const cssH = 160; // hauteur souhaitee en pixels CSS
+  const cssH = 160;
   const dpr  = window.devicePixelRatio || 1;
-
-  // Definir la hauteur CSS via style inline
   sigCanvas.style.height = cssH + 'px';
-
-  // Definir les attributs physiques (resolution reelle)
   sigCanvas.width  = Math.round(cssW * dpr);
   sigCanvas.height = Math.round(cssH * dpr);
-
-  sigCtx = sigCanvas.getContext('2d');
-  // Appliquer le ratio devicePixel pour que 1 unite CSS = 1 pixel logique
-  sigCtx.scale(dpr, dpr);
-
-  // Styles du trait
-  sigCtx.strokeStyle = '#1B5E20';
-  sigCtx.lineWidth   = 2.5;
-  sigCtx.lineCap     = 'round';
-  sigCtx.lineJoin    = 'round';
-
-  // Fond blanc
-  sigCtx.fillStyle = '#ffffff';
-  sigCtx.fillRect(0, 0, cssW, cssH);
-
-  sigInited = true;
-
-  // Calcul precis de la position dans le canvas
-  function getCanvasPos(e) {
-    const rect = sigCanvas.getBoundingClientRect();
-    const src  = e.touches ? e.touches[0] : e;
-    return {
-      x: (src.clientX - rect.left),
-      y: (src.clientY - rect.top)
-    };
-  }
-
-  function onStart(e) {
-    e.preventDefault();
-    sigDrawing = true;
-    const pos = getCanvasPos(e);
-    sigCtx.beginPath();
-    sigCtx.moveTo(pos.x, pos.y);
-  }
-
-  function onMove(e) {
-    if (!sigDrawing) return;
-    e.preventDefault();
-    const pos = getCanvasPos(e);
-    sigCtx.lineTo(pos.x, pos.y);
-    sigCtx.stroke();
-    if (!sigSigned) setSigned(true);
-  }
-
-  function onEnd(e) {
-    e.preventDefault();
-    sigDrawing = false;
-    sigCtx.closePath();
-  }
-
-  // Supprimer les anciens listeners si déjà initialisé
   sigCanvas.replaceWith(sigCanvas.cloneNode(true));
   sigCanvas = document.getElementById('sigCanvas');
   sigCtx = sigCanvas.getContext('2d');
   sigCtx.scale(dpr, dpr);
-  sigCtx.strokeStyle = '#1B5E20';
-  sigCtx.lineWidth   = 2.5;
-  sigCtx.lineCap     = 'round';
-  sigCtx.lineJoin    = 'round';
-  sigCtx.fillStyle   = '#ffffff';
-  sigCtx.fillRect(0, 0, cssW, cssH);
+  sigCtx.strokeStyle = '#1B5E20'; sigCtx.lineWidth = 2.5;
+  sigCtx.lineCap = 'round'; sigCtx.lineJoin = 'round';
+  sigCtx.fillStyle = '#ffffff'; sigCtx.fillRect(0, 0, cssW, cssH);
+  sigInited = true;
 
-  sigCanvas.addEventListener('mousedown',  onStart, { passive: false });
-  sigCanvas.addEventListener('mousemove',  onMove,  { passive: false });
-  sigCanvas.addEventListener('mouseup',    onEnd,   { passive: false });
-  sigCanvas.addEventListener('mouseleave', onEnd,   { passive: false });
-  sigCanvas.addEventListener('touchstart', onStart, { passive: false });
-  sigCanvas.addEventListener('touchmove',  onMove,  { passive: false });
-  sigCanvas.addEventListener('touchend',   onEnd,   { passive: false });
+  function pos(e) {
+    const r = sigCanvas.getBoundingClientRect();
+    const s = e.touches ? e.touches[0] : e;
+    return { x: s.clientX - r.left, y: s.clientY - r.top };
+  }
+  sigCanvas.addEventListener('mousedown',  e => { e.preventDefault(); sigDrawing=true; const p=pos(e); sigCtx.beginPath(); sigCtx.moveTo(p.x,p.y); }, {passive:false});
+  sigCanvas.addEventListener('mousemove',  e => { if(!sigDrawing)return; e.preventDefault(); const p=pos(e); sigCtx.lineTo(p.x,p.y); sigCtx.stroke(); if(!sigSigned)setSigned(true); }, {passive:false});
+  sigCanvas.addEventListener('mouseup',    e => { e.preventDefault(); sigDrawing=false; sigCtx.closePath(); }, {passive:false});
+  sigCanvas.addEventListener('mouseleave', e => { e.preventDefault(); sigDrawing=false; sigCtx.closePath(); }, {passive:false});
+  sigCanvas.addEventListener('touchstart', e => { e.preventDefault(); sigDrawing=true; const p=pos(e); sigCtx.beginPath(); sigCtx.moveTo(p.x,p.y); }, {passive:false});
+  sigCanvas.addEventListener('touchmove',  e => { if(!sigDrawing)return; e.preventDefault(); const p=pos(e); sigCtx.lineTo(p.x,p.y); sigCtx.stroke(); if(!sigSigned)setSigned(true); }, {passive:false});
+  sigCanvas.addEventListener('touchend',   e => { e.preventDefault(); sigDrawing=false; sigCtx.closePath(); }, {passive:false});
 }
 
 function setSigned(val) {
   sigSigned = val;
-  const el = document.getElementById('sigStatus');
-  if (!el) return;
-  if (val) {
-    el.className = 'sig-status signed';
-    el.innerHTML = '<iconify-icon icon="mdi:check-circle-outline"></iconify-icon><span>Signature enregistrée</span>';
-  } else {
-    el.className = 'sig-status empty';
-    el.innerHTML = '<iconify-icon icon="mdi:pencil-outline"></iconify-icon><span>Signature en attente</span>';
-  }
-  const errEl = document.getElementById('sig-err');
-  if (errEl && val) errEl.textContent = '';
+  const el = document.getElementById('sigStatus'); if(!el) return;
+  el.className = 'sig-status ' + (val ? 'signed' : 'empty');
+  el.innerHTML = val
+    ? '<iconify-icon icon="mdi:check-circle-outline"></iconify-icon><span>Signature enregistrée</span>'
+    : '<iconify-icon icon="mdi:pencil-outline"></iconify-icon><span>Signature en attente</span>';
+  const errEl = document.getElementById('sig-err'); if(errEl && val) errEl.textContent='';
 }
 
 function clearSignature() {
   if (!sigCtx || !sigCanvas) return;
-  const dpr  = window.devicePixelRatio || 1;
   const cssW = sigCanvas.getBoundingClientRect().width;
   const cssH = parseInt(sigCanvas.style.height) || 160;
-  sigCtx.fillStyle = '#ffffff';
-  sigCtx.fillRect(0, 0, cssW, cssH);
+  sigCtx.fillStyle = '#ffffff'; sigCtx.fillRect(0,0,cssW,cssH);
   setSigned(false);
 }
 
-function getSignatureDataURL() {
-  if (!sigCanvas) return '';
-  return sigCanvas.toDataURL('image/png');
-}
-
-/* Recalculer le canvas si la fenêtre est redimensionnée */
 let resizeTimer;
 window.addEventListener('resize', () => {
   clearTimeout(resizeTimer);
-  resizeTimer = setTimeout(() => {
-    if (currentStep === 3 && sigInited) {
-      const hadSignature = sigSigned;
-      initSignaturePad();
-      if (!hadSignature) setSigned(false);
-    }
-  }, 300);
+  resizeTimer = setTimeout(() => { if (currentStep===3 && sigInited) { initSignaturePad(); setSigned(false); } }, 300);
 });
 
-/* ═══ MOT DE PASSE ═══ */
+/* ══════════════════════════════════════════════════════
+   MOT DE PASSE
+══════════════════════════════════════════════════════ */
 function checkPwdStrength(pwd) {
-  const rules = { 'r-len': pwd.length>=8, 'r-upper': /[A-Z]/.test(pwd), 'r-num': /[0-9]/.test(pwd), 'r-special': /[!@#$%^&*(),.?":{}|<>_\-]/.test(pwd) };
-  Object.entries(rules).forEach(([id, ok]) => {
-    const el = document.getElementById(id); if(!el) return;
-    el.classList.toggle('ok', ok);
-    el.querySelector('iconify-icon').setAttribute('icon', ok ? 'mdi:check-circle' : 'mdi:circle-outline');
+  const rules = { 'r-len':pwd.length>=8, 'r-upper':/[A-Z]/.test(pwd), 'r-num':/[0-9]/.test(pwd), 'r-special':/[!@#$%^&*(),.?":{}|<>_\-]/.test(pwd) };
+  Object.entries(rules).forEach(([id,ok]) => {
+    const el=document.getElementById(id); if(!el)return;
+    el.classList.toggle('ok',ok);
+    el.querySelector('iconify-icon').setAttribute('icon', ok?'mdi:check-circle':'mdi:circle-outline');
   });
   const score = Object.values(rules).filter(Boolean).length;
-  const lvl   = score <= 1 ? 'weak' : score <= 3 ? 'medium' : 'strong';
-  [1,2,3,4].forEach(i => { const el = document.getElementById('ps'+i); if(el){ el.className='pbs'; if(i<=score) el.classList.add(lvl); } });
-  const lbl = document.getElementById('pwdLbl');
-  if (lbl) lbl.textContent = ['','Tres faible','Faible','Moyen','Fort'][score] || 'Saisissez un mot de passe';
+  const lvl   = score<=1?'weak':score<=3?'medium':'strong';
+  [1,2,3,4].forEach(i=>{const el=document.getElementById('ps'+i);if(el){el.className='pbs';if(i<=score)el.classList.add(lvl);}});
+  const lbl=document.getElementById('pwdLbl');
+  if(lbl) lbl.textContent=['','Très faible','Faible','Moyen','Fort'][score]||'Saisissez un mot de passe';
 }
 
 function togglePwd(inputId, iconId) {
-  const inp = document.getElementById(inputId);
-  const ico = document.getElementById(iconId);
-  const show = inp.type === 'password';
-  inp.type = show ? 'text' : 'password';
-  ico.setAttribute('icon', show ? 'mdi:eye-off-outline' : 'mdi:eye-outline');
+  const inp=document.getElementById(inputId); const ico=document.getElementById(iconId);
+  const show=inp.type==='password'; inp.type=show?'text':'password';
+  ico.setAttribute('icon', show?'mdi:eye-off-outline':'mdi:eye-outline');
 }
 
-/* ═══ SOUMISSION ═══ */
-/* ── Lecture fichier → base64 pur (sans préfixe "data:...;base64,") ── */
-/* Secoue un élément pour attirer l'attention — réapplicable à chaque appel */
-function shakeEl(el) {
-  if (!el) return;
-  el.classList.remove('shake');
-  // Force le reflow pour pouvoir relancer l'animation sur le même élément
-  void el.offsetWidth;
-  el.classList.add('shake');
-}
-
-/* ─────────────────────────────────────────────────
- * Vérification des tailles de fichiers avant envoi
- * Limites : image ≤ 2 Mo | PDF ≤ 3 Mo
- * ───────────────────────────────────────────────── */
-const FILE_LIMITS = {
-  image: 2 * 1024 * 1024, // 2 Mo
-  pdf:   3 * 1024 * 1024, // 3 Mo
-};
-
-function checkFileSizes() {
-  const checks = [
-    { file: FILES.photo,     label: "Photo d'identité", errId: 'photo-err'     },
-    { file: FILES.cni,       label: 'CNI',               errId: 'cni-err'       },
-    { file: FILES.recepisse, label: 'Récépissé',         errId: 'recepisse-err' },
-  ];
-  let ok = true;
-  checks.forEach(({ file, label, errId }) => {
-    if (!file) return;
-    const limit   = file.type === 'application/pdf' ? FILE_LIMITS.pdf : FILE_LIMITS.image;
-    const limitMo = (limit / 1024 / 1024).toFixed(0);
-    const fileMo  = (file.size  / 1024 / 1024).toFixed(1);
-    if (file.size > limit) {
-      const errEl = document.getElementById(errId);
-      if (errEl) {
-        errEl.textContent = label + ' trop volumineux (' + fileMo + ' Mo) — max ' + limitMo + ' Mo.';
-        shakeEl(errEl);
-      }
-      ok = false;
-    }
-  });
-  return ok;
-}
-
-function fileToBase64(file) {
-  return new Promise((res, rej) => {
-    const r = new FileReader();
-    r.onload  = () => res(r.result.split(',')[1]);
-    r.onerror = () => rej(new Error('Lecture du fichier échouée'));
-    r.readAsDataURL(file);
-  });
-}
-
-/**
- * Compression côté client des images avant envoi.
- * Réduit la taille jusqu'à ×10 → payload < 1 Mo par image.
- * Les PDF passent sans compression (FileReader brut).
- * maxWidth : 1200 px   quality : 0.78 JPEG
- */
-function compressImage(file, maxWidth = 1200, quality = 0.78) {
-  // PDF → pas de compression canvas possible → base64 brut
-  if (file.type === 'application/pdf') return fileToBase64(file);
-
-  return new Promise((res, rej) => {
-    const img    = new Image();
-    const objURL = URL.createObjectURL(file);
-
-    img.onload = () => {
-      URL.revokeObjectURL(objURL);
-      const canvas = document.createElement('canvas');
-      let w = img.width, h = img.height;
-      // Réduction proportionnelle si trop large
-      if (w > maxWidth) { h = Math.round(h * maxWidth / w); w = maxWidth; }
-      canvas.width = w; canvas.height = h;
-      canvas.getContext('2d').drawImage(img, 0, 0, w, h);
-      // Retourne le base64 pur sans préfixe
-      res(canvas.toDataURL('image/jpeg', quality).split(',')[1]);
-    };
-    img.onerror = () => { URL.revokeObjectURL(objURL); rej(new Error('Compression échouée')); };
-    img.src = objURL;
-  });
-}
-
-/**
- * Vérification email unique — appelée au blur du champ email.
- * Affiche un feedback inline sans bloquer la navigation.
- */
-async function checkPhoneUniqueness(phone) {
-  const errEl = document.getElementById('tel-err');
-  if (!phone || phone.length < 8) return;
+/* ══════════════════════════════════════════════════════
+   SOUMISSION — connectée à Supabase via /api/membres + /api/upload
+══════════════════════════════════════════════════════ */
+async function getRecaptchaToken(action) {
   try {
-    const result = await FODDEB_API.members.checkPhone(phone);
-    phoneFlagged = result.exists ? phone : '';
-    if (phoneFlagged) {
-      errEl.innerHTML = 'Ce numéro est déjà associé à un compte.';
-      shakeEl(errEl);
-    } else {
-      errEl.textContent = '';
-    }
-  } catch (_) { /* silencieux */ }
-}
-
-async function checkCniUniqueness(cni) {
-  const errEl = document.getElementById('cniNum-err');
-  if (!cni || cni.length < 4) return;
-  try {
-    const result = await FODDEB_API.members.checkCni(cni);
-    cniFlagged = result.exists ? cni.toLowerCase() : '';
-    if (cniFlagged) {
-      errEl.innerHTML = 'Ce numéro de CNI est déjà enregistré.';
-      shakeEl(errEl);
-    } else {
-      errEl.textContent = '';
-    }
-  } catch (_) { /* silencieux */ }
-}
-
-async function checkEmailUniqueness(email) {
-  const errEl = document.getElementById('email-err');
-  if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return;
-  try {
-    const result = await FODDEB_API.members.checkEmail(email);
-    // Stocker le résultat dans la variable d'état — résiste au effacement DOM par ce()
-    emailFlagged = result.exists ? email.toLowerCase() : '';
-    if (emailFlagged) {
-      errEl.innerHTML =
-        'Un compte existe déjà avec cet email. ' +
-        '<a href="/auth/login.html" style="color:var(--g9);font-weight:600">Se connecter</a>';
-      shakeEl(errEl);
-    } else {
-      errEl.textContent = '';
-    }
-  } catch (_) { /* silencieux — le GAS validera côté serveur */ }
+    if (typeof grecaptcha === 'undefined') return '';
+    return await new Promise(res => grecaptcha.ready(() =>
+      grecaptcha.execute(window.FODDEB_CONFIG.RECAPTCHA_SITE_KEY, { action }).then(res)
+    ));
+  } catch(e) { return ''; }
 }
 
 async function submitForm() {
   if (!validateStep(4)) return;
 
-  // Sécurité finale côté client — le GAS rejette aussi côté serveur
   const emailCurrent = document.getElementById('email').value.trim().toLowerCase();
   if (emailFlagged && emailCurrent === emailFlagged) {
     document.getElementById('email-err').innerHTML =
-      'Un compte existe déjà avec cet email. ' +
-      '<a href="/auth/login.html" style="color:var(--g9);font-weight:600">Se connecter</a>';
+      'Un compte existe déjà avec cet email. <a href="/public/auth/login.html" style="color:var(--g9);font-weight:600">Se connecter</a>';
     return;
   }
 
   const btn = document.getElementById('submitBtn');
   btn.disabled = true;
-  btn.innerHTML = '<span class="spinner"></span> Compression des fichiers…';
+  btn.innerHTML = '<span class="spinner"></span> Création du compte…';
 
   try {
-    // ── Vérification taille fichiers — bloque avant tout traitement réseau ──
-    if (!checkFileSizes()) {
-      btn.disabled = false;
-      btn.innerHTML = '<iconify-icon icon="mdi:account-plus-outline"></iconify-icon> Soumettre ma demande';
-      return;
-    }
+    const recaptchaToken = await getRecaptchaToken('register');
+    const password       = document.getElementById('pwd').value;
 
-    // ── Hash du mot de passe ──
-    const pwdBuf  = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(document.getElementById('pwd').value));
-    const pwdHash = Array.from(new Uint8Array(pwdBuf)).map(b => b.toString(16).padStart(2, '0')).join('');
-
-    // ── Compression images → base64 pur ──
-    // compressImage() réduit les photos JPEG/PNG jusqu'à ×10 avant envoi
-    // Les PDF (CNI, récépissé) passent sans compression
-    btn.innerHTML = '<span class="spinner"></span> Compression des fichiers…';
-    const [photoB64, cniB64, recepB64] = await Promise.all([
-      compressImage(FILES.photo),
-      compressImage(FILES.cni),
-      compressImage(FILES.recepisse),
-    ]);
-
-    // ── Signature : canvas.toDataURL() renvoie le préfixe "data:image/png;base64," ──
-    // On le supprime — GAS appelle Utilities.base64Decode() directement
-    const sigDataURL   = getSignatureDataURL();
-    const signatureB64 = sigDataURL ? sigDataURL.split(',')[1] : '';
-
-    // ── Token reCAPTCHA ──
-    let recaptchaToken = '';
-    if (typeof grecaptcha !== 'undefined') {
-      recaptchaToken = await new Promise(res =>
-        grecaptcha.ready(() =>
-          grecaptcha.execute('6LdU3tksAAAAAOAIdgtC7xsQURksQ9mHAZ3MVLXF', { action: 'register' }).then(res)
-        )
-      );
-    }
-
-    // ══════════════════════════════════════════════════
-    // PHASE 1 — Envoi des champs texte uniquement (< 2 Ko)
-    // ══════════════════════════════════════════════════
-    btn.innerHTML = '<span class="spinner"></span> Création du compte…';
-
-    const textPayload = {
+    // ── PHASE 1 : créer le membre en base (texte uniquement) ──────────
+    // Le mot de passe est envoyé en clair — bcrypt est fait côté serveur (api/membres/index.js)
+    const r = await FODDEB_API.membres.create({
       prenom:       document.getElementById('prenom').value.trim(),
       nom:          document.getElementById('nom').value.trim(),
       email:        document.getElementById('email').value.trim(),
       telephone:    document.getElementById('telephone').value.trim(),
-      genre:        document.getElementById('genre').value,
-      typeMemb:     document.querySelector('input[name="typeMemb"]:checked')?.value,
+      password,                                           // bcrypt côté serveur
       organisation: document.getElementById('orgNom').value.trim(),
-      poste:        document.getElementById('poste').value.trim(),
       departement:  document.getElementById('departement').value,
       domaine:      document.getElementById('domaine').value,
-      motivation:   document.getElementById('motivation').value.trim(),
-      username:     document.getElementById('username').value.trim(),
-      cniNum:       document.getElementById('cniNum').value.trim(),
+      num_cni:      document.getElementById('cniNum').value.trim(),
       newsletter:   document.getElementById('newsletter_opt').checked,
-      passwordHash: pwdHash,
-      statut:       'pending',
-      recaptchaToken,
-      createdAt:    new Date().toISOString(),
-    };
+    });
 
-    // ── Test réseau direct (diagnostic) ──
-    // Vérifie que le serveur est joignable avec la même URL avant Phase 1
-    const GAS_URL = document.querySelector('script[src*="api.js"]') ? null :
-      'https://script.google.com/macros/s/AKfycbxJ38GiGFlEb_eboz3XD5J1BoWGWXxUB79EcDD8Iv1oMIcQ2Q1G7nZlvVmNxllPYXvubQ/exec';
+    const membreId = r.id;
+    if (!membreId) throw new Error('ID membre non retourné.');
 
-    try {
-      const ping = await fetch(
-        'https://script.google.com/macros/s/AKfycbxJ38GiGFlEb_eboz3XD5J1BoWGWXxUB79EcDD8Iv1oMIcQ2Q1G7nZlvVmNxllPYXvubQ/exec',
-        { method: 'POST', headers: { 'Content-Type': 'text/plain' },
-          body: JSON.stringify({ action: 'members_check_email', email: 'ping@diagnostic.com' }) }
-      );
-      console.log('[DIAGNOSTIC] Ping GAS OK — status', ping.status, ping.url);
-    } catch(pingErr) {
-      console.error('[DIAGNOSTIC] Ping GAS FAILED :', pingErr.name, pingErr.message);
-      throw new Error('[Ping échoué — URL GAS peut-être expirée] ' + pingErr.message);
-    }
-
-    let createResult;
-    try {
-      createResult = await FODDEB_API.members.create(textPayload);
-    } catch(e) {
-      throw new Error('[Phase 1] ' + e.message);
-    }
-    if (!createResult.success) throw new Error('[Phase 1] ' + (createResult.error || "Erreur création compte"));
-    const memberId = createResult.id;
-    console.log('[FODDEB] Phase 1 OK — memberId:', memberId);
-
-    // ══════════════════════════════════════════════════
-    // PHASE 2 — Upload des fichiers un par un (~1–4 Mo chacun)
-    // ══════════════════════════════════════════════════
+    // ── PHASE 2 : upload des fichiers vers Supabase Storage ───────────
     const uploads = [
-      { type: 'photo',     b64: photoB64,    mime: FILES.photo.type.startsWith('image/') ? 'image/jpeg' : FILES.photo.type },
-      { type: 'cni',       b64: cniB64,      mime: FILES.cni.type },
-      { type: 'recepiss',  b64: recepB64,    mime: FILES.recepisse.type },
-      { type: 'signature', b64: signatureB64, mime: 'image/png' },
+      { file: FILES.photo,     bucket: 'membres-photos',    path: `${membreId}/photo` },
+      { file: FILES.cni,       bucket: 'membres-documents', path: `${membreId}/cni` },
+      { file: FILES.recepisse, bucket: 'membres-documents', path: `${membreId}/recepisse` },
     ];
 
     for (let i = 0; i < uploads.length; i++) {
-      const { type, b64, mime } = uploads[i];
-      if (!b64) continue;
-      btn.innerHTML = '<span class="spinner"></span> Envoi des fichiers (' + (i + 1) + '/4)…';
-      let upResult;
-      try {
-        upResult = await FODDEB_API.members.uploadFile(memberId, type, b64, mime);
-      } catch(e) {
-        throw new Error('[Phase 2 — ' + type + '] ' + e.message);
-      }
-      if (!upResult.success) throw new Error('[Phase 2 — ' + type + '] ' + (upResult.error || 'Erreur upload'));
-      console.log('[FODDEB] Phase 2 OK —', type, '→', upResult.url);
+      const { file, bucket, path } = uploads[i];
+      if (!file) continue;
+      btn.innerHTML = '<span class="spinner"></span> Envoi des documents (' + (i+1) + '/3)…';
+      await FODDEB_API.upload.send(file, bucket, path);
     }
 
-    // ══════════════════════════════════════════════════
-    // PHASE 3 — Finalisation : email admin avec tous les liens Drive
-    // ══════════════════════════════════════════════════
-    btn.innerHTML = '<span class="spinner"></span> Finalisation…';
-    await FODDEB_API.members.finalize(memberId);
+    // ── PHASE 3 : upload signature (canvas → Blob) ────────────────────
+    btn.innerHTML = '<span class="spinner"></span> Envoi de la signature…';
+    const sigCanvas2 = document.getElementById('sigCanvas');
+    if (sigCanvas2) {
+      await new Promise((res, rej) => {
+        sigCanvas2.toBlob(async blob => {
+          if (!blob) { res(); return; }
+          try {
+            const sigFile = new File([blob], 'signature.png', { type: 'image/png' });
+            await FODDEB_API.upload.send(sigFile, 'membres-documents', `${membreId}/signature`);
+            res();
+          } catch(e) { rej(e); }
+        }, 'image/png');
+      });
+    }
 
+    // ── Succès ────────────────────────────────────────────────────────
     document.getElementById('regFormWrap').style.display = 'none';
     document.getElementById('regSuccess').classList.add('visible');
     window.scrollTo({ top: 0, behavior: 'smooth' });
 
-  } catch (err) {
-    // Mapping des erreurs réseau vers messages lisibles
+  } catch(err) {
     let msg = err.message || 'Une erreur est survenue.';
-    if (msg.toLowerCase().includes('failed to fetch') || msg.toLowerCase().includes('networkerror')) {
-      msg = 'Erreur réseau. Vérifiez votre connexion et réessayez. Si le problème persiste, contactez-nous.';
-    } else if (msg.toLowerCase().includes('timeout') || msg.toLowerCase().includes('aborted')) {
-      msg = 'Le serveur met trop de temps à répondre. Réessayez dans quelques instants.';
-    } else if (msg.includes('email existe')) {
-      // Erreur renvoyée par le GAS — rediriger l'utilisateur
-      msg = 'Un compte existe déjà avec cet email. Veuillez vous connecter.';
-      document.getElementById('email-err').innerHTML =
-        msg + ' <a href="/auth/login.html" style="color:var(--g9);font-weight:600">Se connecter</a>';
+    if (msg.includes('failed to fetch') || msg.includes('NetworkError')) {
+      msg = 'Erreur réseau. Vérifiez votre connexion et réessayez.';
     }
     alert(msg);
     btn.disabled = false;
@@ -1076,57 +844,39 @@ async function submitForm() {
   }
 }
 
-/* ═══ INIT ═══ */
+/* ══════════════════════════════════════════════════════
+   INIT
+══════════════════════════════════════════════════════ */
 document.addEventListener('DOMContentLoaded', () => {
-  // Le canvas sera initialisé quand l'utilisateur arrivera à l'étape 3
-  // pour s'assurer que le canvas est visible et ses dimensions connues
-
-  // ── Règle : une adresse email = un seul compte ──
-  // Vérification au blur (perte de focus) du champ email
   const emailInput = document.getElementById('email');
-  if (emailInput) {
-    emailInput.addEventListener('blur', () => {
-      checkEmailUniqueness(emailInput.value.trim());
-    });
-    // Réinitialiser l'état si l'email est différent du dernier email flaggé
-    emailInput.addEventListener('input', () => {
-      const current = emailInput.value.trim().toLowerCase();
-      if (current !== emailFlagged) {
-        emailFlagged = '';
-        const el = document.getElementById('email-err');
-        if (el) el.textContent = '';
-      }
-    });
-  }
+  emailInput?.addEventListener('blur', () => checkEmailUniq(emailInput.value.trim()));
+  emailInput?.addEventListener('input', () => {
+    if (emailInput.value.trim().toLowerCase() !== emailFlagged) {
+      emailFlagged = '';
+      const el = document.getElementById('email-err'); if(el) el.textContent='';
+    }
+  });
 
-  // ── Téléphone — unicité ──
   const telInput = document.getElementById('telephone');
-  if (telInput) {
-    telInput.addEventListener('blur', () => checkPhoneUniqueness(telInput.value.trim()));
-    telInput.addEventListener('input', () => {
-      if (telInput.value.trim() !== phoneFlagged) {
-        phoneFlagged = '';
-        const el = document.getElementById('tel-err');
-        if (el) el.textContent = '';
-      }
-    });
-  }
+  telInput?.addEventListener('blur', () => checkPhoneUniq(telInput.value.trim()));
+  telInput?.addEventListener('input', () => {
+    if (telInput.value.trim() !== phoneFlagged) {
+      phoneFlagged = '';
+      const el = document.getElementById('tel-err'); if(el) el.textContent='';
+    }
+  });
 
-  // ── Numéro CNI — unicité ──
   const cniInput = document.getElementById('cniNum');
-  if (cniInput) {
-    cniInput.addEventListener('blur', () => checkCniUniqueness(cniInput.value.trim()));
-    cniInput.addEventListener('input', () => {
-      if (cniInput.value.trim().toLowerCase() !== cniFlagged) {
-        cniFlagged = '';
-        const el = document.getElementById('cniNum-err');
-        if (el) el.textContent = '';
-      }
-    });
-  }
+  cniInput?.addEventListener('blur', () => checkCniUniq(cniInput.value.trim()));
+  cniInput?.addEventListener('input', () => {
+    if (cniInput.value.trim().toLowerCase() !== cniFlagged) {
+      cniFlagged = '';
+      const el = document.getElementById('cniNum-err'); if(el) el.textContent='';
+    }
+  });
 });
 
-if ('serviceWorker' in navigator) navigator.serviceWorker.register('/sw.js').catch(() => {});
+if ('serviceWorker' in navigator) navigator.serviceWorker.register('/sw.js').catch(()=>{});
 </script>
 </body>
 </html>
